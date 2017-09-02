@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Geoffrey Chameroy">
+
+        <title>{% block title '' %}</title>
+
+        <link href="{{ asset('inspinia/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('inspinia/fonts/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+
+        <link href="{{ asset('inspinia/css/animate.css') }}" rel="stylesheet">
+        <link href="{{ asset('inspinia/css/style.css') }}" rel="stylesheet">
+    </head>
+
+    <body class="{% block body_theme '' %} {% block body_class '' %}">
+        {% block wrapper %}
+            <div id="wrapper">
+                <nav class="navbar-default navbar-static-side" role="navigation">
+                    <div class="sidebar-collapse">
+                        <ul class="nav metismenu" id="side-menu">
+                            <li class="nav-header">
+                                <div class="dropdown profile-element">
+                                    <span>
+                                        <img alt="image" src="{{ asset('inspinia/img/profile_small.jpg') }}">
+                                    </span>
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                        <span class="clear">
+                                            <span class="block m-t-xs">
+                                                <strong class="font-bold">Example Company</strong>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="logo-element">EC</div>
+                            </li>
+                            <li>
+                                <a href="index.html">
+                                    <i class="fa fa-th-large"></i>
+                                    <span class="nav-label">Dashboards</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                {% block page_wrapper %}
+                    <div id="page-wrapper" class="gray-bg">
+                        <div class="row border-bottom">
+                            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                                <div class="navbar-header">
+                                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#">
+                                        <i class="fa fa-bars"></i>
+                                    </a>
+                                </div>
+                                <ul class="nav navbar-top-links navbar-right">
+                                    <li>
+                                        <a href="login.html"><i class="fa fa-sign-out"></i> Sign out</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        {% block breadcrumb '' %}
+                        {% block wrapper_content '' %}
+
+                        <div class="footer">
+                            <div class="pull-right">with <i class="fa fa-heart"></i> by <strong>Geoffrey Chameroy</strong></div>
+                            <div><strong>Copyright</strong> Example Company &copy; 2014-2017</div>
+                        </div>
+                    </div>
+                {% endblock %}
+            </div>
+        {% endblock %}
+
+        <script src="{{ asset('inspinia/js/jquery-3.1.1.min.js') }}"></script>
+        <script src="{{ asset('inspinia/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('inspinia/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+        <script src="{{ asset('inspinia/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+        <script src="{{ asset('inspinia/js/inspinia.js') }}"></script>
+        <script src="{{ asset('inspinia/plugins/pace/pace.min.js') }}"></script>
+    </body>
+</html>

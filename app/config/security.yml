@@ -1,11 +1,25 @@
 security:
+    encoders:
+        AppBundle\Entity\User: bcrypt
+
     providers:
-        in_memory:
-            memory: ~
+        main:
+            entity:
+                class: AppBundle\Entity\User
+                property: email
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
             anonymous: ~
+            form_login:
+                login_path: login
+                check_path: login_check
+            logout:
+                path: logout
+
+    access_control:
+        - { path: ^/admin, roles: "ROLE_ADMIN" }
