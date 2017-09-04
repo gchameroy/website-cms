@@ -1,0 +1,19 @@
+language: php
+
+php:
+  - '7.1'
+
+env:
+  - SYMFONY_ENV=dev
+
+parameters:
+    secret: travis_secret
+
+install: composer install
+
+script: php bin/console about
+
+notifications:
+  webhooks:
+    urls:
+      - https://www.vivifyscrum.com/ciintegrations/travis/7dd62d610592e999fe5df424a5250e22
