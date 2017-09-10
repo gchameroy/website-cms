@@ -1,0 +1,87 @@
+{% extends "::layout.html.twig" %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>{{ product.label }}</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('admin_home') }}">Home</a>
+                </li>
+                <li>
+                    <a href="{{ path('admin_products') }}">Product List</a>
+                </li>
+                <li class="active">
+                    <strong>{{ product.label }}</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+{% endblock %}
+
+{% block wrapper_content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox product-detail">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="product-images" >
+                                    {% for photo in product.photos %}
+                                        <div>
+                                            <div class="image-imitation">
+                                                <img alt="image" class="img-preview" src="{{ path('photo_view', {'product_id': product.id, 'photo_id': photo.id}) }}" />
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            <div class="image-imitation">No Photo</div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <h2 class="font-bold m-b-xs">
+                                    {{ product.label }}
+                                </h2>
+                                <div class="m-t-md">
+                                    <h2 class="product-main-price">{{ product.price|number_format(2, '.') }}€ <small class="text-muted">Exclude Tax</small> </h2>
+                                </div>
+                                <hr>
+                                <h4>Product description</h4>
+                                <div class="small text-muted">
+                                    {{ product.description }}
+                                </div>
+                                <dl class="small m-t-md">
+                                    <dt>Category</dt>
+                                    <dd>{{ product.category.label }}</dd>
+                                </dl>
+                                <p>
+                                    <button class="btn btn-primary action_product_photo_add">Add Photo</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $('.product-images').slick({
+                dots: true
+            });
+        });
+        $('.action_product_photo_add').click(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            $.get('{{ path('admin_product_add_photo', { id: product.id }) }}').done(function(response){
+                $(response).modal();
+            });
+        });
+    </script>
+{% endblock %}

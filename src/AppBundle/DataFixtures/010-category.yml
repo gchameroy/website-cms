@@ -1,0 +1,13 @@
+model: AppBundle\Entity\Category
+fixtures:
+    category_001:
+        label: Category 1
+        description: This is the first Category
+
+    category_002:
+            label: Category 2
+            description: This is the second Category
+
+    category_003:
+            label: Category 3
+            description: This is the third Category
