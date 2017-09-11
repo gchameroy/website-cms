@@ -3,23 +3,23 @@
 {% block breadcrumb %}
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>{{ product.label }}</h2>
+            <h2>{{ newsletter.title }}</h2>
             <ol class="breadcrumb">
                 <li>
                     <a href="{{ path('admin_home') }}">Home</a>
                 </li>
                 <li>
-                    <a href="{{ path('admin_products') }}">Product List</a>
+                    <a href="{{ path('admin_newsletters') }}">Newsletters</a>
                 </li>
                 <li class="active">
-                    <strong>{{ product.label }}</strong>
+                    <strong>{{ newsletter.title }}</strong>
                 </li>
             </ol>
         </div>
         <div class="col-lg-2">
             <div class="title-action">
-                <a href="{{ path('admin_product_edit', {'id': product.id}) }}" class="btn btn-primary btn-sm">Edit</a>
-                <a href="{{ path('admin_product_delete', {'id': product.id}) }}" class="btn btn-danger btn-sm">Delete</a>
+                <a href="{{ path('admin_newsletter_edit', {'id': newsletter.id}) }}" class="btn btn-primary btn-sm">Edit</a>
+                <a href="{{ path('admin_newsletter_delete', {'id': newsletter.id}) }}" class="btn btn-danger btn-sm">Delete</a>
             </div>
         </div>
     </div>
@@ -33,38 +33,33 @@
                     <div class="ibox-content">
                         <div class="row">
                             <div class="col-md-5">
-                                <div class="product-images" >
-                                    {% for image in product.images %}
+                                <div class="newsletter-images">
+                                    {% if newsletter.image %}
                                         <div>
                                             <div class="image-imitation">
-                                                <img alt="image" class="img-preview" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': image.id}) }}" />
+                                                <img alt="image" class="img-preview" src="{{ path('newsletter_image_view', {'newsletter_id': newsletter.id, 'image_id': newsletter.image.id}) }}" />
                                             </div>
                                         </div>
                                     {% else %}
                                         <div>
                                             <div class="image-imitation">No Image</div>
                                         </div>
-                                    {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="col-md-7">
                                 <h2 class="font-bold m-b-xs">
-                                    {{ product.label }}
+                                    {{ newsletter.title }}
                                 </h2>
-                                <div class="m-t-md">
-                                    <h2 class="product-main-price">{{ product.price|number_format(2, '.') }}€ <small class="text-muted">Exclude Tax</small> </h2>
-                                </div>
                                 <hr>
-                                <h4>Product description</h4>
-                                <div class="small text-muted">
-                                    {{ product.description|nl2br }}
-                                </div>
-                                <dl class="small m-t-md">
-                                    <dt>Category</dt>
-                                    <dd>{{ product.category.label }}</dd>
-                                </dl>
-                                <p>
-                                    <button class="btn btn-primary action_product_image_add">Add Image</button>
+                                <h4>Newsletter content</h4>
+                                <div class="small text-muted">{{ newsletter.content|nl2br }}</div>
+                                <p class="m-t">
+                                    {% if newsletter.image %}
+                                        <button class="btn btn-primary action_newsletter_image_add">Change Image</button>
+                                    {% else %}
+                                        <button class="btn btn-primary action_newsletter_image_add">Add Image</button>
+                                    {% endif %}
                                 </p>
                             </div>
                         </div>
@@ -78,14 +73,14 @@
 {% block javascripts %}
     <script>
         $(document).ready(function(){
-            $('.product-images').slick({
+            $('.newsletter-images').slick({
                 dots: true
             });
         });
-        $('.action_product_image_add').click(function(e){
+        $('.action_newsletter_image_add').click(function(e){
             e.preventDefault();
             e.stopPropagation();
-            $.get('{{ path('admin_product_add_image', { id: product.id }) }}').done(function(response){
+            $.get('{{ path('admin_newsletter_add_image', { id: newsletter.id }) }}').done(function(response){
                 $(response).modal();
             });
         });

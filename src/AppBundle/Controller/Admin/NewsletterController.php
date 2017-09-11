@@ -1,0 +1,209 @@
+<?php
+
+namespace AppBundle\Controller\Admin;
+
+use AppBundle\Entity\Image;
+use AppBundle\Entity\Newsletter;
+use AppBundle\Form\Type\ImageType;
+use AppBundle\Form\Type\NewsletterDeleteType;
+use AppBundle\Form\Type\NewsletterType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+/**
+ * @Route("/newsletters")
+ */
+class NewsletterController extends Controller
+{
+    /**
+     * @Route("/", name="admin_newsletters")
+     * @Method({"GET"})
+     * @return Response
+     */
+    public function listAction() {
+        $newsletters = $this->getDoctrine()
+            ->getRepository(Newsletter::class)
+            ->findAll();
+
+        return $this->render('admin/newsletter/list.html.twig', [
+            'newsletters' => $newsletters
+        ]);
+    }
+
+    /**
+     * @Route("/add", name="admin_newsletters_add")
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function addAction(Request $request) {
+        $newsletter = new Newsletter();
+
+        $form = $this->createForm(NewsletterType::class, $newsletter);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newsletter);
+            $em->flush();
+
+            $this->addFlash('success', 'Newsletter added successfully.');
+
+            return $this->redirectToRoute('admin_newsletter', [
+                'id' => $newsletter->getId(),
+            ]);
+        }
+
+        return $this->render('admin/newsletter/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}", name="admin_newsletter", requirements={"id": "\d+"})
+     * @Method({"GET"})
+     * @param integer $id
+     * @return Response
+     */
+    public function viewAction($id) {
+        $newsletter = $this->getDoctrine()
+            ->getRepository(Newsletter::class)
+            ->find($id);
+        $this->checkNewsletter($newsletter);
+
+        return $this->render('admin/newsletter/view.html.twig', [
+            'newsletter' => $newsletter
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit", name="admin_newsletter_edit", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse|Response
+     */
+    public function editAction(Request $request, $id) {
+        $newsletter = $this->getDoctrine()
+            ->getRepository(Newsletter::class)
+            ->find($id);
+        $this->checkNewsletter($newsletter);
+
+        $form = $this->createForm(NewsletterType::class, $newsletter);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newsletter);
+            $em->flush();
+
+            $this->addFlash('success', 'Newsletter edited successfully.');
+
+            return $this->redirectToRoute('admin_newsletters', [
+                'id' => $id,
+            ]);
+        }
+
+        return $this->render('admin/newsletter/edit.html.twig', [
+            'form' => $form->createView(),
+            'newsletter' => $newsletter,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/delete", name="admin_newsletter_delete", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param $id
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function deleteAction($id, Request $request) {
+        $newsletter = $this->getDoctrine()
+            ->getRepository(Newsletter::class)
+            ->find($id);
+        $this->checkNewsletter($newsletter);
+
+        $form = $this->createForm(NewsletterDeleteType::class, $newsletter);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($newsletter);
+            $em->flush();
+
+            $this->addFlash('success', 'Newsletter deleted successfully.');
+
+            return $this->redirectToRoute('admin_newsletters', [
+                'id' => $id,
+            ]);
+        }
+
+        return $this->render('admin/newsletter/delete.html.twig', [
+            'form' => $form->createView(),
+            'newsletter' => $newsletter,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/add_image", name="admin_newsletter_add_image", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param integer $id
+     * @return RedirectResponse|Response
+     */
+    public function addImageAction(Request $request, $id) {
+        $newsletter = $this->getDoctrine()
+            ->getRepository(Newsletter::class)
+            ->find($id);
+        $this->checkNewsletter($newsletter);
+
+        $image = $newsletter->getImage();
+        if ($image) {
+            $em = $this->getDoctrine()->getManager();
+            $newsletter->removeImage();
+            $em->remove($image);
+            $em->flush();
+        }
+
+        $image = new Image();
+        $image->setNewsletter($newsletter);
+
+        $form = $this->createForm(ImageType::class, $image);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $file */
+            $file = $image->getPath();
+            $fileName = md5(uniqid(null, true));
+            $filePath = $this->get('kernel')->getRootDir().'/../uploads/newsletter/';
+            $file->move($filePath, $fileName);
+            $image->setPath($fileName);
+            $newsletter->setImage($image);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($image);
+            $em->flush();
+
+            $this->addFlash('success_image', 'Image added successfully.');
+
+            return $this->redirectToRoute('admin_newsletter', [
+                'id' => $id
+            ]);
+        }
+
+        return $this->render('admin/newsletter/modal/add_image.html.twig', [
+            'form' => $form->createView(),
+            'newsletter' => $newsletter,
+        ]);
+    }
+
+    /**
+     * @param $newsletter
+     */
+    private function checkNewsletter($newsletter) {
+        if (!$newsletter) {
+            $this->createNotFoundException('Newsletter Not Found.');
+        }
+    }
+}

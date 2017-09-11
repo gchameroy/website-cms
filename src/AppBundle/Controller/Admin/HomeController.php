@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends Controller
 {
     /**
-     * @Route("/admin", name="admin_home")
+     * @Route("/", name="admin_home")
      * @Method({"GET"})
      * @return Response
      */

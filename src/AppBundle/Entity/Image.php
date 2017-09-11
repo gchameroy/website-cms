@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Photo
+ * Image
  *
- * @ORM\Table(name="photo")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PhotoRepository")
+ * @ORM\Table(name="image")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ImageRepository")
  */
-class Photo
+class Image
 {
     /**
      * @var int
@@ -31,10 +31,18 @@ class Photo
     /**
      * @var Product
      *
-     * @ORM\ManyToOne(targetEntity="Product", inversedBy="photos")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="images")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $product;
+
+    /**
+     * @var Newsletter
+     *
+     * @ORM\OneToOne(targetEntity="Newsletter")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $newsletter;
 
     /**
      * Get id
@@ -51,7 +59,7 @@ class Photo
      *
      * @param string $path
      *
-     * @return Photo
+     * @return Image
      */
     public function setPath($path)
     {
@@ -89,5 +97,24 @@ class Photo
     {
         return $this->product;
     }
-}
 
+    /**
+     * @param Newsletter $newsletter
+     *
+     * @return $this
+     */
+    public function setNewsletter(Newsletter $newsletter)
+    {
+        $this->newsletter = $newsletter;
+
+        return $this;
+    }
+
+    /**
+     * @return Newsletter
+     */
+    public function getNewsletter()
+    {
+        return $this->newsletter;
+    }
+}

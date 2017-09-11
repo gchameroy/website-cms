@@ -52,13 +52,13 @@ class Product
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="Photo", mappedBy="product", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Image", mappedBy="product", cascade={"remove", "persist"})
      */
-    private $photos;
+    private $images;
 
     public function __construct()
     {
-        $this->photos = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     /**
@@ -164,26 +164,26 @@ class Product
     }
 
     /**
-     * @param ArrayCollection $photos
+     * @param ArrayCollection $images
      */
-    public function setPhotos(ArrayCollection $photos)
+    public function setImages(ArrayCollection $images)
     {
-        $this->photos = new ArrayCollection();
+        $this->images = new ArrayCollection();
 
-        foreach ($photos As $photo) {
-            $this->addPhoto($photo);
+        foreach ($images As $image) {
+            $this->addImage($image);
         }
     }
 
     /**
-     * @param Photo $photo
+     * @param Image $image
      *
      * @return $this
      */
-    public function addPhoto(Photo $photo)
+    public function addImage(Image $image)
     {
-        if (!$this->photos->contains($photo)) {
-            $this->photos->add($photo);
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
         }
 
         return $this;
@@ -192,9 +192,9 @@ class Product
     /**
      * @return ArrayCollection
      */
-    public function getPhotos()
+    public function getImages()
     {
-        return $this->photos;
+        return $this->images;
     }
 }
 

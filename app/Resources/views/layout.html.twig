@@ -6,14 +6,14 @@
         <meta name="author" content="Geoffrey Chameroy">
 
         <title>{% block title '' %}</title>
-        {% block stylesheets %}
-            <link href="{{ asset('inspinia/css/bootstrap.min.css') }}" rel="stylesheet">
-            <link href="{{ asset('inspinia/fonts/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
-            <link href="{{ asset('inspinia/css/animate.css') }}" rel="stylesheet">
-            <link href="{{ asset('inspinia/css/style.css') }}" rel="stylesheet">
-            <link href="{{ asset('inspinia/plugins/slick/slick.css') }}" rel="stylesheet">
-            <link href="{{ asset('inspinia/plugins/slick/slick-theme.css') }}" rel="stylesheet">
-        {% endblock %}
+
+        <link href="{{ asset('inspinia/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('inspinia/fonts/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('inspinia/css/animate.css') }}" rel="stylesheet">
+        <link href="{{ asset('inspinia/css/style.css') }}" rel="stylesheet">
+        <link href="{{ asset('inspinia/plugins/slick/slick.css') }}" rel="stylesheet">
+        <link href="{{ asset('inspinia/plugins/slick/slick-theme.css') }}" rel="stylesheet">
+        {% block stylesheets '' %}
     </head>
 
     <body class="{% block body_theme '' %} {% block body_class '' %}">
@@ -29,12 +29,11 @@
                         {% endblock %}
                         {% block breadcrumb '' %}
                         {% block wrapper_content '' %}
-                        {% block footer %}
-                            <div class="footer">
-                                <div class="pull-right">with <i class="fa fa-heart"></i> by <strong>Geoffrey Chameroy</strong></div>
-                                <div><strong>Copyright</strong> Example Company &copy; 2014-2017</div>
-                            </div>
-                        {% endblock %}
+
+                        <div class="footer">
+                            <div class="pull-right">with <i class="fa fa-heart"></i> by <strong>Geoffrey Chameroy</strong></div>
+                            <div><strong>Copyright</strong> Example Company &copy; 2017</div>
+                        </div>
                     </div>
                 {% endblock %}
             </div>
@@ -47,7 +46,6 @@
         <script src="{{ asset('inspinia/js/inspinia.js') }}"></script>
         <script src="{{ asset('inspinia/plugins/pace/pace.min.js') }}"></script>
         <script src="{{ asset('inspinia/plugins/slick/slick.min.js') }}"></script>
-
         {% block javascripts '' %}
     </body>
 </html>

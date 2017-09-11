@@ -1,3 +1,12 @@
-app:
-    resource: '@AppBundle/Controller/'
+security:
+    resource: '@AppBundle/Controller/SecurityController.php'
     type: annotation
+
+uploads:
+    resource: '@AppBundle/Controller/ImageController.php'
+    type: annotation
+
+admin:
+    resource: '@AppBundle/Controller/admin/'
+    type: annotation
+    prefix: '/admin'
