@@ -6,7 +6,12 @@ uploads:
     resource: '@AppBundle/Controller/ImageController.php'
     type: annotation
 
+front:
+    resource: '@AppBundle/Controller/Front/'
+    type: annotation
+    prefix: '/'
+
 admin:
-    resource: '@AppBundle/Controller/admin/'
+    resource: '@AppBundle/Controller/Admin/'
     type: annotation
     prefix: '/admin'

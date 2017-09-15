@@ -193,7 +193,7 @@ class ProductController extends Controller
      */
     private function checkProduct($product) {
         if (!$product) {
-            $this->createNotFoundException('Product Not Found.');
+            throw $this->createNotFoundException('Product Not Found.');
         }
     }
 }

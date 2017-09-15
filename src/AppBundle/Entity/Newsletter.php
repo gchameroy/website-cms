@@ -38,7 +38,7 @@ class Newsletter
     /**
      * @var Image
      *
-     * @ORM\OneToOne(targetEntity="Image", cascade={"remove", "persist"})
+     * @ORM\OneToOne(targetEntity="Image")
      * @ORM\JoinColumn(nullable=true)
      */
     private $image;

@@ -3,7 +3,8 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Category;
-use AppBundle\Form\CategoryType;
+use AppBundle\Form\Type\CategoryDeleteType;
+use AppBundle\Form\Type\CategoryType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -88,20 +89,33 @@ class CategoryController Extends Controller
 
     /**
      * @Route("/{id}/delete", name="admin_category_delete", requirements={"id": "\d+"})
-     * @Method({"GET"})
+     * @Method({"GET", "POST"})
      * @param $id
+     * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function deleteAction($id) {
-        $category = $this->getDoctrine()->getRepository(Category::class)->find($id);
-
+    public function deleteAction($id, Request $request) {
+        $category = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->find($id);
         $this->checkCategory($category);
 
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($category);
-        $em->flush();
+        $form = $this->createForm(CategoryDeleteType::class, $category);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($category);
+            $em->flush();
 
-        return $this->redirectToRoute('admin_categories');
+            $this->addFlash('success', 'Category deleted successfully.');
+
+            return $this->redirectToRoute('admin_categories');
+        }
+
+        return $this->render('admin/category/delete.html.twig', [
+            'form' => $form->createView(),
+            'category' => $category,
+        ]);
     }
 
     /**
@@ -109,7 +123,7 @@ class CategoryController Extends Controller
      */
     private function checkCategory($category) {
         if (!$category) {
-            $this->createNotFoundException('Category Not Found.');
+            throw $this->createNotFoundException('Category Not Found.');
         }
     }
 }

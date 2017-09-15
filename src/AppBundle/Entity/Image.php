@@ -40,7 +40,7 @@ class Image
      * @var Newsletter
      *
      * @ORM\OneToOne(targetEntity="Newsletter")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $newsletter;
 

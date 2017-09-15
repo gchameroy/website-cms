@@ -135,9 +135,7 @@ class NewsletterController extends Controller
 
             $this->addFlash('success', 'Newsletter deleted successfully.');
 
-            return $this->redirectToRoute('admin_newsletters', [
-                'id' => $id,
-            ]);
+            return $this->redirectToRoute('admin_newsletters');
         }
 
         return $this->render('admin/newsletter/delete.html.twig', [
@@ -203,7 +201,7 @@ class NewsletterController extends Controller
      */
     private function checkNewsletter($newsletter) {
         if (!$newsletter) {
-            $this->createNotFoundException('Newsletter Not Found.');
+            throw $this->createNotFoundException('Newsletter Not Found.');
         }
     }
 }
