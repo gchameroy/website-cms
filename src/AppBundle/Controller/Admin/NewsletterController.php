@@ -5,8 +5,9 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Newsletter;
 use AppBundle\Form\Type\ImageType;
-use AppBundle\Form\Type\NewsletterDeleteType;
-use AppBundle\Form\Type\NewsletterType;
+use AppBundle\Form\Type\Newsletter\NewsletterDeleteType;
+use AppBundle\Form\Type\Newsletter\NewsletterPublishType;
+use AppBundle\Form\Type\Newsletter\NewsletterType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -81,6 +82,38 @@ class NewsletterController extends Controller
     }
 
     /**
+     * @Route("/{id}/publish", name="admin_newsletter_publish", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse|Response
+     */
+    public function publishAction(Request $request, $id) {
+        $newsletter = $this->getDoctrine()
+            ->getRepository(Newsletter::class)
+            ->find($id);
+        $this->checkNewsletter($newsletter);
+
+        $form = $this->createForm(NewsletterPublishType::class, $newsletter);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newsletter->setPublishedAt(new \DateTime());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newsletter);
+            $em->flush();
+
+            $this->addFlash('success', 'Newsletter published successfully.');
+
+            return $this->redirectToRoute('admin_newsletters');
+        }
+
+        return $this->render('admin/newsletter/publish.html.twig', [
+            'form' => $form->createView(),
+            'newsletter' => $newsletter,
+        ]);
+    }
+
+    /**
      * @Route("/{id}/edit", name="admin_newsletter_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request
@@ -102,9 +135,7 @@ class NewsletterController extends Controller
 
             $this->addFlash('success', 'Newsletter edited successfully.');
 
-            return $this->redirectToRoute('admin_newsletters', [
-                'id' => $id,
-            ]);
+            return $this->redirectToRoute('admin_newsletters');
         }
 
         return $this->render('admin/newsletter/edit.html.twig', [

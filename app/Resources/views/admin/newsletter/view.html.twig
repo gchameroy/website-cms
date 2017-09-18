@@ -18,6 +18,9 @@
         </div>
         <div class="col-lg-2">
             <div class="title-action">
+                {% if not newsletter.published %}
+                    <a href="{{ path('admin_newsletter_publish', {'id': newsletter.id }) }}" class="btn btn-primary btn-sm">Publish</a>
+                {% endif %}
                 <a href="{{ path('admin_newsletter_edit', {'id': newsletter.id}) }}" class="btn btn-primary btn-sm">Edit</a>
                 <a href="{{ path('admin_newsletter_delete', {'id': newsletter.id}) }}" class="btn btn-danger btn-sm">Delete</a>
             </div>
@@ -49,7 +52,12 @@
                             </div>
                             <div class="col-md-7">
                                 <h2 class="font-bold m-b-xs">
-                                    {{ newsletter.title }}
+                                    <span>{{ newsletter.title }}</span>
+                                    {% if newsletter.published %}
+                                        <label class="label label-info m-l-md">online</label>
+                                    {% else %}
+                                        <label class="label label-default m-l-md">offline</label>
+                                    {% endif %}
                                 </h2>
                                 <hr>
                                 <h4>Newsletter content</h4>

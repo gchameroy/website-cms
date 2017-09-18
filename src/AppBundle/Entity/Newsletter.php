@@ -46,6 +46,13 @@ class Newsletter
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="published_at", type="datetime", nullable=true)
+     */
+    private $publishedAt;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="inserted_at", type="datetime")
      */
     private $insertedAt;
@@ -147,6 +154,40 @@ class Newsletter
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Set publishedAt
+     *
+     * @param \DateTime $publishedAt
+     *
+     * @return Newsletter
+     */
+    public function setPublishedAt($publishedAt)
+    {
+        $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get publishedAt
+     *
+     * @return \DateTime
+     */
+    public function getPublishedAt()
+    {
+        return $this->publishedAt;
+    }
+
+    /**
+     * Get isPublished
+     *
+     * @return boolean
+     */
+    public function isPublished()
+    {
+        return $this->publishedAt ? true : false;
     }
 
     /**
