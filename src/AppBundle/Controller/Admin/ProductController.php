@@ -5,8 +5,9 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Product;
 use AppBundle\Form\Type\ImageType;
-use AppBundle\Form\Type\ProductDeleteType;
-use AppBundle\Form\Type\ProductType;
+use AppBundle\Form\Type\Product\ProductPublishType;
+use AppBundle\Form\Type\Product\ProductDeleteType;
+use AppBundle\Form\Type\Product\ProductType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -59,6 +60,38 @@ class ProductController extends Controller
 
         return $this->render('admin/product/add.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/publish", name="admin_product_publish", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse|Response
+     */
+    public function publishAction(Request $request, $id) {
+        $product = $this->getDoctrine()
+            ->getRepository(Product::class)
+            ->find($id);
+        $this->checkProduct($product);
+
+        $form = $this->createForm(ProductPublishType::class, $product);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $product->setPublishedAt(new \DateTime());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($product);
+            $em->flush();
+
+            $this->addFlash('success', 'Product published successfully.');
+
+            return $this->redirectToRoute('admin_products');
+        }
+
+        return $this->render('admin/product/publish.html.twig', [
+            'form' => $form->createView(),
+            'product' => $product,
         ]);
     }
 

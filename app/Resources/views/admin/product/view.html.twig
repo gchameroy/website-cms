@@ -18,6 +18,9 @@
         </div>
         <div class="col-lg-2">
             <div class="title-action">
+                {% if not product.published %}
+                    <a href="{{ path('admin_product_publish', {'id': product.id }) }}" class="btn btn-primary btn-sm">Publish</a>
+                {% endif %}
                 <a href="{{ path('admin_product_edit', {'id': product.id}) }}" class="btn btn-primary btn-sm">Edit</a>
                 <a href="{{ path('admin_product_delete', {'id': product.id}) }}" class="btn btn-danger btn-sm">Delete</a>
             </div>
@@ -50,6 +53,12 @@
                             <div class="col-md-7">
                                 <h2 class="font-bold m-b-xs">
                                     {{ product.label }}
+                                    <span>{{ product.label }}</span>
+                                    {% if product.published %}
+                                        <label class="label label-info m-l-md">online</label>
+                                    {% else %}
+                                        <label class="label label-default m-l-md">offline</label>
+                                    {% endif %}
                                 </h2>
                                 <div class="m-t-md">
                                     <h2 class="product-main-price">{{ product.price|number_format(2, '.') }}€ <small class="text-muted">Exclude Tax</small> </h2>

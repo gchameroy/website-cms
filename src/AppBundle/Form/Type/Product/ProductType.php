@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Form\Type;
+namespace AppBundle\Form\Type\Product;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;

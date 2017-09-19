@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Form\Type;
+namespace AppBundle\Form\Type\Product;
 
 use AppBundle\Entity\Product;
 use Symfony\Component\Form\AbstractType;

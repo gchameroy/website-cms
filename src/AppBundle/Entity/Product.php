@@ -44,6 +44,13 @@ class Product
     private $price;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="published_at", type="datetime", nullable=true)
+     */
+    private $publishedAt;
+
+    /**
      * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
@@ -141,6 +148,41 @@ class Product
     public function getPrice()
     {
         return $this->price;
+    }
+
+    /**
+     * Set publishedAt
+     *
+     * @param \DateTime $publishedAt
+     *
+     * @return Product
+     */
+    public function setPublishedAt($publishedAt)
+    {
+        $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+
+    /**
+     * Get publishedAt
+     *
+     * @return \DateTime
+     */
+    public function getPublishedAt()
+    {
+        return $this->publishedAt;
+    }
+
+    /**
+     * Get isPublished
+     *
+     * @return boolean
+     */
+    public function isPublished()
+    {
+        return $this->publishedAt ? true : false;
     }
 
     /**

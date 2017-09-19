@@ -34,6 +34,13 @@
                             <tbody>
                             {% for product in products %}
                                 <tr>
+                                    <td>
+                                        {% if product.published %}
+                                            <label class="label label-info">online</label>
+                                        {% else %}
+                                            <label class="label label-default">offline</label>
+                                        {% endif %}
+                                    </td>
                                     <td class="project-title" nowrap>
                                         <a href="{{ path('admin_product', {'id': product.id }) }}">{{ product.label }}</a>
                                         <br>
@@ -44,6 +51,9 @@
                                     <td nowrap>{{ product.price|number_format(2, '.') }}€</td>
                                     <td nowrap>{{ product.category.label }}</td>
                                     <td class="project-actions">
+                                        {% if not product.published %}
+                                            <a href="{{ path('admin_product_publish', {'id': product.id }) }}" class="btn btn-primary btn-sm">Publish</a>
+                                        {% endif %}
                                         <a href="{{ path('admin_product_edit', {'id': product.id }) }}" class="btn btn-primary btn-sm">Edit product</a>
                                         <a href="{{ path('admin_product_delete', {'id': product.id }) }}" class="btn btn-danger btn-sm">Delete product</a>
                                     </td>
