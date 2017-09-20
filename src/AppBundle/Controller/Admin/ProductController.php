@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Product;
+use AppBundle\Form\Type\CategoryType;
 use AppBundle\Form\Type\ImageType;
 use AppBundle\Form\Type\Product\ProductPublishType;
 use AppBundle\Form\Type\Product\ProductDeleteType;
@@ -12,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -219,6 +222,39 @@ class ProductController extends Controller
             'form' => $form->createView(),
             'product' => $product,
         ]);
+    }
+
+    /**
+     * @Route("/add_category", name="admin_add_category", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return JsonResponse|Response
+     */
+    public function addCategoryAction(Request $request) {
+        $category = new Category();
+
+        $form = $this->createForm(CategoryType::class, $category);
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $category = $form->getData();
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($category);
+                $em->flush();
+
+                return new JsonResponse([
+                    'success' => true,
+                    'id' => $category->getId(),
+                    'label'  => $category->getLabel()
+                ]);
+            }
+        }
+
+        return $this->render("admin/product/modal/add_category.html.twig", array(
+            'form'  =>  $form->createView()
+        ));
     }
 
     /**
