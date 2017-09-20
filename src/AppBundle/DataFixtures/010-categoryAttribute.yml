@@ -1,0 +1,7 @@
+model: AppBundle\Entity\CategoryAttribute
+fixtures:
+    category_attribute_001:
+        label: Color
+
+    category_attribute_002:
+        label: Size

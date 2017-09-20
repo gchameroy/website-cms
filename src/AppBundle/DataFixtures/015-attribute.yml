@@ -1,0 +1,13 @@
+model: AppBundle\Entity\Attribute
+fixtures:
+    attribute_001:
+        label: Black
+        categoryAttribute: category_attribute_001
+
+    attribute_002:
+        label: White
+        categoryAttribute: category_attribute_001
+
+    attribute_003:
+        label: 10X10cm
+        categoryAttribute: category_attribute_002

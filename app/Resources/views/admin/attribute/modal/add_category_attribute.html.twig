@@ -1,0 +1,45 @@
+<div class="modal inmodal fade" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Add Category Attribute</h4>
+            </div>
+            {{ form_start(form) }}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">Label</label>
+                    <div class="col-lg-10">
+                        {{ form_widget(form.label, {'attr' : {'class' : 'form-control'} }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                <div class="btn btn-primary save_category">Add Category Attribute</div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('.save_category').click(function(e){
+                $.ajax({
+                    url         : "{{ path('admin_attribute_add_category') }}",
+                    type        : "POST",
+                    data        : $('form[name="category_attribute"]').serializeArray(),
+                    success     : function(result) {
+                        $('select[id$=_categoryAttribute]')
+                            .append($('<option>', {value : result.id, text: result.label}))
+                            .val(result.id);
+                        $('.close').click();
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+

@@ -1,0 +1,66 @@
+{% extends "::layout.html.twig" %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Category Attribute List</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('admin_home') }}">Home</a>
+                </li>
+                <li class="active">
+                    <strong>Category Attribute List</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+            <div class="title-action">
+                <a href="{{ path('admin_categories_attribute_add') }}" class="btn btn-primary btn-sm">Create category attribute</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block wrapper_content %}
+    <div class="row wrapper wrapper-content animated fadeInRight">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h4>Category Attribute list</h4>
+                </div>
+                <div class="ibox-content">
+                    <div class="project-list">
+                        <table class="table table-hover">
+                            <tbody>
+                            {% for categoryAttribute in categoriesAttribute %}
+                                <tr>
+                                    <td class="project-title" nowrap>
+                                        {{ categoryAttribute.label }}
+                                    </td>
+                                    <td class="project-title" nowrap>
+                                        {% for attribute in categoryAttribute.attributes %}
+                                            - {{ attribute.label }}
+                                            <a href="{{ path('admin_attribute_delete', {'id': attribute.id }) }}"><i class="fa fa-times"></i></a>
+                                            <a href="{{ path('admin_attribute_edit', {'id': attribute.id }) }}"><i class="fa fa-pencil"></i></a>
+                                            <br>
+                                        {% endfor %}
+                                        <a href="{{ path('admin_attributes_add', {'id': categoryAttribute.id }) }}"><u>+ Add Attribute</u></a>
+                                    </td>
+                                    <td class="project-actions">
+                                        <a href="{{ path('admin_category_attribute_edit', {'id': categoryAttribute.id }) }}" class="btn btn-primary btn-sm">Edit</a>
+                                        <a href="{{ path('admin_category_attribute_delete', {'id': categoryAttribute.id }) }}" class="btn btn-danger btn-sm">Delete</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td>No category attribute found.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
