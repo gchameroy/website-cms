@@ -1,0 +1,35 @@
+{% extends "front/layout.html.twig" %}
+
+{% block sections %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Product categories</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>label</th>
+                                <th>description</th>
+                                <th>action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in categories %}
+                                <tr>
+                                    <td>{{ category.id }}</td>
+                                    <td>{{ category.label }}</td>
+                                    <td>{{ category.description }}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-primary btn-sm">view</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

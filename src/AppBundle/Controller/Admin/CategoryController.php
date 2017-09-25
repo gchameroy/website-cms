@@ -22,7 +22,9 @@ class CategoryController Extends Controller
      * @return Response
      */
     public function listAction() {
-        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+        $categories = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->findAll();
 
         return $this->render('admin/category/list.html.twig', [
             'categories' => $categories

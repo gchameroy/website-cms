@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Front;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,12 +20,12 @@ class HomeController extends Controller
 
     /**
      * @param int $max
-     * @param EntityManagerInterface $em
      * @return Response
      */
-    public function productsAction($max = 3, EntityManagerInterface $em) {
-        $products = $em->getRepository('AppBundle:Product')
-            ->findLasts($max);
+    public function productsAction($max = 3) {
+        $products = $this->getDoctrine()
+            ->getRepository('AppBundle:Product')
+            ->findAll($max, 1, 'desc');
 
         return $this->render('front/home/partial/products.html.twig', [
             'products' => $products
@@ -35,12 +34,12 @@ class HomeController extends Controller
 
     /**
      * @param int $max
-     * @param EntityManagerInterface $em
      * @return Response
      */
-    public function newslettersAction($max = 2, EntityManagerInterface $em) {
-        $newsletters = $em->getRepository('AppBundle:Newsletter')
-            ->findLasts($max);
+    public function newslettersAction($max = 2) {
+        $newsletters = $this->getDoctrine()
+            ->getRepository('AppBundle:Newsletter')
+            ->findAll($max, 1, 'desc');
 
         return $this->render('front/home/partial/newsletters.html.twig', [
             'newsletters' => $newsletters

@@ -29,7 +29,7 @@ class NewsletterController extends Controller
     public function listAction() {
         $newsletters = $this->getDoctrine()
             ->getRepository(Newsletter::class)
-            ->findAll();
+            ->findAll(0, null, 'desc', false);
 
         return $this->render('admin/newsletter/list.html.twig', [
             'newsletters' => $newsletters

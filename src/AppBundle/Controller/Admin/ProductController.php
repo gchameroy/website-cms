@@ -31,7 +31,7 @@ class ProductController extends Controller
     public function listAction() {
         $products = $this->getDoctrine()
             ->getRepository(Product::class)
-            ->findAll();
+            ->findAll(0, null, 'desc', false);
 
         return $this->render('admin/product/list.html.twig', [
             'products' => $products
