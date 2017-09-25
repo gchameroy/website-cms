@@ -32,4 +32,18 @@ class HomeController extends Controller
             'products' => $products
         ]);
     }
+
+    /**
+     * @param int $max
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    public function newslettersAction($max = 2, EntityManagerInterface $em) {
+        $newsletters = $em->getRepository('AppBundle:Newsletter')
+            ->findLasts($max);
+
+        return $this->render('front/home/partial/newsletters.html.twig', [
+            'newsletters' => $newsletters
+        ]);
+    }
 }

@@ -1,0 +1,28 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Last Newsletters</h2>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>title</th>
+                        <th>content</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for newsletter in newsletters %}
+                        <tr>
+                            <td>{{ newsletter.id }}</td>
+                            <td>{{ newsletter.title }}</td>
+                            <td>{{ newsletter.content }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <a href="#" class="btn btn-primary">+ View more</a>
+            </div>
+        </div>
+    </div>
+</section>
