@@ -10,4 +10,5 @@
             </div>
         </div>
     </section>
+    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
 {% endblock %}

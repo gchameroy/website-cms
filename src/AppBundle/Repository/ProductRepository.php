@@ -12,4 +12,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProductRepository extends EntityRepository
 {
+    /**
+     * @param int $perPage
+     * @param int $page
+     * @return array
+     */
+    public function findLasts($perPage = 3, $page = 1) {
+        return $this->createQueryBuilder('p')
+            ->where('p.publishedAt <= :now')
+                ->setParameter('now', new \DateTime())
+            ->orderBy('p.publishedAt', 'desc')
+            ->setFirstResult(($page - 1) * $perPage)
+            ->setMaxResults($perPage)
+            ->getQuery()
+            ->getResult();
+    }
 }
