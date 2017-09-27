@@ -3,8 +3,9 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Category;
-use AppBundle\Form\Type\CategoryDeleteType;
-use AppBundle\Form\Type\CategoryType;
+use AppBundle\Form\Type\Category\CategoryDeleteType;
+use AppBundle\Form\Type\Category\CategoryPublishType;
+use AppBundle\Form\Type\Category\CategoryType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,7 +25,7 @@ class CategoryController Extends Controller
     public function listAction() {
         $categories = $this->getDoctrine()
             ->getRepository(Category::class)
-            ->findAll();
+            ->findAll(0, null, 'asc', false);
 
         return $this->render('admin/category/list.html.twig', [
             'categories' => $categories
@@ -56,6 +57,38 @@ class CategoryController Extends Controller
 
         return $this->render('admin/category/add.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/publish", name="admin_category_publish", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse|Response
+     */
+    public function publishAction(Request $request, $id) {
+        $category = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->find($id);
+        $this->checkCategory($category);
+
+        $form = $this->createForm(CategoryPublishType::class, $category);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $category->setPublishedAt(new \DateTime());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($category);
+            $em->flush();
+
+            $this->addFlash('success', 'Category published successfully.');
+
+            return $this->redirectToRoute('admin_categories');
+        }
+
+        return $this->render('admin/category/publish.html.twig', [
+            'form' => $form->createView(),
+            'category' => $category,
         ]);
     }
 

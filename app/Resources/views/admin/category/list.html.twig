@@ -34,6 +34,13 @@
                             <tbody>
                             {% for category in categories %}
                                 <tr>
+                                    <td>
+                                        {% if category.published %}
+                                            <label class="label label-info">online</label>
+                                        {% else %}
+                                            <label class="label label-default">offline</label>
+                                        {% endif %}
+                                    </td>
                                     <td class="project-title" nowrap>
                                         {{ category.label }}
                                         <br>
@@ -42,6 +49,9 @@
                                         </p>
                                     </td>
                                     <td class="project-actions">
+                                        {% if not category.published %}
+                                            <a href="{{ path('admin_category_publish', {'id': category.id }) }}" class="btn btn-primary btn-sm">Publish</a>
+                                        {% endif %}
                                         <a href="{{ path('admin_category_edit', {'id': category.id }) }}" class="btn btn-primary btn-sm">Edit</a>
                                         <a href="{{ path('admin_category_delete', {'id': category.id }) }}" class="btn btn-danger btn-sm">Delete</a>
                                     </td>

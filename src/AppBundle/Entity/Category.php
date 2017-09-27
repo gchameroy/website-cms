@@ -37,6 +37,13 @@ class Category
     private $description;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="published_at", type="datetime", nullable=true)
+     */
+    private $publishedAt;
+
+    /**
      * @ORM\OneToMany(targetEntity="Product", mappedBy="category", cascade={"remove"})
      */
     private $products;
@@ -102,6 +109,40 @@ class Category
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set publishedAt
+     *
+     * @param \DateTime $publishedAt
+     *
+     * @return Category
+     */
+    public function setPublishedAt($publishedAt)
+    {
+        $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get publishedAt
+     *
+     * @return \DateTime
+     */
+    public function getPublishedAt()
+    {
+        return $this->publishedAt;
+    }
+
+    /**
+     * Get isPublished
+     *
+     * @return boolean
+     */
+    public function isPublished()
+    {
+        return $this->publishedAt ? true : false;
     }
 
     /**

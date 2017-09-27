@@ -5,7 +5,9 @@
                 <h2>Menu</h2>
                 <ul class="list-inline">
                     <li><a href="{{ path('front_home') }}">Home</a></li>
-                    <li><a href="{{ path('front_product_categories') }}">Products</a></li>
+                    {% for category in categories %}
+                        <li><a href="#">{{ category.label }}</a></li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>

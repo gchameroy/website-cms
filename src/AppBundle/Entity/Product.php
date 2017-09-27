@@ -164,7 +164,6 @@ class Product
         return $this;
     }
 
-
     /**
      * Get publishedAt
      *
