@@ -206,14 +206,16 @@ class Product
 
     /**
      * @param ArrayCollection $images
+     *
+     * @return $this
      */
     public function setImages(ArrayCollection $images)
     {
-        $this->images = new ArrayCollection();
-
         foreach ($images As $image) {
             $this->addImage($image);
         }
+
+        return $this;
     }
 
     /**
@@ -223,6 +225,7 @@ class Product
      */
     public function addImage(Image $image)
     {
+        $image->setProduct($this);
         if (!$this->images->contains($image)) {
             $this->images->add($image);
         }

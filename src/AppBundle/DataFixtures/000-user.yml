@@ -1,6 +1,0 @@
-model: AppBundle\Entity\User
-fixtures:
-    admin_001:
-        email: admin@test.fr
-        password: $2y$13$O7Xgp0nwqSjZCPCoAsLbhOQXWjznR9b3hg48lvm6OIeA38q5yGvvq
-        admin: 1

@@ -15,4 +15,10 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+
 /uploads/*
+!/uploads/.gitkeep
+/uploads/product/*
+!/uploads/product/.gitkeep
+/uploads/newsletter/*
+!/uploads/newsletter/.gitkeep

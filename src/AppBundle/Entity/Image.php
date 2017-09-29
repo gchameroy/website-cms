@@ -105,6 +105,7 @@ class Image
      */
     public function setNewsletter(Newsletter $newsletter)
     {
+        $newsletter->setImage($this);
         $this->newsletter = $newsletter;
 
         return $this;
