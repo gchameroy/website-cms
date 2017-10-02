@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -22,6 +23,7 @@ class User implements UserInterface
     {
         $this->registeredAt = new \Datetime;
         $this->isAdmin = false;
+        $this->orders = new ArrayCollection();
     }
 
     /**
@@ -64,6 +66,11 @@ class User implements UserInterface
      * @ORM\Column(name="registered_at", type="datetime")
      */
     private $registeredAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Order", mappedBy="user", cascade={"remove", "persist"})
+     */
+    private $orders;
 
     /**
      * Get id

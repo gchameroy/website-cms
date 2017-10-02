@@ -63,9 +63,15 @@ class Product
      */
     private $images;
 
+    /**
+     * @ORM\OneToMany(targetEntity="OrderProduct", mappedBy="product", cascade={"remove", "persist"})
+     */
+    private $orderProducts;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->orderProducts = new ArrayCollection();
     }
 
     /**
@@ -239,6 +245,40 @@ class Product
     public function getImages()
     {
         return $this->images;
+    }
+
+    /**
+     * @param ArrayCollection $orderProducts
+     */
+    public function setOrderProducts(ArrayCollection $orderProducts)
+    {
+        $this->orderProducts = new ArrayCollection();
+
+        foreach ($orderProducts As $orderProduct) {
+            $this->addOrderProduct($orderProduct);
+        }
+    }
+
+    /**
+     * @param OrderProduct $orderProduct
+     *
+     * @return $this
+     */
+    public function addOrderProduct(OrderProduct $orderProduct)
+    {
+        if (!$this->orderProducts->contains($orderProduct)) {
+            $this->orderProducts->add($orderProduct);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getOrderProducts()
+    {
+        return $this->orderProducts;
     }
 }
 
