@@ -14,7 +14,7 @@ class ProductController extends Controller
     /**
      * @Route("/categories/{category}-{page}", name="front_products")
      * @Method({"GET"})
-     * @param $category
+     * @param int $category
      * @param int $page
      * @return Response
      */
@@ -41,11 +41,37 @@ class ProductController extends Controller
     }
 
     /**
+     * @Route("/products/{product}", name="front_product")
+     * @Method({"GET"})
+     * @param int $product
+     * @return Response
+     */
+    public function viewAction($product) {
+        $product = $this->getDoctrine()
+            ->getRepository(Product::class)
+            ->findOnePublished($product);
+        $this->checkProduct($product);
+
+        return $this->render('front/product/view.html.twig', [
+            'product' => $product
+        ]);
+    }
+
+    /**
      * @param $category
      */
     private function checkCategory($category) {
         if (!$category) {
             throw $this->createNotFoundException('Category Not Found.');
+        }
+    }
+
+    /**
+     * @param $product
+     */
+    private function checkProduct($product) {
+        if (!$product) {
+            throw $this->createNotFoundException('Product Not Found.');
         }
     }
 }

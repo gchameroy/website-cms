@@ -20,7 +20,7 @@
                         {% for product in products %}
                             <tr>
                                 <td>{{ product.id }}</td>
-                                <td>{{ product.label }}</td>
+                                <td><a href="{{ path('front_product', {'product': product.id}) }}">{{ product.label }}</a></td>
                                 <td>{{ product.description }}</td>
                                 <td>{{ product.price|number_format(2, ',', ' ') }} €</td>
                             </tr>

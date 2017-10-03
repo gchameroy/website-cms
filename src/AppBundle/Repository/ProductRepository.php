@@ -15,6 +15,17 @@ class ProductRepository extends EntityRepository
 {
     const PER_PAGE = 6;
 
+    public function findOnePublished($product)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.publishedAt <= :now')
+                ->setParameter('now', new \DateTime())
+            ->andWhere('p.id = :product')
+                ->setParameter('product', $product)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findPublishedByCategory(Category $category, $page = 1)
     {
         return $this->createQueryBuilder('p')
