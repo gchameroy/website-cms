@@ -25,7 +25,7 @@ class HomeController extends Controller
     public function productsAction($max = 3) {
         $products = $this->getDoctrine()
             ->getRepository('AppBundle:Product')
-            ->findAll($max, 1, 'desc');
+            ->findLastPublished($max);
 
         return $this->render('front/home/partial/products.html.twig', [
             'products' => $products

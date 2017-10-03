@@ -29,9 +29,14 @@ class ProductController extends Controller
      * @return Response
      */
     public function listAction() {
+        $options = [
+            'perPage' => 0,
+            'order' => 'desc',
+            'published' => false
+        ];
         $products = $this->getDoctrine()
             ->getRepository(Product::class)
-            ->findAll(0, null, 'desc', false);
+            ->findAll($options);
 
         return $this->render('admin/product/list.html.twig', [
             'products' => $products

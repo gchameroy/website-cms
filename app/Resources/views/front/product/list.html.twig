@@ -1,0 +1,38 @@
+{% extends "front/layout.html.twig" %}
+
+{% block sections %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Products <small>page {{ page }}/{{ nbPage }}</small></h2>
+                    <h3>{{ category.label }}</h3>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>label</th>
+                            <th>description</th>
+                            <th>price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td>{{ product.id }}</td>
+                                <td>{{ product.label }}</td>
+                                <td>{{ product.description }}</td>
+                                <td>{{ product.price|number_format(2, ',', ' ') }} €</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div>
+                        <a class="btn btn-primary pull-left {% if page <= 1 %}disabled{% endif %}" href="{{ path('front_products', {category: category.id, page: page - 1}) }}">Previous</a>
+                        <a class="btn btn-primary pull-right {% if page >= nbPage %}disabled{% endif %}" href="{{ path('front_products', {category: category.id, page: page + 1}) }}">Next</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
