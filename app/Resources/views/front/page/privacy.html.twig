@@ -1,0 +1,17 @@
+{% extends "front/layout.html.twig" %}
+
+{% block sections %}
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Privacy Policy</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel est pulvinar ex aliquam semper. Nulla tempor at sapien sit amet aliquam. Cras ac iaculis urna, ut eleifend libero. Vivamus auctor hendrerit venenatis. Pellentesque id nulla eu ligula pulvinar interdum. Ut scelerisque eros ante, ut vehicula mauris euismod malesuada. In porta justo urna, eu imperdiet leo convallis eget.</p>
+                    <p>Cras eget ante ornare, molestie dui ut, molestie elit. Duis blandit ligula a felis venenatis, nec posuere ante hendrerit. Mauris a massa porta, pretium diam ultrices, viverra odio. Curabitur pellentesque lectus vel turpis maximus, nec volutpat nunc ornare. Proin cursus eu mauris quis ornare. Phasellus pellentesque metus ac massa viverra, ac pellentesque eros ornare. Morbi dolor velit, scelerisque in vestibulum non, dictum quis neque. Sed euismod dolor euismod diam mattis scelerisque. Integer aliquet mauris urna, gravida eleifend mauris tristique sed. Nulla eleifend dapibus sem, non semper turpis volutpat vitae. Mauris molestie, magna et mollis fermentum, arcu augue vulputate nibh, nec dictum est enim vitae magna. Fusce tortor enim, vestibulum sed eros ac, condimentum fringilla turpis.</p>
+                    <p>Proin porta tortor et nisl dignissim, quis eleifend quam sollicitudin. Integer a pharetra ipsum, in venenatis leo. Nunc fermentum lectus at nisl interdum vehicula. Mauris aliquam magna vestibulum consectetur consectetur. Donec condimentum sodales neque, nec congue justo fermentum non. Praesent pharetra dignissim justo, in ultrices odio egestas eget. Nunc luctus purus eget congue iaculis. Etiam porta quam et felis aliquam bibendum. Proin sit amet nulla faucibus ligula venenatis varius. Phasellus id malesuada nulla. Maecenas convallis nisi eu diam venenatis eleifend. Aenean nec sem non ligula iaculis tincidunt. Cras vestibulum at augue at tristique.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
+{% endblock %}
