@@ -1,0 +1,37 @@
+{% extends "front/layout.html.twig" %}
+
+{% block sections %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Newsletter</h2>
+                    <table class="table">
+                        <tr>
+                            <td class="text-right">id</td>
+                            <td>{{ newsletter.id }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">title</td>
+                            <td>{{ newsletter.title }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">content</td>
+                            <td>{{ newsletter.content }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">image</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <img class="img-responsive" src="{{ path('newsletter_image_view', {'newsletter_id': newsletter.id, 'image_id': newsletter.image.id}) }}">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
