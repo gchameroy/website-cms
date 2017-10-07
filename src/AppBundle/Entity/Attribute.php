@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,7 +36,17 @@ class Attribute
      * @ORM\JoinColumn(name="category_attribute_id", referencedColumnName="id", nullable=false)
      */
     private $categoryAttribute;
-    
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Product", mappedBy="attributes", cascade={"remove"})
+     */
+    private $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
+
     /**
      * Get id
      *
@@ -89,5 +100,42 @@ class Attribute
     {
         return $this->categoryAttribute;
     }
-}
 
+    /**
+     * Add product
+     *
+     * @param Product $product
+     *
+     * @return Attribute
+     */
+    public function addProduct(Product $product)
+    {
+        $this->products[] = $product;
+
+        return $this;
+    }
+
+    /**
+     * Remove product
+     *
+     * @param Product $product
+     *
+     * @return $this
+     */
+    public function removeProduct(Product $product)
+    {
+        $this->products->removeElement($product);
+
+        return $this;
+    }
+
+    /**
+     * Get products
+     *
+     * @return ArrayCollection
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+}

@@ -1,0 +1,9 @@
+<div class="row">
+    {% for attribute in attributes %}
+        <div>
+            <label>
+                <input type="checkbox" {% if attribute in products_attributes %} checked {% endif %} name="attributes[]" value="{{ attribute.id }}"> {{ attribute.label }}
+            </label>
+        </div>
+    {% endfor %}
+</div>

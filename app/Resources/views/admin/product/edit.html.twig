@@ -24,7 +24,7 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h4>Create product</h4>
+                    <h4>Edit product</h4>
                     &nbsp;
                     {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
                     <div class="form-group">
@@ -54,6 +54,15 @@
                             {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                     </div>
+                    {% for category_attribute in categories_attribute %}
+                        <div class="form-group">
+                            <h5 class="clickCategoryAttribute" data-id="{{ category_attribute.id }}">
+                                {{ category_attribute.label }}
+                                <i class="fa fa-arrow-down"></i>
+                            </h5>
+                            <div class="listAttribute" style="display: none"></div>
+                        </div>
+                    {% endfor %}
                     <div class="form-group">
                         <div class="col-lg-2"></div>
                         <div class="col-lg-10">
@@ -70,6 +79,12 @@
 {% endblock %}
 {% block javascripts %}
     <script>
+        $(document).ready(function(){
+           $('.clickCategoryAttribute').each(function(){
+               var category_id = $(this).attr('data-id');
+               getAttributes(category_id, true);
+           });
+        });
         $('.modal_add_category').click(function(e){
             e.preventDefault();
             e.stopPropagation();
@@ -77,5 +92,44 @@
                 $(response).modal();
             });
         });
+        $('.clickCategoryAttribute').click(function (e) {
+            var listAttributes = $(this).parent().find('.listAttribute');
+            var category_id = $(this).attr('data-id');
+
+            listAttributes.toggle();
+            $(this).find('i').toggleClass('fa-arrow-down', 'fa-arrow-up');
+            $(this).find('i').toggleClass('fa-arrow-up', 'fa-arrow-down');
+
+            getAttributes(category_id, false);
+        });
+        function getAttributes(category_id, start)
+        {
+            var divCategory = $('.clickCategoryAttribute[data-id='+category_id+']');
+            var listAttributes = divCategory.parent().find('.listAttribute');
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('admin_add_product_attributes') }}',
+                data: {
+                    category_id: category_id,
+                    product_id: "{{ product.id }}"
+                },
+                success: function(jqXHR){
+                    listAttributes.html(jqXHR);
+                    if (start) {
+                        var display = false;
+                        listAttributes.find('input').each(function(){
+                            if ($(this).is(':checked')) {
+                                display = true;
+                            }
+                        });
+                        if (display) {
+                            listAttributes.toggle();
+                            divCategory.find('i').toggleClass('fa-arrow-down', 'fa-arrow-up');
+                            divCategory.find('i').toggleClass('fa-arrow-up', 'fa-arrow-down');
+                        }
+                    }
+                }
+            });
+        }
     </script>
 {% endblock %}

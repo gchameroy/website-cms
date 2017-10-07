@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Attribute;
 use AppBundle\Entity\Category;
+use AppBundle\Entity\CategoryAttribute;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Product;
-use AppBundle\Form\Type\CategoryType;
+use AppBundle\Form\Type\Category\CategoryType;
 use AppBundle\Form\Type\ImageType;
 use AppBundle\Form\Type\Product\ProductPublishType;
 use AppBundle\Form\Type\Product\ProductDeleteType;
@@ -51,10 +53,17 @@ class ProductController extends Controller
      */
     public function addAction(Request $request) {
         $product = new Product();
+        $categoriesAttribute = $this->getDoctrine()->getRepository(CategoryAttribute::class)->findAll();
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $attributes = $request->request->get('attributes');
+            foreach ($attributes As $attribute_id) {
+                $attribute = $this->getDoctrine()->getRepository(Attribute::class)->find($attribute_id);
+                $product->addAttribute($attribute);
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();
@@ -68,6 +77,7 @@ class ProductController extends Controller
 
         return $this->render('admin/product/add.html.twig', [
             'form' => $form->createView(),
+            'categories_attribute' => $categoriesAttribute
         ]);
     }
 
@@ -111,6 +121,7 @@ class ProductController extends Controller
      * @return RedirectResponse|Response
      */
     public function editAction(Request $request, $id) {
+        $categoriesAttribute = $this->getDoctrine()->getRepository(CategoryAttribute::class)->findAll();
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
             ->find($id);
@@ -119,6 +130,13 @@ class ProductController extends Controller
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $product->removeAttributes();
+            $attributes = $request->request->get('attributes');
+            foreach ($attributes As $attribute_id) {
+                $attribute = $this->getDoctrine()->getRepository(Attribute::class)->find($attribute_id);
+                $product->addAttribute($attribute);
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();
@@ -133,6 +151,7 @@ class ProductController extends Controller
         return $this->render('admin/product/edit.html.twig', [
             'form' => $form->createView(),
             'product' => $product,
+            'categories_attribute' => $categoriesAttribute
         ]);
     }
 
@@ -263,11 +282,49 @@ class ProductController extends Controller
     }
 
     /**
+     * @Route("/add_attributes", name="admin_add_product_attributes")
+     * @Method({"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function addAttributeAction(Request $request) {
+        $product_id = $request->request->get('product_id');
+        $category_id = $request->request->get('category_id');
+
+        $productAttributes = array();
+        if (null != $product_id) {
+            $product = $this->getDoctrine()
+                ->getRepository(Product::class)
+                ->find($product_id);
+            $this->checkProduct($product);
+            $productAttributes = $product->getAttributes();
+        }
+        $categoryAttribute = $this->getDoctrine()
+            ->getRepository(CategoryAttribute::class)
+            ->find($category_id);
+        $this->checkCategoryAttribute($categoryAttribute);
+
+        return $this->render("admin/product/add_attributes.html.twig", array(
+            'attributes'  =>  $categoryAttribute->getAttributes(),
+            'products_attributes' => $productAttributes
+        ));
+    }
+
+    /**
      * @param $product
      */
     private function checkProduct($product) {
         if (!$product) {
             throw $this->createNotFoundException('Product Not Found.');
+        }
+    }
+
+    /**
+     * @param $categoryAttribute
+     */
+    private function checkCategoryAttribute($categoryAttribute) {
+        if (!$categoryAttribute) {
+            throw $this->createNotFoundException('Category Attribute Not Found.');
         }
     }
 }

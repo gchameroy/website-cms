@@ -68,10 +68,17 @@ class Product
      */
     private $orderProducts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Attribute", inversedBy="products", cascade={"remove"})
+     * @ORM\JoinTable(name="products_attributes")
+     */
+    private $attributes;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->orderProducts = new ArrayCollection();
+        $this->attributes = new ArrayCollection();
     }
 
     /**
@@ -280,5 +287,79 @@ class Product
     {
         return $this->orderProducts;
     }
-}
 
+    /**
+     * Remove image
+     *
+     * @param Image $image
+     *
+     * @return Product
+     */
+    public function removeImage(Image $image)
+    {
+        $this->images->removeElement($image);
+
+        return $this;
+    }
+
+    /**
+     * Remove orderProduct
+     *
+     * @param \AppBundle\Entity\OrderProduct $orderProduct
+     *
+     * @return Product
+     */
+    public function removeOrderProduct(OrderProduct $orderProduct)
+    {
+        $this->orderProducts->removeElement($orderProduct);
+
+        return $this;
+    }
+
+    /**
+     * Add attribute
+     *
+     * @param Attribute $attribute
+     *
+     * @return Product
+     */
+    public function addAttribute(Attribute $attribute)
+    {
+        $this->attributes[] = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * Remove attribute
+     *
+     * @param Attribute $attribute
+     *
+     * @return Product
+     */
+    public function removeAttribute(Attribute $attribute)
+    {
+        $this->attributes->removeElement($attribute);
+
+        return $this;
+    }
+
+    /**
+     * @return Product
+     */
+    public function removeAttributes()
+    {
+        $this->attributes->clear();
+
+        return $this;
+    }
+    /**
+     * Get attributes
+     *
+     * @return ArrayCollection
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+}
