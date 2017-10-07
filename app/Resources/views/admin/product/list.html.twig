@@ -54,8 +54,8 @@
                                         {% if not product.published %}
                                             <a href="{{ path('admin_product_publish', {'id': product.id }) }}" class="btn btn-primary btn-sm">Publish</a>
                                         {% endif %}
-                                        <a href="{{ path('admin_product_edit', {'id': product.id }) }}" class="btn btn-primary btn-sm">Edit product</a>
-                                        <a href="{{ path('admin_product_delete', {'id': product.id }) }}" class="btn btn-danger btn-sm">Delete product</a>
+                                        <a href="{{ path('admin_product', {'id': product.id }) }}" class="btn btn-primary btn-sm">View</a>
+                                        <a href="{{ path('admin_product_delete', {'id': product.id }) }}" class="btn btn-danger btn-sm">Delete</a>
                                     </td>
                                 </tr>
                             {% else %}
