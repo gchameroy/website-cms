@@ -6,16 +6,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Order
- *
- * @ORM\Table(name="order")
+ * @ORM\Table(name="orders")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderRepository")
  */
 class Order
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,14 +21,12 @@ class Order
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     private $createdAt;
 
     /**
      * @var User
-     *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="orders")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -39,25 +34,26 @@ class Order
 
     /**
      * @var Address
-     *
      * @ORM\ManyToOne(targetEntity="Address", inversedBy="orders")
      * @ORM\JoinColumn(name="delivery_address_id", referencedColumnName="id")
      */
     private $deliveryAddress;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="OrderProduct", mappedBy="order", cascade={"remove", "persist"})
      */
     private $orderProducts;
 
+    /**
+     * Order constructor.
+     */
     public function __construct()
     {
         $this->orderProducts = new ArrayCollection();
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -66,10 +62,7 @@ class Order
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
+     * @param $createdAt
      * @return Order
      */
     public function setCreatedAt($createdAt)
@@ -81,8 +74,6 @@ class Order
 
 
     /**
-     * Get createdAt
-     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -92,8 +83,7 @@ class Order
 
     /**
      * @param User $user
-     *
-     * @return $this
+     * @return Order
      */
     public function setUser(User $user)
     {
@@ -112,8 +102,7 @@ class Order
 
     /**
      * @param Address $deliveryAddress
-     *
-     * @return $this
+     * @return Order
      */
     public function setDeliveryAddress(Address $deliveryAddress)
     {
@@ -132,6 +121,7 @@ class Order
 
     /**
      * @param ArrayCollection $orderProducts
+     * @return Order
      */
     public function setOrderProducts(ArrayCollection $orderProducts)
     {
@@ -140,12 +130,13 @@ class Order
         foreach ($orderProducts As $orderProduct) {
             $this->addOrderProduct($orderProduct);
         }
+        
+        return $this;
     }
 
     /**
      * @param OrderProduct $orderProduct
-     *
-     * @return $this
+     * @return Order
      */
     public function addOrderProduct(OrderProduct $orderProduct)
     {

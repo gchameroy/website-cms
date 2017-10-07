@@ -8,8 +8,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * User
- *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @UniqueEntity(fields="email", message="Email already taken.")
@@ -17,18 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class User implements UserInterface
 {
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->registeredAt = new \Datetime;
-        $this->isAdmin = false;
-        $this->orders = new ArrayCollection();
-    }
-
-    /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -37,14 +24,12 @@ class User implements UserInterface
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      */
     private $email;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="password", type="string", length=60)
      */
     private $password;
@@ -62,19 +47,34 @@ class User implements UserInterface
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="registered_at", type="datetime")
      */
     private $registeredAt;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Order", mappedBy="user", cascade={"remove", "persist"})
      */
     private $orders;
 
     /**
-     * Get id
-     *
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Cart", mappedBy="user", cascade={"remove", "persist"})
+     */
+    private $carts;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->registeredAt = new \Datetime;
+        $this->isAdmin = false;
+        $this->orders = new ArrayCollection();
+        $this->carts = new ArrayCollection();
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -83,8 +83,6 @@ class User implements UserInterface
     }
 
     /**
-     * Get username
-     *
      * @return string
      */
     public function getUsername()
@@ -93,10 +91,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set email
-     *
-     * @param string $email
-     *
+     * @param $email
      * @return User
      */
     public function setEmail($email)
@@ -107,8 +102,6 @@ class User implements UserInterface
     }
 
     /**
-     * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -117,10 +110,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set password
-     *
-     * @param string $password
-     *
+     * @param $password
      * @return User
      */
     public function setPassword($password)
@@ -131,8 +121,6 @@ class User implements UserInterface
     }
 
     /**
-     * Get plainPassword
-     *
      * @return string
      */
     public function getPlainPassword()
@@ -141,10 +129,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set plainPassword
-     *
-     * @param string $plainPassword
-     *
+     * @param $plainPassword
      * @return User
      */
     public function setPlainPassword($plainPassword)
@@ -155,8 +140,6 @@ class User implements UserInterface
     }
 
     /**
-     * Get password
-     *
      * @return string
      */
     public function getPassword()
@@ -165,10 +148,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set registeredAt
-     *
-     * @param \DateTime $registeredAt
-     *
+     * @param $registeredAt
      * @return User
      */
     public function setRegisteredAt($registeredAt)
@@ -179,21 +159,23 @@ class User implements UserInterface
     }
 
     /**
-     * Get registeredAt
-     *
      * @return \DateTime
      */
     public function getRegisteredAt()
     {
         return $this->registeredAt;
     }
-    
+
+    /**
+     * @return array
+     */
     public function getRoles()
     {
         $roles = ['ROLE_USER'];
         if ($this->isAdmin()) {
             $roles[] = 'ROLE_ADMIN';
         }
+
         return $roles;
     }
 
@@ -203,13 +185,10 @@ class User implements UserInterface
     }
 
     /**
-     * Set isAdmin
-     *
-     * @param boolean $isAdmin
-     *
+     * @param $isAdmin
      * @return User
      */
-    public function setAdmin($isAdmin)
+    public function setIsAdmin($isAdmin)
     {
         $this->isAdmin = $isAdmin;
 
@@ -217,9 +196,7 @@ class User implements UserInterface
     }
 
     /**
-     * Get isAdmin
-     *
-     * @return boolean
+     * @return bool
      */
     public function isAdmin()
     {
@@ -234,5 +211,65 @@ class User implements UserInterface
     public function getSalt()
     {
         return null;
+    }
+
+    /**
+     * @param Order $order
+     * @return User
+     */
+    public function addOrder(Order $order)
+    {
+        $this->orders[] = $order;
+
+        return $this;
+    }
+
+    /**
+     * @param Order $order
+     * @return $this
+     */
+    public function removeOrder(Order $order)
+    {
+        $this->orders->removeElement($order);
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param Cart $cart
+     * @return User
+     */
+    public function addCart(Cart $cart)
+    {
+        $this->carts[] = $cart;
+
+        return $this;
+    }
+
+    /**
+     * @param Cart $cart
+     * @return User
+     */
+    public function removeCart(Cart $cart)
+    {
+        $this->carts->removeElement($cart);
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCarts()
+    {
+        return $this->carts;
     }
 }

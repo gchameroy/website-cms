@@ -1,7 +1,4 @@
-/.web-server-pid
 /app/config/parameters.yml
-/build/
-/phpunit.xml
 /var/*
 !/var/cache
 /var/cache/*
@@ -18,8 +15,6 @@
 
 /uploads/*
 !/uploads/.gitkeep
-/uploads/product/*
 !/uploads/product/.gitkeep
-/uploads/newsletter/*
 !/uploads/newsletter/.gitkeep
 *~

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Front;
 
+use AppBundle\Service\CartManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,6 +32,18 @@ class LayoutController extends Controller
 
         return $this->render('front/home/partial/newsletters.html.twig', [
             'newsletters' => $newsletters
+        ]);
+    }
+
+    /**
+     * @param CartManager $cartManager
+     * @return Response
+     */
+    public function cartAction(CartManager $cartManager) {
+        $cart = $cartManager->getCurrentCart();
+
+        return $this->render('front/layout/partial/cart.html.twig', [
+            'cart' => $cart
         ]);
     }
 }

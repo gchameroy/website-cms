@@ -6,8 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Product
- *
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ProductRepository")
  */
@@ -15,7 +13,6 @@ class Product
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,46 +21,43 @@ class Product
 
     /**
      * @var string
-     *
      * @ORM\Column(name="label", type="string", length=255)
      */
     private $label;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="description", type="string", length=1000)
      */
     private $description;
 
     /**
      * @var float
-     *
      * @ORM\Column(name="price", type="float")
      */
     private $price;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="published_at", type="datetime", nullable=true)
      */
     private $publishedAt;
 
     /**
      * @var Category
-     *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
      */
     private $category;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Image", mappedBy="product", cascade={"remove", "persist"})
      */
     private $images;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="OrderProduct", mappedBy="product", cascade={"remove", "persist"})
      */
     private $orderProducts;
@@ -74,16 +68,24 @@ class Product
      */
     private $attributes;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="CartProduct", mappedBy="product", cascade={"remove", "persist"})
+     */
+    private $cartProducts;
+
+    /**
+     * Product constructor.
+     */
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->orderProducts = new ArrayCollection();
         $this->attributes = new ArrayCollection();
+        $this->cartProducts = new ArrayCollection();
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -92,10 +94,7 @@ class Product
     }
 
     /**
-     * Set label
-     *
-     * @param string $label
-     *
+     * @param $label
      * @return Product
      */
     public function setLabel($label)
@@ -106,8 +105,6 @@ class Product
     }
 
     /**
-     * Get label
-     *
      * @return string
      */
     public function getLabel()
@@ -116,10 +113,7 @@ class Product
     }
 
     /**
-     * Set description
-     *
-     * @param string $description
-     *
+     * @param $description
      * @return Product
      */
     public function setDescription($description)
@@ -130,8 +124,6 @@ class Product
     }
 
     /**
-     * Get description
-     *
      * @return string
      */
     public function getDescription()
@@ -140,10 +132,7 @@ class Product
     }
 
     /**
-     * Set price
-     *
-     * @param float $price
-     *
+     * @param $price
      * @return Product
      */
     public function setPrice($price)
@@ -154,8 +143,6 @@ class Product
     }
 
     /**
-     * Get price
-     *
      * @return float
      */
     public function getPrice()
@@ -164,10 +151,7 @@ class Product
     }
 
     /**
-     * Set publishedAt
-     *
-     * @param \DateTime $publishedAt
-     *
+     * @param $publishedAt
      * @return Product
      */
     public function setPublishedAt($publishedAt)
@@ -178,8 +162,6 @@ class Product
     }
 
     /**
-     * Get publishedAt
-     *
      * @return \DateTime
      */
     public function getPublishedAt()
@@ -188,9 +170,7 @@ class Product
     }
 
     /**
-     * Get isPublished
-     *
-     * @return boolean
+     * @return bool
      */
     public function isPublished()
     {
@@ -199,8 +179,7 @@ class Product
 
     /**
      * @param Category $category
-     *
-     * @return $this
+     * @return Product
      */
     public function setCategory(Category $category)
     {
@@ -219,8 +198,7 @@ class Product
 
     /**
      * @param ArrayCollection $images
-     *
-     * @return $this
+     * @return Product
      */
     public function setImages(ArrayCollection $images)
     {
@@ -233,8 +211,7 @@ class Product
 
     /**
      * @param Image $image
-     *
-     * @return $this
+     * @return Product
      */
     public function addImage(Image $image)
     {
@@ -242,6 +219,17 @@ class Product
         if (!$this->images->contains($image)) {
             $this->images->add($image);
         }
+
+        return $this;
+    }
+
+    /**
+     * @param Image $image
+     * @return Product
+     */
+    public function removeImage(Image $image)
+    {
+        $this->images->removeElement($image);
 
         return $this;
     }
@@ -256,6 +244,7 @@ class Product
 
     /**
      * @param ArrayCollection $orderProducts
+     * @return Product
      */
     public function setOrderProducts(ArrayCollection $orderProducts)
     {
@@ -264,12 +253,13 @@ class Product
         foreach ($orderProducts As $orderProduct) {
             $this->addOrderProduct($orderProduct);
         }
+
+        return $this;
     }
 
     /**
      * @param OrderProduct $orderProduct
-     *
-     * @return $this
+     * @return Product
      */
     public function addOrderProduct(OrderProduct $orderProduct)
     {
@@ -281,32 +271,7 @@ class Product
     }
 
     /**
-     * @return ArrayCollection
-     */
-    public function getOrderProducts()
-    {
-        return $this->orderProducts;
-    }
-
-    /**
-     * Remove image
-     *
-     * @param Image $image
-     *
-     * @return Product
-     */
-    public function removeImage(Image $image)
-    {
-        $this->images->removeElement($image);
-
-        return $this;
-    }
-
-    /**
-     * Remove orderProduct
-     *
-     * @param \AppBundle\Entity\OrderProduct $orderProduct
-     *
+     * @param OrderProduct $orderProduct
      * @return Product
      */
     public function removeOrderProduct(OrderProduct $orderProduct)
@@ -314,6 +279,14 @@ class Product
         $this->orderProducts->removeElement($orderProduct);
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getOrderProducts()
+    {
+        return $this->orderProducts;
     }
 
     /**
@@ -361,5 +334,49 @@ class Product
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+
+    /**
+     * @param ArrayCollection $cartProducts
+     * @return Product
+     */
+    public function setCartProducts(ArrayCollection $cartProducts)
+    {
+        foreach ($cartProducts As $cartProduct) {
+            $this->addCartProduct($cartProduct);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CartProduct $cartProduct
+     * @return Product
+     */
+    public function addCartProduct(CartProduct $cartProduct)
+    {
+        $this->cartProducts[] = $cartProduct;
+
+        return $this;
+    }
+
+    /**
+     * @param CartProduct $cartProduct
+     * @return Product
+     */
+    public function removeCartProduct(CartProduct $cartProduct)
+    {
+        $this->cartProducts->removeElement($cartProduct);
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCartProducts()
+    {
+        return $this->cartProducts;
     }
 }

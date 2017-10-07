@@ -67,7 +67,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @param $product
+     *@param $product
      */
     private function checkProduct($product) {
         if (!$product) {

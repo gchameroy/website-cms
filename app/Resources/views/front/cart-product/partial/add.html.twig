@@ -1,0 +1,13 @@
+{{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
+<div class="form-group">
+    <label class="col-lg-2 control-label">Quantity</label>
+    <div class="col-lg-2">
+        {{ form_widget(form.quantity, {'attr' : {'class' : 'form-control'} }) }}
+    </div>
+    <div class="col-lg-8">
+        <button class="btn btn-sm btn-primary" type="submit">
+            <strong>Add to cart</strong>
+        </button>
+    </div>
+</div>
+{{ form_end(form) }}

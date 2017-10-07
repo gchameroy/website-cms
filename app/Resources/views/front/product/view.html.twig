@@ -36,6 +36,7 @@
                             </td>
                         </tr>
                     </table>
+                    {{ render(controller('AppBundle:Front/CartProduct:add', {product: product.id})) }}
                 </div>
             </div>
         </div>
