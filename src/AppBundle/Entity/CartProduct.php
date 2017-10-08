@@ -39,6 +39,21 @@ class CartProduct
     private $product;
 
     /**
+     * @var Attribute
+     * @ORM\ManyToOne(targetEntity="Attribute", inversedBy="cartProducts")
+     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
+     */
+    private $attribute;
+
+    /**
+     * CartProduct constructor.
+     */
+    public function __construct()
+    {
+        $this->quantity = 1;
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -102,5 +117,23 @@ class CartProduct
     {
         return $this->product;
     }
-}
 
+    /**
+     * @param Attribute $attribute
+     * @return CartProduct
+     */
+    public function setAttribute(Attribute $attribute)
+    {
+        $this->attribute = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+}

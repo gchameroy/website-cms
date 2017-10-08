@@ -15,7 +15,6 @@ class Attribute
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -31,7 +30,6 @@ class Attribute
 
     /**
      * @var CategoryAttribute
-     *
      * @ORM\ManyToOne(targetEntity="CategoryAttribute", inversedBy="attributes")
      * @ORM\JoinColumn(name="category_attribute_id", referencedColumnName="id", nullable=false)
      */
@@ -42,9 +40,16 @@ class Attribute
      */
     private $products;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="CartProduct", mappedBy="attribute", cascade={"remove", "persist"})
+     */
+    private $cartProducts;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->cartProducts = new ArrayCollection();
     }
 
     /**
@@ -137,5 +142,48 @@ class Attribute
     public function getProducts()
     {
         return $this->products;
+    }
+
+    /**
+     * @param ArrayCollection $cartProducts
+     * @return Attribute
+     */
+    public function setCartProducts(ArrayCollection $cartProducts)
+    {
+        foreach ($cartProducts As $cartProduct) {
+            $this->addCartProduct($cartProduct);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CartProduct $cartProduct
+     * @return Attribute
+     */
+    public function addCartProduct(CartProduct $cartProduct)
+    {
+        $this->cartProducts[] = $cartProduct;
+
+        return $this;
+    }
+
+    /**
+     * @param CartProduct $cartProduct
+     * @return Attribute
+     */
+    public function removeCartProduct(CartProduct $cartProduct)
+    {
+        $this->cartProducts->removeElement($cartProduct);
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCartProducts()
+    {
+        return $this->cartProducts;
     }
 }

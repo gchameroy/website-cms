@@ -2,11 +2,13 @@
 
 namespace AppBundle\Controller\Front;
 
+use AppBundle\Entity\Attribute;
 use AppBundle\Entity\CartProduct;
 use AppBundle\Entity\Product;
-use AppBundle\Form\Type\CartProduct\CartProductType;
 use AppBundle\Service\CartManager;
+use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,15 +34,44 @@ class CartProductController extends Controller
         $cartProduct->setProduct($product);
         $cartProduct->setCart($cartManager->getCurrentCart());
 
-        $form = $this->createForm(CartProductType::class, $cartProduct, [
-            'action' => $this->generateUrl('front_cart_product_add', [
+        $form = $this->createFormBuilder($cartProduct)
+            ->setAction($this->generateUrl('front_cart_product_add', [
                 'product' => $product->getId()
-            ])
-        ]);
+            ]))
+            ->add('attribute', EntityType::class, array(
+                'class' => Attribute::class,
+                'choice_label' => function (Attribute $attribute) {
+                    return $attribute->getLabel();
+                },
+                'query_builder' => function (EntityRepository $er) use ($product) {
+                    return $er->createQueryBuilder('a')
+                        ->join('a.products', 'p')
+                        ->where('p.id = :product')
+                        ->setParameter('product', $product->getId())
+                        ->orderBy('a.label', 'ASC');
+                }
+            ))
+            ->getForm();
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cartProduct);
+
+            $cartProduct2 = $em->getRepository(CartProduct::class)
+                ->findOneBy([
+                   'cart' => $cartProduct->getCart(),
+                   'product' => $cartProduct->getProduct(),
+                   'attribute' => $cartProduct->getAttribute(),
+                ]);
+            if (!$cartProduct2) {
+                $em->persist($cartProduct);
+            } else {
+                $cartProduct2->setQuantity(
+                    $cartProduct2->getQuantity() + 1
+                );
+                $em->persist($cartProduct2);
+            }
+
             $em->flush();
 
             $this->addFlash('success', 'Product added successfully to the cart.');
