@@ -136,4 +136,12 @@ class CartProduct
     {
         return $this->attribute;
     }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->product->getPrice() * $this->quantity;
+    }
 }

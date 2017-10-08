@@ -202,4 +202,17 @@ class Cart
 
         return $length;
     }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        $price = 0;
+        foreach ($this->products as $cartProduct) {
+            $price += $cartProduct->getPrice();
+        }
+
+        return $price;
+    }
 }

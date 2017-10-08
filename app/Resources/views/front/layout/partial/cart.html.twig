@@ -1,4 +1,6 @@
-<h1 class="text-right">
-    <i class="fa fa-shopping-cart"></i>
-    <span class="m-l-sm">{{ cart.length }} items</span>
-</h1>
+<h3 class="text-right">
+    <a href="{{ path('front_cart') }}">
+        <i class="fa fa-shopping-cart"></i>
+        <span class="m-l-sm">{{ cart.length }} products | {{ cart.price|number_format(2, ',', ' ') }}€</span>
+    </a>
+</h3>

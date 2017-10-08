@@ -24,7 +24,8 @@ class CartProductController extends Controller
      * @param CartManager $cartManager
      * @return Response
      */
-    public function addAction($product, Request $request, CartManager $cartManager) {
+    public function addAction($product, Request $request, CartManager $cartManager)
+    {
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
             ->find($product);
@@ -76,7 +77,7 @@ class CartProductController extends Controller
 
             $this->addFlash('success', 'Product added successfully to the cart.');
 
-            return $this->redirectToRoute('front_home');
+            return $this->redirectToRoute('front_cart');
         }
 
         return $this->render('front/cart-product/partial/add.html.twig', [
