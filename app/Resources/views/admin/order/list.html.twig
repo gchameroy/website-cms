@@ -1,0 +1,52 @@
+{% extends "admin/layout.html.twig" %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Order list</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('admin_home') }}">Home</a>
+                </li>
+                <li class="active">
+                    <strong>Order List</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+{% endblock %}
+
+{% block wrapper_content %}
+    <div class="row wrapper wrapper-content animated fadeInRight">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h4>Order list</h4>
+                </div>
+                <div class="ibox-content">
+                    <div class="project-list">
+                        <table class="table table-hover">
+                            <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.user.email }}</td>
+                                    <td>{{ order.createdAt|date('Y-m-d H:i') }}</td>
+                                    <td>{{ order.price|number_format(2, ',', ' ') }}€</td>
+                                    <td>
+                                        <a href="{{ path('admin_order', {'id': order.id }) }}" class="btn btn-primary btn-sm">View</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td>No order found.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -17,7 +17,7 @@ class UserFixtures extends Fixture
             ->encodePassword($user, $user->getPlainPassword());
         $user->setPassword($password)
             ->eraseCredentials();
-        $user->setAdmin(true);
+        $user->setIsAdmin(true);
 
         $this->setReference('user-admin', $user);
         $manager->persist($user);

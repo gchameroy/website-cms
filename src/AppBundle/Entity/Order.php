@@ -154,5 +154,31 @@ class Order
     {
         return $this->orderProducts;
     }
+
+    /**
+     * @return int
+     */
+    public function getLength()
+    {
+        $length = 0;
+        foreach ($this->orderProducts as $orderProduct) {
+            $length += $orderProduct->getQuantity();
+        }
+
+        return $length;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        $price = 0;
+        foreach ($this->orderProducts as $orderProduct) {
+            $price += $orderProduct->getPrice();
+        }
+
+        return $price;
+    }
 }
 
