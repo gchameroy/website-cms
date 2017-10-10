@@ -40,7 +40,7 @@
                                     {% if newsletter.image %}
                                         <div>
                                             <div class="image-imitation">
-                                                <img alt="image" class="img-preview" src="{{ path('newsletter_image_view', {'newsletter_id': newsletter.id, 'image_id': newsletter.image.id}) }}" />
+                                                <img alt="image" class="img-preview" src="{{ path('newsletter_image_view', {'image_id': newsletter.image.id}) }}" />
                                             </div>
                                         </div>
                                     {% else %}

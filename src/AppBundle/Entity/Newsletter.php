@@ -37,9 +37,8 @@ class Newsletter
 
     /**
      * @var Image
-     *
-     * @ORM\OneToOne(targetEntity="Image")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="Image", inversedBy="newsletters")
+     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=true)
      */
     private $image;
 

@@ -197,7 +197,6 @@ class NewsletterController extends Controller
         }
 
         $image = new Image();
-        $image->setNewsletter($newsletter);
 
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);

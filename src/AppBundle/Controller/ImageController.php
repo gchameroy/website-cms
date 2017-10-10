@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Image;
+use AppBundle\Entity\Newsletter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,21 +41,17 @@ class ImageController Extends Controller
 
     /**
      * @Route(
-     *     "/images/n{newsletter_id}-{image_id}", name="newsletter_image_view",
-     *     requirements={"newsletter_id": "\d+", "image_id": "\d+"}
+     *     "/images/n-{image_id}", name="newsletter_image_view",
+     *     requirements={"image_id": "\d+"}
      * )
      * @Method({"GET"})
-     * @param integer $newsletter_id
      * @param integer $image_id
      * @return BinaryFileResponse
      */
-    public function viewNewsletterImageAction($newsletter_id, $image_id) {
+    public function viewNewsletterImageAction($image_id) {
         $image = $this->getDoctrine()
             ->getRepository(Image::class)
-            ->findOneBy([
-                'id' => $image_id,
-                'newsletter' => $newsletter_id
-            ]);
+            ->find($image_id);
         $this->checkImage($image);
 
         $filePath = $this->get('kernel')->getRootDir() . '/../uploads/newsletter/';

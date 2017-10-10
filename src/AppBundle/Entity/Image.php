@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Proxies\__CG__\AppBundle\Entity\Newsletter;
 
 /**
  * Image
@@ -36,13 +38,16 @@ class Image
      */
     private $product;
 
+
     /**
-     * @var Newsletter
-     *
-     * @ORM\OneToOne(targetEntity="Newsletter")
-     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     * @ORM\OneToMany(targetEntity="Newsletter", mappedBy="imge")
      */
-    private $newsletter;
+    private $newsletters;
+
+    public function __construct()
+    {
+        $this->newsletters = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -99,23 +104,40 @@ class Image
     }
 
     /**
+     * Set newsletters
+     *
+     * @param ArrayCollection $newsletters
+     */
+    public function setNewsletters(ArrayCollection $newsletters)
+    {
+        $this->newsletters = new ArrayCollection();
+
+        foreach ($newsletters As $newsletter) {
+            $this->addAttribute($newsletter);
+        }
+    }
+
+    /**
+     * Add newsletter
+     *
      * @param Newsletter $newsletter
      *
      * @return $this
      */
-    public function setNewsletter(Newsletter $newsletter)
+    public function addNewsletter(Newsletter $newsletter)
     {
-        $newsletter->setImage($this);
-        $this->newsletter = $newsletter;
+        if (!$this->newsletters->contains($newsletter)) {
+            $this->newsletters->add($newsletter);
+        }
 
         return $this;
     }
 
     /**
-     * @return Newsletter
+     * @return ArrayCollection
      */
-    public function getNewsletter()
+    public function getNewsletters()
     {
-        return $this->newsletter;
+        return $this->newsletters;
     }
 }
