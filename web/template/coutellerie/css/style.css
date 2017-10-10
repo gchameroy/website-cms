@@ -1,0 +1,26 @@
+a, a:hover {
+    text-decoration: none;
+}
+
+footer {
+    padding-top: 40px;
+    background-color: #2c1613;
+    color: #fff;
+}
+
+footer em {
+    font-style: normal;
+    color: #dfd8b7;
+}
+
+footer a, footer a:hover {
+    color: #fff;
+}
+
+footer .legal-notice {
+    margin-top: 50px;
+    padding-top: 20px;
+    height: 66px;
+    background-color: #64453b;
+    color: #fff;
+}
