@@ -26,14 +26,22 @@ p {
     font-family: "PT Sans";
 }
 
-.btn-primary, .btn-primary:hover, .btn-primary:visited, .btn-primary:active, .btn-primary:focus {
-    background-color: #64453b;
-    border-color: #64453b;
-    border-radius: 0;
-    color: #fff;
+.btn {
     font-size: 30px;
     font-family: Lora;
+    border-radius: 0;
+}
 
+.btn-primary {
+    background-color: #64453b !important;
+    border-color: #64453b !important;
+    color: #fff !important;
+}
+
+.btn-inverse {
+    background-color: #fff !important;
+    border-color: #fff !important;
+    color: #64453b !important;
 }
 
 .home-newsletters {
@@ -73,6 +81,26 @@ p {
 .presentation .name .line-2{
     color: #fff;
     padding-left: 35px;
+}
+
+.home-pleasure {
+    -webkit-background-size: 100% auto;
+    background-size: 100% auto;
+    background: #2d1713 url("../img/bg_home_pleasure.png");
+    text-align: center;
+    height: 526px;
+}
+
+.home-pleasure .separator{
+    margin-top: 140px;
+}
+
+.home-pleasure h2 {
+    color: #fff;
+    font-size: 48px;
+    font-family: Lora;
+    font-weight: bold;
+    font-style: italic;
 }
 
 .aside {
