@@ -27,7 +27,7 @@ class HomeController extends Controller
             ->getRepository('AppBundle:Product')
             ->findLastPublished($max);
 
-        return $this->render('front/home/partial/products.html.twig', [
+        return $this->render('front/layout/partial/last-products.html.twig', [
             'products' => $products
         ]);
     }
