@@ -16,7 +16,7 @@ class LayoutController extends Controller
             ->getRepository('AppBundle:Category')
             ->findAll();
 
-        return $this->render('front/layout/menu.html.twig', [
+        return $this->render('front/layout/partial/menu.html.twig', [
             'categories' => $categories
         ]);
     }

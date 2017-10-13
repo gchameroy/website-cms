@@ -1,12 +1,10 @@
-<header>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <h1>Website CMS</h1>
-            </div>
-            <div class="col-md-4">
-                {{ render(controller('AppBundle:Front/Layout:cart')) }}
-            </div>
-        </div>
-    </div>
+<header class="header">
+    {% include('front/layout/partial/social.html.twig') %}
+    {{ render(controller('AppBundle:Front/Layout:cart')) }}
+    <nav class="nav">
+        {% include('front/layout/partial/corners.html.twig') %}
+        {% include('front/layout/partial/logo.html.twig') %}
+        {{ render(controller('AppBundle:Front/Layout:menu')) }}
+    </nav>
+    {% include('front/layout/partial/baseline.html.twig') %}
 </header>
