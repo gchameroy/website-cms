@@ -1,0 +1,19 @@
+<h1>Demande de contact</h1>
+<table>
+    <tr>
+        <td><strong>Nom :</strong></td>
+        <td>{{ contact.name }}</td>
+    </tr>
+    <tr>
+        <td><strong>Email :</strong></td>
+        <td>{{ contact.email }}</strong></td>
+    </tr>
+    <tr>
+        <td><strong>Sujet :</strong></td>
+        <td>{{ contact.subject }}</td>
+    </tr>
+    <tr>
+        <td><strong>Message :</strong></td>
+        <td>{{ contact.message|nl2br }}</td>
+    </tr>
+</table>
