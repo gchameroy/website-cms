@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityRepository;
 
 class ProductRepository extends EntityRepository
 {
-    const PER_PAGE = 6;
+    const PER_PAGE = 9;
 
     public function findOnePublished($product)
     {

@@ -24,13 +24,27 @@ class ProductController extends Controller
             ->find($category);
         $this->checkCategory($category);
 
-        $products = $this->getDoctrine()
-            ->getRepository(Product::class)
-            ->findPublishedByCategory($category, $page);
+        if ($page <= 0) {
+            return $this->redirectToRoute('front_products', [
+                'category' => $category->getId(),
+                'page' => 1
+            ]);
+        }
 
         $nbPage = $this->getDoctrine()
             ->getRepository(Product::class)
             ->countNbPagePublishedByCategory($category);
+
+        if ($page > $nbPage) {
+            return $this->redirectToRoute('front_products', [
+                'category' => $category->getId(),
+                'page' => $nbPage
+            ]);
+        }
+
+        $products = $this->getDoctrine()
+            ->getRepository(Product::class)
+            ->findPublishedByCategory($category, $page);
 
         return $this->render('front/product/list.html.twig', [
             'category' => $category,

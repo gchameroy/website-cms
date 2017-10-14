@@ -31,10 +31,13 @@ class ImageController Extends Controller
                 'id' => $image_id,
                 'product' => $product_id
             ]);
-        $this->checkImage($image);
 
         $filePath = $this->get('kernel')->getRootDir() . '/../uploads/product/';
-        $file = $filePath.$image->getPath();
+        if ($image) {
+            $file = $filePath.$image->getPath();
+        } else {
+            $file = $filePath.'img_no_product.png';
+        }
 
         return new BinaryFileResponse($file);
     }

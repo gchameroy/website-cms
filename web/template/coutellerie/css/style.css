@@ -222,8 +222,20 @@ h3 {
     margin-top: 25px;
 }
 
+.products-section {
+    padding-bottom: 100px;
+}
+
 .last-products {
     padding-bottom: 35px;
+}
+
+.products {
+    margin-top: -80px;
+}
+
+.product {
+    margin-top: 80px;
 }
 
 .product h3, .product p {
@@ -235,6 +247,10 @@ h3 {
     margin-top: -100px;
     position: relative;
     z-index: 5;
+}
+
+.product .product-image img {
+    background: #fff;
 }
 
 .product ul.product-price {
@@ -270,6 +286,26 @@ ul.product-price span + span {
     padding-right: 5px;
 }
 
+.pagination {
+    border-radius: 0;
+}
+
+.pagination li a {
+    border-radius: 0 !important;
+    padding: 3px 11px;
+    background: #64463c;
+    color: #fff;
+    border-color: #c8c2c1 !important;
+}
+
+.pagination li.active a,
+.pagination li:hover a,
+.pagination li.active:hover a {
+    background: #fff;
+    color: #64463c;
+    border-color: #fff;
+}
+
 .contact {
     padding-bottom: 35px;
 }
@@ -288,10 +324,10 @@ ul.product-price span + span {
 .form-control {
     color: #2c1613;
     border: none !important;
-    border-color:transparent !important;
+    border-color: transparent !important;
     border-bottom: 1px solid #2c1613 !important;
     border-radius: unset;
-    box-shadow:none !important;
+    box-shadow: none !important;
     -webkit-box-shadow: none !important;
     outline: none !important;
 }
