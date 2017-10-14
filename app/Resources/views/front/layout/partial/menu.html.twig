@@ -7,7 +7,7 @@
                     <li><a href="{{ path('front_products', {category: category.id, page: 1}) }}">{{ category.label }}</a></li>
                 {% endfor %}
                 <li><a href="#">Table/Cuisine</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="{{ path('front_contact') }}">Contact</a></li>
             </ul>
             <p class="separator m-t-md m-b-xl">
                 <img src="{{ asset('template/coutellerie/img/img_separator.png') }}" alt="">

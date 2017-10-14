@@ -1,11 +1,8 @@
 {% extends "front/layout.html.twig" %}
 
 {% block sections %}
-    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
-    {{ render(controller('AppBundle:Front/Home:newsletters', {'max': 2})) }}
-    {% include('front/home/partial/presentation.html.twig') %}
-    {% include('front/home/partial/pleasure.html.twig') %}
     {% include('front/contact/partial/contact.html.twig') %}
+    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
 {% endblock %}
 
 {% block javascripts %}
