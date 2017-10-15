@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i|PT+Sans:400,400i,700,700i');
+
 body {
     background: #dfd8b7;
-    font-family: "PT Sans";
+    font-family: 'PT Sans', sans-serif;
     color: #3e180b;
     font-size: 14px;
     line-height: 20px;
@@ -12,9 +14,8 @@ a, a:hover, a:visited, a:active, a:focus {
 }
 
 h1 {
-    font-size: 30px;
     color: #fff;
-    font-family: Lora;
+    font-family: 'Lora', serif;
     font-size: 48px;
     font-weight: bold;
     font-style: italic;
@@ -25,7 +26,7 @@ h1 {
 h2 {
     font-size: 30px;
     color: #2c1613;
-    font-family: Lora;
+    font-family: 'Lora', serif;
     margin-top: 30px;
     margin-bottom: 45px;
 }
@@ -33,12 +34,12 @@ h2 {
 h3 {
     font-size: 30px;
     color: #64453b;
-    font-family: Lora;
+    font-family: 'Lora', serif;
 }
 
 .btn {
     font-size: 18px;
-    font-family: Lora;
+    font-family: 'Lora', serif;
     border-radius: 0;
 }
 
@@ -71,7 +72,7 @@ h3 {
 .nav {
     -webkit-background-size: 100% auto;
     background-size: 100% auto;
-    background: #2c1613 url("../img/bg_header.png") center no-repeat;
+    background: #2c1613 url('../img/bg_header.png') center no-repeat;
     text-align: center;
 }
 
@@ -80,7 +81,7 @@ h3 {
     height: 317px;
     -webkit-background-size: 100% auto;
     background-size: 100% auto;
-    background: url("../img/bg_baseline.png") center;
+    background: url('../img/bg_baseline.png') center;
     text-align: center;
     padding: 35px 0;
 }
@@ -90,7 +91,7 @@ h3 {
 }
 
 .baseline em {
-    font-family: Lora;
+    font-family: 'Lora', serif;
     font-size: 30px;
     color: #64453b;
 }
@@ -100,13 +101,13 @@ h3 {
 }
 
 .nav ul li {
-    font-family: Lora;
+    font-family: 'Lora', serif;
     font-size: 30px;
 }
 
 .nav ul li:not(:last-child):after {
     margin-left: 10px;
-    content: "|";
+    content: '|';
     color: #fff;
 }
 
@@ -128,7 +129,7 @@ h3 {
 
 .cart-bar p {
     color: #fff;
-    font-family: "PT Sans";
+    font-family: 'PT Sans', sans-serif;
     font-weight: bold;
     font-size: 14px;
 }
@@ -141,7 +142,7 @@ h3 {
 .home-newsletters {
     -webkit-background-size: 100% auto;
     background-size: 100% auto;
-    background: url("../img/bg_home_newsletters.png") center;
+    background: url('../img/bg_home_newsletters.png') center;
 }
 
 .home-newsletters .container {
@@ -168,7 +169,7 @@ h3 {
     margin-top: 20px;
     margin-left: 80px;
     font-size: 30px;
-    font-family: Lora;
+    font-family: 'Lora', serif;
     color: #2c1613;
     line-height: 40px;
 }
@@ -181,7 +182,7 @@ h3 {
 .home-pleasure {
     -webkit-background-size: 100% auto;
     background-size: 100% auto;
-    background: #2d1713 url("../img/bg_home_pleasure.png") center;
+    background: #2d1713 url('../img/bg_home_pleasure.png') center;
     text-align: center;
     height: 526px;
 }
@@ -193,7 +194,7 @@ h3 {
 .home-pleasure h2 {
     color: #fff;
     font-size: 48px;
-    font-family: Lora;
+    font-family: 'Lora', serif;
     font-weight: bold;
     font-style: italic;
 }
@@ -207,7 +208,7 @@ h3 {
 .aside p {
     font-size: 12px;
     color: #7e7d7e;
-    font-family: "PT Sans";
+    font-family: 'PT Sans', sans-serif;
 }
 
 .aside .aside-container {
@@ -263,7 +264,7 @@ h3 {
     margin: -30px auto;
     position: relative;
     z-index: 10;
-    font-family: "PT Sans";
+    font-family: 'PT Sans', sans-serif;
     font-size: 18px;
     line-height: 24px;
     color: #fff;
@@ -281,7 +282,7 @@ ul.product-price li:before {
     float: left;
     width: 0;
     white-space: nowrap;
-    content: "..................................." "...................................";
+    content: '...................................' '...................................';
 }
 
 ul.product-price span:first-child {
