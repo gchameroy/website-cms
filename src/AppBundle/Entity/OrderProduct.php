@@ -52,6 +52,13 @@ class OrderProduct
     private $product;
 
     /**
+     * @var Attribute
+     * @ORM\ManyToOne(targetEntity="Attribute", inversedBy="orderProducts")
+     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
+     */
+    private $attribute;
+
+    /**
      * Get id
      *
      * @return int
@@ -147,6 +154,25 @@ class OrderProduct
     public function getProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * @param Attribute $attribute
+     * @return OrderProduct
+     */
+    public function setAttribute(Attribute $attribute)
+    {
+        $this->attribute = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
     }
 }
 

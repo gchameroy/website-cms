@@ -46,10 +46,17 @@ class Attribute
      */
     private $cartProducts;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="OrderProduct", mappedBy="attribute", cascade={"remove", "persist"})
+     */
+    private $orderProducts;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->cartProducts = new ArrayCollection();
+        $this->orderProducts = new ArrayCollection();
     }
 
     /**

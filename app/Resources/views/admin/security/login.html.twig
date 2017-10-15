@@ -8,12 +8,12 @@
     <div class="middle-box text-center loginscreen animated fadeInDown">
         <div>
             <p>Hi there! Please sign in.</p>
-            <form class="m-t" action="{{ path('login_check') }}" method="post">
+            <form class="m-t" action="{{ path('admin_login_check') }}" method="post">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="_username" value="{{ last_username }}">
+                    <input type="text" class="form-control" name="_username" value="{{ last_username }}" placeholder="Email address">
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" name="_password">
+                    <input type="password" class="form-control" name="_password" placeholder="Password">
                 </div>
                 {% if error %}
                     <p class="m-b-0 text-danger">{{ error.messageKey }}</p>

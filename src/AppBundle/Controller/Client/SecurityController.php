@@ -1,33 +1,33 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Client;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\Response;
 
 class SecurityController extends Controller
 {
     /**
-     * @Route("/sign-in", name="login")
-     * @Method("GET")
+     * @Route("/sign-in", name="client_login")
      * @param AuthenticationUtils $authUtils
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function loginAction(AuthenticationUtils $authUtils)
     {
         $error = $authUtils->getLastAuthenticationError();
         $lastUsername = $authUtils->getLastUsername();
 
-        return $this->render('admin/security/login.html.twig', [
+        return $this->render('client/security/login-from-cart.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error
         ]);
     }
 
     /**
-     * @Route("/sign-out", name="logout")
+     * @Route("/sign-out", name="client_logout")
      * @Method("GET")
      */
     public function logoutAction()
@@ -36,7 +36,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * @Route("/login-check", name="login_check")
+     * @Route("/login-check", name="client_login_check")
      * @Method("POST")
      */
     public function loginCheckAction()

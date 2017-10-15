@@ -40,7 +40,7 @@ class Image
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Newsletter", mappedBy="imge")
+     * @ORM\OneToMany(targetEntity="Newsletter", mappedBy="image")
      */
     private $newsletters;
 

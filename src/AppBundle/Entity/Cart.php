@@ -170,10 +170,10 @@ class Cart
     }
 
     /**
-     * @param Product $product
+     * @param CartProduct $product
      * @return Cart
      */
-    public function addProduct(Product $product)
+    public function addProduct(CartProduct $product)
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);

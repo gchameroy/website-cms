@@ -38,7 +38,31 @@ class User implements UserInterface
      * @var string
      */
     private $plainPassword;
-    
+
+    /**
+     * @var string
+     * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
+     */
+    private $lastName;
+
+    /**
+     * @var string
+     * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     * @ORM\Column(name="company", type="string", length=255, nullable=true)
+     */
+    private $company;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="birth_date", type="datetime", nullable=true)
+     */
+    private $birthDate;
+
     /**
      * @var boolean
      * @ORM\Column(name="is_admin", type="boolean")
@@ -46,10 +70,30 @@ class User implements UserInterface
     private $isAdmin;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="is_informations", type="boolean")
+     */
+    private $isInformations;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="registered_at", type="datetime")
      */
     private $registeredAt;
+
+    /**
+     * @var Address
+     * @ORM\ManyToOne(targetEntity="Address", cascade={"remove", "persist"})
+     * @ORM\JoinColumn(name="delivery_address_id", referencedColumnName="id")
+     */
+    private $deliveryAddress;
+
+    /**
+     * @var Address
+     * @ORM\ManyToOne(targetEntity="Address", cascade={"remove", "persist"})
+     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id")
+     */
+    private $billingAddress;
 
     /**
      * @var ArrayCollection
@@ -214,6 +258,43 @@ class User implements UserInterface
     }
 
     /**
+     * @param Address $deliveryAddress
+     * @return User
+     */
+    public function setDeliveryAddress(Address $deliveryAddress)
+    {
+        $this->deliveryAddress = $deliveryAddress;
+
+        return $this;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getDeliveryAddress()
+    {
+        return $this->deliveryAddress;
+    }
+
+    /**
+     * @param Address $billingAddress
+     * @return User
+     */
+    public function setBillingAddress(Address $billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
+
+        return $this;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getBillingAddress()
+    {
+        return $this->billingAddress;
+    }
+    /**
      * @param Order $order
      * @return User
      */
@@ -271,5 +352,120 @@ class User implements UserInterface
     public function getCarts()
     {
         return $this->carts;
+    }
+
+    /**
+     * Set lastName
+     *
+     * @param string $lastName
+     *
+     * @return User
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get lastName
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set firstName
+     *
+     * @param string $firstName
+     *
+     * @return User
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * Get firstName
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set company
+     *
+     * @param string $company
+     *
+     * @return User
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return string
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * Set birthDate
+     *
+     * @param \DateTime $birthDate
+     *
+     * @return User
+     */
+    public function setBirthDate($birthDate)
+    {
+        $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+    /**
+     * Get birthDate
+     *
+     * @return \DateTime
+     */
+    public function getBirthDate()
+    {
+        return $this->birthDate;
+    }
+
+    /**
+     * @param $isInformations
+     * @return User
+     */
+    public function setIsInformations($isInformations)
+    {
+        $this->isInformations = $isInformations;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInformations()
+    {
+        return $this->isInformations;
     }
 }

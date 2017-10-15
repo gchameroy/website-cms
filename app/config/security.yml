@@ -3,7 +3,11 @@ security:
         AppBundle\Entity\User: bcrypt
 
     providers:
-        main:
+        user:
+            entity:
+                class: AppBundle\Entity\User
+                property: email
+        admin:
             entity:
                 class: AppBundle\Entity\User
                 property: email
@@ -13,13 +17,32 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        main:
+        user:
+            pattern: ^/client
+            provider: user
             anonymous: ~
             form_login:
-                login_path: login
-                check_path: login_check
+                login_path: client_login
+                check_path: client_login_check
+                default_target_path: client_register_address
             logout:
-                path: logout
+                path: client_logout
+
+        admin:
+            pattern: ^/admin
+            provider: admin
+            anonymous: ~
+            form_login:
+                login_path: admin_login
+                check_path: admin_login_check
+            logout:
+                path: admin_logout
 
     access_control:
+        - { path: ^/client/sign-in, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/client/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/client/register_email, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/front, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/client, roles: "ROLE_USER" }
+        - { path: ^/admin/sign-in, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: "ROLE_ADMIN" }

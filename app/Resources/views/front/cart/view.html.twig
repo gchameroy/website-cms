@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>Cart products</h2>
+                    <h2>Cart<small class="m-l-md">1. Resume</small></h2>
                     <table class="table">
                         <thead>
                             <tr>
@@ -55,8 +55,37 @@
                             </tr>
                         </tfoot>
                     </table>
+                    <div class=row">
+                        <div class="col-md-3">
+                            <p>
+                                <a href="{{ path('front_home') }}" class="btn btn-primary">Continue shopping</a>
+                            </p>
+                        </div>
+                        <div class="col-md-9">
+                            <p class="text-right">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="accept">
+                                    <span>I'm agree with <a href="#">therms of use</a> and <a href="#">therms of sale</a></span>
+                                </label>
+                                <a href="{{ path('client_login') }}" name="order" class="btn btn-primary m-l-md">Order</a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            $('a[name="order"]').click(function() {
+                if (false === $('input[name="accept"]').is(':checked')) {
+                    window.alert('You must accept therms.');
+                    return false;
+                }
+            });
+        });
+    </script>
 {% endblock %}

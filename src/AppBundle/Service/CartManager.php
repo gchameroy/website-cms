@@ -6,7 +6,7 @@ use AppBundle\Entity\Cart;
 use AppBundle\Entity\Product;
 use AppBundle\Repository\CartRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class CartManager
 {
     /**
-     * @var Session
+     * @var SessionInterface
      */
     private $session;
 
@@ -25,7 +25,7 @@ class CartManager
      */
     private $em;
 
-    public function __construct(Session $session, EntityManagerInterface $em)
+    public function __construct(SessionInterface $session, EntityManagerInterface $em)
     {
         $this->session = $session;
         $this->em = $em;

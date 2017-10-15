@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Front;
 
 use AppBundle\Entity\CartProduct;
 use AppBundle\Service\CartManager;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,10 +29,10 @@ class CartController extends Controller
      * @Method({"GET"})
      * @param int $cartProduct
      * @param CartManager $cartManager
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      * @return Response
      */
-    public function addOneProductAction(int $cartProduct, CartManager $cartManager, EntityManager $em)
+    public function addOneProductAction(int $cartProduct, CartManager $cartManager, EntityManagerInterface $em)
     {
         $cart = $cartManager->getCurrentCart();
         $cartProduct = $em->getRepository(CartProduct::class)
@@ -58,10 +58,10 @@ class CartController extends Controller
      * @Method({"GET"})
      * @param int $cartProduct
      * @param CartManager $cartManager
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      * @return Response
      */
-    public function removeOneProductAction(int $cartProduct, CartManager $cartManager, EntityManager $em)
+    public function removeOneProductAction(int $cartProduct, CartManager $cartManager, EntityManagerInterface $em)
     {
         $cart = $cartManager->getCurrentCart();
         $cartProduct = $em->getRepository(CartProduct::class)
@@ -84,5 +84,14 @@ class CartController extends Controller
         $em->flush();
 
         return $this->redirectToRoute('front_cart');
+    }
+
+    /**
+     * @Route("/cart/sign-in", name="front_cart_login")
+     * @Method({"GET"})
+     * @return Response
+     */
+    public function loginAction() {
+        return $this->render('front/cart/login.html.twig');
     }
 }

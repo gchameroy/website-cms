@@ -26,6 +26,12 @@ class Order
     private $createdAt;
 
     /**
+     * @var string
+     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
+     */
+    private $comment;
+
+    /**
      * @var User
      * @ORM\ManyToOne(targetEntity="User", inversedBy="orders")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
@@ -34,10 +40,17 @@ class Order
 
     /**
      * @var Address
-     * @ORM\ManyToOne(targetEntity="Address", inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="Address")
      * @ORM\JoinColumn(name="delivery_address_id", referencedColumnName="id")
      */
     private $deliveryAddress;
+
+    /**
+     * @var Address
+     * @ORM\ManyToOne(targetEntity="Address")
+     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id")
+     */
+    private $billingAddress;
 
     /**
      * @var ArrayCollection
@@ -120,6 +133,25 @@ class Order
     }
 
     /**
+     * @param Address $billingAddress
+     * @return Order
+     */
+    public function setBillingAddress(Address $billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
+
+        return $this;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getBillingAddress()
+    {
+        return $this->billingAddress;
+    }
+
+    /**
      * @param ArrayCollection $orderProducts
      * @return Order
      */
@@ -179,6 +211,27 @@ class Order
         }
 
         return $price;
+    }
+
+    /**
+     * Set comment
+     * @param string $comment
+     * @return Order
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }
 

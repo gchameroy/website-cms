@@ -1,7 +1,3 @@
-security:
-    resource: '@AppBundle/Controller/SecurityController.php'
-    type: annotation
-
 uploads:
     resource: '@AppBundle/Controller/ImageController.php'
     type: annotation
@@ -10,6 +6,11 @@ front:
     resource: '@AppBundle/Controller/Front/'
     type: annotation
     prefix: '/'
+
+client:
+    resource: '@AppBundle/Controller/Client/'
+    type: annotation
+    prefix: '/client'
 
 admin:
     resource: '@AppBundle/Controller/Admin/'
