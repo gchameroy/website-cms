@@ -1,37 +1,19 @@
 {% extends "front/layout.html.twig" %}
 
 {% block sections %}
-    <section>
+    <section class="section-newsletter">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>Newsletter</h2>
-                    <table class="table">
-                        <tr>
-                            <td class="text-right">id</td>
-                            <td>{{ newsletter.id }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-right">title</td>
-                            <td>{{ newsletter.title }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-right">content</td>
-                            <td>{{ newsletter.content }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-right">image</td>
-                            <td>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <img class="img-responsive" src="{{ path('newsletter_image_view', {'image_id': newsletter.image.id}) }}">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                    <h2>{{ newsletter.title }}</h2>
+                    <div class="newsletter-image">
+                        <img class="img-responsive" src="{{ path('newsletter_image_view', {'image_id': newsletter.image.id}) }}" alt="">
+                    </div>
+                    <p class="m-t-md text-justify">{{ newsletter.content|nl2br }}</p>
+                    <p><a class="btn btn-primary m-t-md" href="{{ path('front_home') }}">Retour</a></p>
                 </div>
             </div>
         </div>
     </section>
+    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
 {% endblock %}

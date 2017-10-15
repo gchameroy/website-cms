@@ -61,6 +61,10 @@ class CartManager
             $cart = $this->em
                 ->getRepository(Cart::class)
                 ->findOneByToken($token);
+            if (!$cart) {
+                $cart = $this->createCart();
+                $this->session->set('token', $cart->getToken());
+            }
         } else {
             $cart = $this->createCart();
             $this->session->set('token', $cart->getToken());

@@ -13,7 +13,7 @@ class OrderProductFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = Faker::create();
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 2; $i++) {
             for ($j = 1; $j <= 10; $j++) {
                 /** @var Product $product */
                 $product = $this->getReference('product-' . $i . '-' .$j);

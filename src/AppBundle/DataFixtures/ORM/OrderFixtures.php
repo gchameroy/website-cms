@@ -10,7 +10,7 @@ class OrderFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 2; $i++) {
             for ($j = 1; $j <= 10; $j++) {
                 $order = (new Order())
                     ->setUser($this->getReference('user-admin'))

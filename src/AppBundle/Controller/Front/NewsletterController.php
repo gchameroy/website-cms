@@ -22,7 +22,7 @@ class NewsletterController extends Controller
             ->findOnePublished($newsletter);
         $this->checkNewsletter($newsletter);
 
-        return $this->render('front/home/newsletter/view.html.twig', [
+        return $this->render('front/newsletter/newsletter.html.twig', [
             'newsletter' => $newsletter
         ]);
     }

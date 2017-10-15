@@ -15,7 +15,7 @@
                                 <h3 class="text-center">{{ product.label }}</h3>
                                 <p class="product-image text-center">
                                     {% if product.images|length > 0%}
-                                        <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': product.images[0].id}) }}" height="320" alt="">
+                                        <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': product.images[0].id}) }}" alt="">
                                     {% else %}
                                         <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'product_id': 0, 'image_id':0}) }}" height="320" alt="">
                                     {% endif %}

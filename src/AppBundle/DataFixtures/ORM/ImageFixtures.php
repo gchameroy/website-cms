@@ -31,9 +31,6 @@ class ImageFixtures extends Fixture
 
     public function getDependencies()
     {
-        return [
-            ProductFixtures::class,
-            NewsletterFixtures::class
-        ];
+        return [ProductFixtures::class];
     }
 }

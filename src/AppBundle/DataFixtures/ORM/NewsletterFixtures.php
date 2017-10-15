@@ -15,8 +15,8 @@ class NewsletterFixtures extends Fixture
         $faker = Faker::create();
         for ($i = 1; $i <= 3; $i++) {
             $newsletter = new Newsletter();
-            $newsletter->setTitle($faker->sentence(5))
-                ->setContent($faker->paragraph)
+            $newsletter->setTitle('Titre de l\'actualité')
+                ->setContent($faker->paragraph(100))
                 ->setPublishedAt(new \DateTime())
                 ->setImage($this->loadImage($manager));
 

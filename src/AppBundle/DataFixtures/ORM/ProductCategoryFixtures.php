@@ -11,16 +11,19 @@ class ProductCategoryFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        $faker = Faker::create();
-        for ($i = 1; $i <= 3; $i++) {
-            $category = new Category();
-            $category->setLabel($faker->sentence(5))
-                ->setDescription($faker->paragraph(1));
-            $category->setPublishedAt(new \DateTime());
+        $categories = ['Vannerie', 'Coutellerie'];
 
+        $i = 1;
+        foreach ($categories as $label) {
+            $category = new Category();
+            $category->setLabel($label)
+                ->setDescription('');
+            $category->setPublishedAt(new \DateTime());
             $this->setReference('product-category-' . $i, $category);
             $manager->persist($category);
+            ++$i;
         }
+
         $manager->flush();
     }
 }
