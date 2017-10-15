@@ -251,6 +251,7 @@ h3 {
 
 .product .product-image img {
     background: #fff;
+    margin: 0 auto;
 }
 
 .product ul.product-price {
@@ -266,6 +267,14 @@ h3 {
     font-size: 18px;
     line-height: 24px;
     color: #fff;
+}
+
+.section-product {
+    padding-bottom: 140px;
+}
+
+.section-product .return-link {
+    color: #3e180b;
 }
 
 ul.product-price li:before {

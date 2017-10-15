@@ -1,13 +1,20 @@
 {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
-<div class="form-group">
-    <label class="col-lg-2 control-label">Attribute</label>
-    <div class="col-lg-2">
-        {{ form_widget(form.attribute, {'attr' : {'class' : 'form-control'} }) }}
-    </div>
-    <div class="col-lg-8">
-        <button class="btn btn-sm btn-primary" type="submit">
-            <strong>Add to cart</strong>
-        </button>
+<div class="row m-b-sm">
+    <div class="col-md-offset-8 col-md-2 text-right">Quantité : </div>
+    <div class="col-md-2">
+        {{ form_widget(form.quantity, {'attr' : {'class' : 'form-control'} }) }}
     </div>
 </div>
+<div class="row m-b-sm {% if product.attributes|length == 0 %}hidden{% endif %}">
+    <div class="col-md-offset-8 col-md-2 text-right">Modèle : </div>
+    <div class="col-md-2">
+        {{ form_widget(form.attribute, {'attr' : {'class' : 'form-control'} }) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-offset-10 col-md-2">
+        <button class="btn btn-primary" type="submit">Commander</button>
+    </div>
+</div>
+{{ form_rest(form) }}
 {{ form_end(form) }}

@@ -1,44 +1,47 @@
 {% extends "front/layout.html.twig" %}
 
 {% block sections %}
-    <section>
+    <section class="section-product">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Product</h2>
-                    <table class="table">
-                        <tr>
-                            <td class="text-right">id</td>
-                            <td>{{ product.id }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-right">label</td>
-                            <td>{{ product.label }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-right">description</td>
-                            <td>{{ product.description }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-right">price</td>
-                            <td>{{ product.price|number_format(2, ',', ' ') }} €</td>
-                        </tr>
-                        <tr>
-                            <td class="text-right">images</td>
-                            <td>
-                                <div class="row">
-                                    {% for image in product.images %}
-                                        <div class="col-md-3">
-                                            <img class="img-responsive" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': image.id}) }}">
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    {{ render(controller('AppBundle:Front/CartProduct:add', {product: product.id})) }}
+            <p class="m-t-md">
+                <a href="{{ path('front_products', {'category': product.Category.id, 'page': 1}) }}" class="return-link">
+                    <i class="fa fa-chevron-left m-r-sm"></i>
+                    <span>Retour aux produits</span>
+                </a>
+            </p>
+            <h2 class="text-center">{{ product.label }}</h2>
+            <div class="row m-t-lg">
+                <div class="col-md-6">
+                    <div class="row products">
+                        <div class="col-md-12 product">
+                            <p class="text-center">
+                                <img src="{{ asset('template/coutellerie/img/img_product_separator.png') }}" alt="">
+                            </p>
+                            <h3 class="text-center">{{ product.label }}</h3>
+                            <p class="product-image text-center">
+                                <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': product.images[0].id}) }}" alt="">
+                            </p>
+                            <ul class="product-price">
+                                <li>
+                                    <span>Prix:</span>
+                                    <span>{{ product.price|number_format(2, '.', ' ') }}€</span>
+                                </li>
+                            </ul>
+                            <br class="clear">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <aside class="aside">
+                        <div class="aside-container">
+                            <h3>{{ product.label }}</h3>
+                            <p>{{ product.description|nl2br }}</p>
+                        </div>
+                    </aside>
                 </div>
             </div>
+            {{ render(controller('AppBundle:Front/CartProduct:add', {product: product.id})) }}
         </div>
     </section>
+    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
 {% endblock %}

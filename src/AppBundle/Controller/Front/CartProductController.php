@@ -10,6 +10,8 @@ use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,7 +41,8 @@ class CartProductController extends Controller
             ->setAction($this->generateUrl('front_cart_product_add', [
                 'product' => $product->getId()
             ]))
-            ->add('attribute', EntityType::class, array(
+            ->add('quantity', IntegerType::class)
+            ->add('attribute', EntityType::class, [
                 'class' => Attribute::class,
                 'choice_label' => function (Attribute $attribute) {
                     return $attribute->getLabel();
@@ -51,7 +54,7 @@ class CartProductController extends Controller
                         ->setParameter('product', $product->getId())
                         ->orderBy('a.label', 'ASC');
                 }
-            ))
+            ])
             ->getForm();
 
         $form->handleRequest($request);
@@ -81,6 +84,7 @@ class CartProductController extends Controller
         }
 
         return $this->render('front/cart-product/partial/add.html.twig', [
+            'product' => $product,
             'form' => $form->createView(),
         ]);
     }
