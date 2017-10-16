@@ -3,16 +3,16 @@
 {% block breadcrumb %}
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>Add Newsletter</h2>
+            <h2>Ajouter une newsletter</h2>
             <ol class="breadcrumb">
                 <li>
-                    <a href="{{ path('admin_home') }}">Home</a>
+                    <a href="{{ path('admin_home') }}">Dashboards</a>
                 </li>
                 <li>
-                    <a href="{{ path('admin_newsletters') }}">Newsletters</a>
+                    <a href="{{ path('admin_newsletters') }}">Liste des newsletters</a>
                 </li>
                 <li class="active">
-                    <strong>Add Newsletter</strong>
+                    <strong>Ajouter une newsletter</strong>
                 </li>
             </ol>
         </div>
@@ -24,16 +24,16 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h4>Add Newsletter</h4>
+                    <h4>Ajouter une newsletter</h4>
                     {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
                     <div class="form-group">
-                        <label class="col-lg-2 control-label">Title</label>
+                        <label class="col-lg-2 control-label">Titre</label>
                         <div class="col-lg-10">
                             {{ form_widget(form.title, {'attr' : {'class' : 'form-control'} }) }}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 control-label">Content</label>
+                        <label class="col-lg-2 control-label">Contenu</label>
                         <div class="col-lg-10">
                             {{ form_widget(form.content, { 'attr': {'class': 'form-control'} }) }}
                         </div>
@@ -41,9 +41,7 @@
                     <div class="form-group">
                         <div class="col-lg-2"></div>
                         <div class="col-lg-10">
-                            <button class="btn btn-sm btn-primary" type="submit">
-                                <strong>Add Newsletter</strong>
-                            </button>
+                            <button class="btn btn-sm btn-primary" type="submit">Ajouter</button>
                         </div>
                     </div>
                     {{ form_end(form) }}

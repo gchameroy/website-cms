@@ -11,7 +11,7 @@ class SecurityController extends Controller
 {
     /**
      * @Route("/sign-in", name="admin_login")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      * @param AuthenticationUtils $authUtils
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -31,15 +31,6 @@ class SecurityController extends Controller
      * @Method("GET")
      */
     public function logoutAction()
-    {
-
-    }
-
-    /**
-     * @Route("/login-check", name="admin_login_check")
-     * @Method("POST")
-     */
-    public function loginCheckAction()
     {
 
     }

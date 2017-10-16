@@ -174,5 +174,13 @@ class OrderProduct
     {
         return $this->attribute;
     }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->quantity * $this->price;
+    }
 }
 

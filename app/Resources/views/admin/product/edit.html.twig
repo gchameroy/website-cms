@@ -6,10 +6,10 @@
             <h2>{{ product.label }}</h2>
             <ol class="breadcrumb">
                 <li>
-                    <a href="{{ path('admin_home') }}">Home</a>
+                    <a href="{{ path('admin_home') }}">Dashboards</a>
                 </li>
                 <li>
-                    <a href="{{ path('admin_products') }}">Product List</a>
+                    <a href="{{ path('admin_products') }}">Liste des produits</a>
                 </li>
                 <li class="active">
                     <strong>{{ product.label }}</strong>
@@ -24,28 +24,12 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h4>Edit product</h4>
-                    &nbsp;
+                    <h4>Modifier un produit</h4>
                     {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
                     <div class="form-group">
-                        <label class="col-lg-2 control-label">Label</label>
+                        <label class="col-lg-2 control-label">Nom</label>
                         <div class="col-lg-10">
                             {{ form_widget(form.label, {'attr' : {'class' : 'form-control'} }) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label">Price</label>
-                        <div class="col-lg-10">
-                            {{ form_widget(form.price, {'attr' : {'class' : 'form-control'} }) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label">Category</label>
-                        <div class="col-lg-8">
-                            {{ form_widget(form.category, {'attr' : {'class' : 'form-control'} }) }}
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="btn btn-sm btn-primary modal_add_category">Add Category</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -54,10 +38,25 @@
                             {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Prix</label>
+                        <div class="col-lg-10">
+                            {{ form_widget(form.price, {'attr' : {'class' : 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Catégorie</label>
+                        <div class="col-lg-8">
+                            {{ form_widget(form.category, {'attr' : {'class' : 'form-control'} }) }}
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="btn btn-sm btn-primary modal_add_category">Ajouter une categorie</div>
+                        </div>
+                    </div>
                     {% for category_attribute in categories_attribute %}
                         <div class="form-group">
                             <h5 class="clickCategoryAttribute" data-id="{{ category_attribute.id }}">
-                                {{ category_attribute.label }}
+                                <span>{{ category_attribute.label }}</span>
                                 <i class="fa fa-arrow-down"></i>
                             </h5>
                             <div class="listAttribute" style="display: none"></div>
@@ -67,7 +66,7 @@
                         <div class="col-lg-2"></div>
                         <div class="col-lg-10">
                             <button class="btn btn-sm btn-primary" type="submit">
-                                <strong>Save</strong>
+                                <strong>Enregistrer</strong>
                             </button>
                         </div>
                     </div>

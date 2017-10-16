@@ -233,5 +233,18 @@ class Order
     {
         return $this->comment;
     }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        $total = 0;
+        foreach ($this->orderProducts as $orderProduct) {
+            $total += $orderProduct->getTotal();
+        }
+
+        return $total;
+    }
 }
 

@@ -58,7 +58,7 @@ class HomeController extends Controller
             ->getRepository('AppBundle:Product')
             ->findLastPublished($max);
 
-        return $this->render('front/layout/partial/last-products.html.twig', [
+        return $this->render('front/product/partial/last-products.html.twig', [
             'products' => $products
         ]);
     }
@@ -72,7 +72,7 @@ class HomeController extends Controller
             ->getRepository('AppBundle:Newsletter')
             ->findAll($max, 1, 'desc');
 
-        return $this->render('front/home/partial/newsletters.html.twig', [
+        return $this->render('front/newsletter/partial/last-newsletters.html.twig', [
             'newsletters' => $newsletters
         ]);
     }

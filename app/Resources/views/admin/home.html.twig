@@ -1,7 +1,42 @@
 {% extends "admin/layout.html.twig" %}
 
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Dashboard</h2>
+        </div>
+    </div>
+{% endblock %}
+
 {% block wrapper_content %}
-    <div class="row">
-        <p>Hello world!</p>
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="widget style1 bg-info">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <i class="fa fa-cubes fa-5x"></i>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <span>Nombre de commandes</span>
+                            <h2 class="font-bold">{{ orders|length }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="widget style1 bg-info">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <i class="fa fa-dollar fa-5x"></i>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <span>Montant des commandes</span>
+                            <h2 class="font-bold">{{ total|number_format(2, ',', ' ') }} €</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

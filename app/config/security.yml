@@ -34,7 +34,7 @@ security:
             anonymous: ~
             form_login:
                 login_path: admin_login
-                check_path: admin_login_check
+                check_path: admin_login
             logout:
                 path: admin_logout
 

@@ -6,10 +6,10 @@
             <h2>{{ newsletter.title }}</h2>
             <ol class="breadcrumb">
                 <li>
-                    <a href="{{ path('admin_home') }}">Home</a>
+                    <a href="{{ path('admin_home') }}">Dashboards</a>
                 </li>
                 <li>
-                    <a href="{{ path('admin_newsletters') }}">Newsletters</a>
+                    <a href="{{ path('admin_newsletters') }}">Liste des newsletters</a>
                 </li>
                 <li class="active">
                     <strong>{{ newsletter.title }}</strong>
@@ -19,10 +19,10 @@
         <div class="col-lg-2">
             <div class="title-action">
                 {% if not newsletter.published %}
-                    <a href="{{ path('admin_newsletter_publish', {'id': newsletter.id }) }}" class="btn btn-primary btn-sm">Publish</a>
+                    <a href="{{ path('admin_newsletter_publish', {'id': newsletter.id }) }}" class="btn btn-primary btn-sm">Publier</a>
                 {% endif %}
-                <a href="{{ path('admin_newsletter_edit', {'id': newsletter.id}) }}" class="btn btn-primary btn-sm">Edit</a>
-                <a href="{{ path('admin_newsletter_delete', {'id': newsletter.id}) }}" class="btn btn-danger btn-sm">Delete</a>
+                <a href="{{ path('admin_newsletter_edit', {'id': newsletter.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                <a href="{{ path('admin_newsletter_delete', {'id': newsletter.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
                                         </div>
                                     {% else %}
                                         <div>
-                                            <div class="image-imitation">No Image</div>
+                                            <div class="image-imitation">Aucune image</div>
                                         </div>
                                     {% endif %}
                                 </div>
@@ -54,19 +54,19 @@
                                 <h2 class="font-bold m-b-xs">
                                     <span>{{ newsletter.title }}</span>
                                     {% if newsletter.published %}
-                                        <label class="label label-info m-l-md">online</label>
+                                        <label class="label label-info m-l-md">en ligne</label>
                                     {% else %}
-                                        <label class="label label-default m-l-md">offline</label>
+                                        <label class="label label-default m-l-md">hors ligne</label>
                                     {% endif %}
                                 </h2>
                                 <hr>
-                                <h4>Newsletter content</h4>
+                                <h4>Contenu</h4>
                                 <div class="small text-muted">{{ newsletter.content|nl2br }}</div>
                                 <p class="m-t">
                                     {% if newsletter.image %}
-                                        <button class="btn btn-primary action_newsletter_image_add">Change Image</button>
+                                        <button class="btn btn-primary action_newsletter_image_add">Modifier l'image</button>
                                     {% else %}
-                                        <button class="btn btn-primary action_newsletter_image_add">Add Image</button>
+                                        <button class="btn btn-primary action_newsletter_image_add">Ajouter une image</button>
                                     {% endif %}
                                 </p>
                             </div>
