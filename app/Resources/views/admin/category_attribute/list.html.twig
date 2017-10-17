@@ -3,19 +3,19 @@
 {% block breadcrumb %}
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>Category Attribute List</h2>
+            <h2>Liste des attributs</h2>
             <ol class="breadcrumb">
                 <li>
-                    <a href="{{ path('admin_home') }}">Home</a>
+                    <a href="{{ path('admin_home') }}">Dashboard</a>
                 </li>
                 <li class="active">
-                    <strong>Category Attribute List</strong>
+                    <strong>Liste des attributs</strong>
                 </li>
             </ol>
         </div>
         <div class="col-lg-2">
             <div class="title-action">
-                <a href="{{ path('admin_categories_attribute_add') }}" class="btn btn-primary btn-sm">Create category attribute</a>
+                <a href="{{ path('admin_categories_attribute_add') }}" class="btn btn-primary btn-sm">Ajouter une catégorie</a>
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h4>Category Attribute list</h4>
+                    <h4>Liste des attributs</h4>
                 </div>
                 <div class="ibox-content">
                     <div class="project-list">
@@ -44,16 +44,18 @@
                                             <a href="{{ path('admin_attribute_edit', {'id': attribute.id }) }}"><i class="fa fa-pencil"></i></a>
                                             <br>
                                         {% endfor %}
-                                        <a href="{{ path('admin_attributes_add', {'id': categoryAttribute.id }) }}"><u>+ Add Attribute</u></a>
+                                        <a href="{{ path('admin_attributes_add', {'id': categoryAttribute.id }) }}"><u>+ Ajouter un attribut</u></a>
                                     </td>
                                     <td class="project-actions">
-                                        <a href="{{ path('admin_category_attribute_edit', {'id': categoryAttribute.id }) }}" class="btn btn-primary btn-sm">Edit</a>
-                                        <a href="{{ path('admin_category_attribute_delete', {'id': categoryAttribute.id }) }}" class="btn btn-danger btn-sm">Delete</a>
+                                        <a href="{{ path('admin_category_attribute_edit', {'id': categoryAttribute.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                        <a href="{{ path('admin_category_attribute_delete', {'id': categoryAttribute.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
                                     </td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td>No category attribute found.</td>
+                                    <td>
+                                        <a href="{{ path('admin_categories_attribute_add') }}" class="btn btn-primary btn-sm">Ajouter une catégorie</a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>

@@ -3,13 +3,13 @@
 {% block breadcrumb %}
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>Order list</h2>
+            <h2>Liste des commandes</h2>
             <ol class="breadcrumb">
                 <li>
-                    <a href="{{ path('admin_home') }}">Home</a>
+                    <a href="{{ path('admin_home') }}">Dashboard</a>
                 </li>
                 <li class="active">
-                    <strong>Order List</strong>
+                    <strong>Liste des commandes</strong>
                 </li>
             </ol>
         </div>
@@ -21,7 +21,7 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h4>Order list</h4>
+                    <h4>Liste des commandes</h4>
                 </div>
                 <div class="ibox-content">
                     <div class="project-list">
@@ -39,7 +39,7 @@
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td>No order found.</td>
+                                    <td>Aucune commande pour le moment.</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

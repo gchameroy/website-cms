@@ -6,10 +6,10 @@
             <h2>{{ newsletter.title }}</h2>
             <ol class="breadcrumb">
                 <li>
-                    <a href="{{ path('admin_home') }}">Dashboards</a>
+                    <a href="{{ path('admin_home') }}">Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{ path('admin_newsletters') }}">Liste des newsletters</a>
+                    <a href="{{ path('admin_newsletters') }}">Liste des actualités</a>
                 </li>
                 <li class="active">
                     <strong>{{ newsletter.title }}</strong>
@@ -24,7 +24,7 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h4>Modifier une newsletter</h4>
+                    <h4>Modifier une actualité</h4>
                     {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Titre</label>

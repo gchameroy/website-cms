@@ -116,6 +116,7 @@ class User implements UserInterface
         $this->isAdmin = false;
         $this->orders = new ArrayCollection();
         $this->carts = new ArrayCollection();
+        $this->isInformations = false;
     }
 
     /**

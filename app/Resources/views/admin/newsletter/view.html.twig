@@ -6,10 +6,10 @@
             <h2>{{ newsletter.title }}</h2>
             <ol class="breadcrumb">
                 <li>
-                    <a href="{{ path('admin_home') }}">Dashboards</a>
+                    <a href="{{ path('admin_home') }}">Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{ path('admin_newsletters') }}">Liste des newsletters</a>
+                    <a href="{{ path('admin_newsletters') }}">Liste des actualités</a>
                 </li>
                 <li class="active">
                     <strong>{{ newsletter.title }}</strong>
@@ -44,9 +44,7 @@
                                             </div>
                                         </div>
                                     {% else %}
-                                        <div>
-                                            <div class="image-imitation">Aucune image</div>
-                                        </div>
+                                        <button class="btn btn-primary action_newsletter_image_add">Ajouter une image</button>
                                     {% endif %}
                                 </div>
                             </div>

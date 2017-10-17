@@ -6,13 +6,13 @@
             <h2>Order #{{ order.id }}</h2>
             <ol class="breadcrumb">
                 <li>
-                    <a href="{{ path('admin_home') }}">Home</a>
+                    <a href="{{ path('admin_home') }}">Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{ path('admin_orders') }}">Order List</a>
+                    <a href="{{ path('admin_orders') }}">Liste des commandes</a>
                 </li>
                 <li class="active">
-                    <strong>Order #{{ order.id }}</strong>
+                    <strong>Commande N°{{ order.id }}</strong>
                 </li>
             </ol>
         </div>
@@ -25,10 +25,10 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Product</th>
-                            <th>Attributes</th>
-                            <th class="text-center">Quantity</th>
-                            <th>Price</th>
+                            <th>Produit</th>
+                            <th>Attributs</th>
+                            <th class="text-center">Quantité</th>
+                            <th class="text-right">Prix</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,31 +37,31 @@
                             <td>{{ orderProduct.product.label }}</td>
                             <td>
                                 {% for attribute in orderProduct.product.attributes %}
-                                    - {{ attribute.label }}
+                                    <span>- {{ attribute.label }}</span>
                                 {% else %}
-                                    None
+                                   <span>/</span>
                                 {% endfor %}
                             </td>
                             <td class="text-center">{{ orderProduct.quantity }}</td>
-                            <td>{{ orderProduct.price|number_format(2, ',', ' ') }}€</td>
+                            <td class="text-right">{{ orderProduct.price|number_format(2, ',', ' ') }}€</td>
                         </tr>
                     {% endfor %}
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="2"></td>
-                            <td>Sub total</td>
-                            <td>{{ order.price|number_format(2, ',', ' ') }}€</td>
+                            <td>Sous total</td>
+                            <td class="text-right">{{ order.price|number_format(2, ',', ' ') }}€</td>
                         </tr>
                         <tr>
                             <td colspan="2"></td>
-                            <td>Shipping fee</td>
-                            <td>0,00€</td>
+                            <td>Frais de livraison</td>
+                            <td class="text-right">0,00€</td>
                         </tr>
                         <tr>
                             <td colspan="2"></td>
                             <td>Total TTC</td>
-                            <td>{{ order.price|number_format(2, ',', ' ') }}€</td>
+                            <td class="text-right">{{ order.price|number_format(2, ',', ' ') }}€</td>
                         </tr>
                     </tfoot>
                 </table>

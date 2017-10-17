@@ -6,10 +6,10 @@
             <h2>{{ categoryAttribute.label }}</h2>
             <ol class="breadcrumb">
                 <li>
-                    <a href="{{ path('admin_home') }}">Home</a>
+                    <a href="{{ path('admin_home') }}">Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{ path('admin_categories_attribute') }}">Category Attribute List</a>
+                    <a href="{{ path('admin_categories_attribute') }}">Liste des attributs</a>
                 </li>
                 <li class="active">
                     <strong>{{ categoryAttribute.label }}</strong>
@@ -19,14 +19,12 @@
     </div>
 {% endblock %}
 
-
 {% block wrapper_content %}
     <div class="row wrapper wrapper-content animated fadeInRight">
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h4>Update category attribute</h4>
-                    &nbsp;
+                    <h4>Modifier une catégorie</h4>
                     {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Label</label>
@@ -38,7 +36,7 @@
                         <div class="col-lg-2"></div>
                         <div class="col-lg-10">
                             <button class="btn btn-sm btn-primary" type="submit">
-                                <strong>Save Category Attribute</strong>
+                                <strong>Enregistrer</strong>
                             </button>
                         </div>
                     </div>
