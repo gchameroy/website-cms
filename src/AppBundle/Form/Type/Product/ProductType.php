@@ -20,6 +20,12 @@ class ProductType extends AbstractType
             ->add('label', TextType::class)
             ->add('description', TextareaType::class)
             ->add('price', NumberType::class)
+            ->add('titleSEO', TextType::class, array(
+                'required' => false
+            ))
+            ->add('descriptionSEO', TextType::class, array(
+                'required' => false
+            ))
             ->add('category', EntityType::class, array(
                 'class' => Category::class,
                 'choice_label' => function (Category $category) {

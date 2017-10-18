@@ -44,6 +44,17 @@ class Product
     private $publishedAt;
 
     /**
+     * @var string
+     * @ORM\Column(name="title_seo", type="string", length=255, nullable=true)
+     */
+    private $titleSEO;
+
+    /**
+     * @var string
+     * @ORM\Column(name="description_seo", type="string", length=255, nullable=true)
+     */
+    private $descriptionSEO;
+    /**
      * @var Category
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
@@ -378,5 +389,53 @@ class Product
     public function getCartProducts()
     {
         return $this->cartProducts;
+    }
+
+    /**
+     * Set titleSEO
+     *
+     * @param string $titleSEO
+     *
+     * @return Product
+     */
+    public function setTitleSEO($titleSEO)
+    {
+        $this->titleSEO = $titleSEO;
+
+        return $this;
+    }
+
+    /**
+     * Get titleSEO
+     *
+     * @return string
+     */
+    public function getTitleSEO()
+    {
+        return $this->titleSEO;
+    }
+
+    /**
+     * Set descriptionSEO
+     *
+     * @param string $descriptionSEO
+     *
+     * @return Product
+     */
+    public function setDescriptionSEO($descriptionSEO)
+    {
+        $this->descriptionSEO = $descriptionSEO;
+
+        return $this;
+    }
+
+    /**
+     * Get descriptionSEO
+     *
+     * @return string
+     */
+    public function getDescriptionSEO()
+    {
+        return $this->descriptionSEO;
     }
 }
