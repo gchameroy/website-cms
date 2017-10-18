@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class ClientController extends Controller
 {
@@ -44,6 +45,11 @@ class ClientController extends Controller
             $em->flush();
 
             $this->addFlash('success', 'Compte créé avec succès.');
+
+            $token = new UsernamePasswordToken($user, null, 'user', $user->getRoles());
+            $this->get('security.token_storage')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
+
             return $this->redirectToRoute('client_login');
         }
 
