@@ -56,6 +56,20 @@ class Newsletter
      */
     private $insertedAt;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title_seo", type="string", length=255, nullable=true)
+     */
+    private $titleSEO;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description_seo", type="string", length=255, nullable=true)
+     */
+    private $descriptionSEO;
+
     public function __construct()
     {
         $this->insertedAt = new \DateTime();
@@ -211,5 +225,53 @@ class Newsletter
     public function getInsertedAt()
     {
         return $this->insertedAt;
+    }
+
+    /**
+     * Set titleSEO
+     *
+     * @param string $titleSEO
+     *
+     * @return Newsletter
+     */
+    public function setTitleSEO($titleSEO)
+    {
+        $this->titleSEO = $titleSEO;
+
+        return $this;
+    }
+
+    /**
+     * Get titleSEO
+     *
+     * @return string
+     */
+    public function getTitleSEO()
+    {
+        return $this->titleSEO;
+    }
+
+    /**
+     * Set descriptionSEO
+     *
+     * @param string $descriptionSEO
+     *
+     * @return Newsletter
+     */
+    public function setDescriptionSEO($descriptionSEO)
+    {
+        $this->descriptionSEO = $descriptionSEO;
+
+        return $this;
+    }
+
+    /**
+     * Get descriptionSEO
+     *
+     * @return string
+     */
+    public function getDescriptionSEO()
+    {
+        return $this->descriptionSEO;
     }
 }

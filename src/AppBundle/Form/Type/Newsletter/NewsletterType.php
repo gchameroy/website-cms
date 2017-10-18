@@ -15,6 +15,12 @@ class NewsletterType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('content', TextareaType::class)
+            ->add('titleSEO', TextType::class, array(
+                'required' => false
+            ))
+            ->add('descriptionSEO', TextType::class, array(
+                'required' => false
+            ))
         ;
     }
 
