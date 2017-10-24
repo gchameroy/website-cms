@@ -1,5 +1,9 @@
 {% extends "front/layout.html.twig" %}
 
+{% block meta %}<meta name="description" content="{{ newsletter.descriptionSEO }}">{% endblock %}
+
+{% block title newsletter.titleSEO %}
+
 {% block sections %}
     <section class="section-newsletter">
         <div class="container">
