@@ -1,80 +1,107 @@
 {% extends "front/layout.html.twig" %}
 
 {% block sections %}
-    <section>
+    <section class="section-cart m-b-xl">
         <div class="container">
+            <h2 class="m-b-md">Panier</h2>
+            <p class="indent m-b-md">Notre site ne dispose actuellement d’aucun système de paiement en ligne, nous vous contacterons directement pour finaliser ensemble votre commande. Nous restons à votre disposition pour toutes questions.</p>
+            <div class="row">
+                <div class="col-md-3">
+                    <h4 class="bg-white p-h-xs p-w-md m-n">1. Résumé</h4>
+                </div>
+                <div class="col-md-3">
+                    <h4 class="p-h-xs p-w-md m-n">2. Identifiez-vous</h4>
+                </div>
+                <div class="col-md-3">
+                    <h4 class="p-h-xs p-w-md m-n">3. Adresse</h4>
+                </div>
+                <div class="col-md-3">
+                    <h4 class="p-h-xs p-w-md m-n">4. Validation</h4>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>Cart<small class="m-l-md">1. Resume</small></h2>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Attribute</th>
-                                <th class="text-center">Quantity</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for cartProduct in cart.products %}
+                    <div class="bg-white p-w-sm">
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <td>{{ cartProduct.product.label }}</td>
-                                    <td>{% if cartProduct.attribute is not null %}{{ cartProduct.attribute.label }}{% else %}None{% endif %}</td>
-                                    <td class="text-center">
-                                        <span class="m-r-sm">
-                                            <a href="{{ path('front_cart_remove_one_quantity', {'cartProduct': cartProduct.id}) }}">
-                                                <i class="fa fa-minus"></i>
-                                            </a>
-                                        </span>
-                                        <span>{{ cartProduct.quantity }}</span>
-                                        <span class="m-l-sm">
-                                            <a href="{{ path('front_cart_add_one_quantity', {'cartProduct': cartProduct.id}) }}">
-                                                <i class="fa fa-plus"></i>
-                                            </a>
-                                        </span>
-                                    </td>
-                                    <td>{{ cartProduct.price|number_format(2, ',', ' ') }}€</td>
+                                    <th>Article</th>
+                                    <th>Nom du Produit</th>
+                                    <th class="text-center">Prix</th>
+                                    <th class="text-center">Quantité</th>
+                                    <th class="text-center">Total</th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="2"></td>
-                                <td>Sub total</td>
-                                <td>{{ cart.price|number_format(2, ',', ' ') }}€</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"></td>
-                                <td>Shipping fee</td>
-                                <td>0,00€</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"></td>
-                                <td>Total TTC</td>
-                                <td>{{ cart.price|number_format(2, ',', ' ') }}€</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <div class=row">
-                        <div class="col-md-3">
-                            <p>
-                                <a href="{{ path('front_home') }}" class="btn btn-primary">Continue shopping</a>
-                            </p>
-                        </div>
-                        <div class="col-md-9">
-                            <p class="text-right">
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" name="accept">
-                                    <span>I'm agree with <a href="#">therms of use</a> and <a href="#">therms of sale</a></span>
-                                </label>
-                                <a href="{{ path('client_login') }}" name="order" class="btn btn-primary m-l-md">Order</a>
-                            </p>
-                        </div>
+                            </thead>
+                            <tbody>
+                                {% for cartProduct in cart.cartProducts %}
+                                    <tr>
+                                        <td class="td-image">
+                                            <img class="img-lg" src="{{ path('product_image_view', {'product_id': cartProduct.product.id, 'image_id': cartProduct.product.images[0].id}) }}" alt="">
+                                        </td>
+                                        <td>
+                                            <span>{{ cartProduct.product.label }}</span>
+                                            {% if cartProduct.attribute is not null %}<br><em>{{ cartProduct.attribute.label }}</em>{% endif %}
+                                        </td>
+                                        <td class="text-center">{{ cartProduct.product.price|number_format(2, '.', ' ') }}€</td>
+                                        <td class="text-center">
+                                            <span class="m-r-sm">
+                                                <a href="{{ path('front_cart_remove_one_quantity', {'cartProduct': cartProduct.id}) }}">
+                                                    <span>-</span>
+                                                </a>
+                                            </span>
+                                            <span>{{ cartProduct.quantity }}</span>
+                                            <span class="m-l-sm">
+                                                <a href="{{ path('front_cart_add_one_quantity', {'cartProduct': cartProduct.id}) }}">
+                                                    <span>+</span>
+                                                </a>
+                                            </span>
+                                        </td>
+                                        <td class="text-center">{{ cartProduct.price|number_format(2, '.', ' ') }}€</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td><strong>Sous-total</strong></td>
+                                    <td class="text-center">{{ cart.price|number_format(2, '.', ' ') }}€</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td class="border"><strong>Frais de port</strong></td>
+                                    <td class="border text-center">0.00€</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="b-none"></td>
+                                    <td><strong>Total TTC</strong></td>
+                                    <td class="text-center">{{ cart.price|number_format(2, '.', ' ') }}€</td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </div>
+            <p>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="accept">
+                    <span>En cochant la case, j'accepte nos conditions d'utilisation et de ventes</span>
+                </label>
+            </p>
+            <div class="clear m-t-md">
+                <span class="pull-left">
+                    <a href="{{ path('front_home') }}" class="btn btn-primary">Continuer ses achats</a>
+                </span>
+                <span class="pull-right">
+                    {% if cart.length > 0 %}
+                        <a href="{{ path('client_login') }}" name="order" class="btn btn-primary m-l-md">Commander</a>
+                    {% else %}
+                        <a class="btn btn-primary m-l-md" disabled>Commander</a>
+                    {% endif %}
+                </span>
+            </div>
         </div>
     </section>
+    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
 {% endblock %}
 
 {% block javascripts %}
@@ -82,7 +109,7 @@
         $(document).ready(function() {
             $('a[name="order"]').click(function() {
                 if (false === $('input[name="accept"]').is(':checked')) {
-                    window.alert('You must accept therms.');
+                    window.alert('Vous devez accepter les conditions d\'utilisation et de ventes');
                     return false;
                 }
             });

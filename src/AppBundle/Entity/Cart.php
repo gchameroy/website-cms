@@ -40,7 +40,7 @@ class Cart
 
     /**
      * @var string
-     * @ORM\Column(name="token", type="string", length=60)
+     * @ORM\Column(name="token", type="string", length=60, nullable=true)
      */
     private $token;
 
@@ -48,7 +48,7 @@ class Cart
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="CartProduct", mappedBy="cart")
      */
-    private $products;
+    private $cartProducts;
 
     /**
      * Cart constructor.
@@ -56,7 +56,7 @@ class Cart
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->products = new ArrayCollection();
+        $this->cartProducts = new ArrayCollection();
     }
 
     /**
@@ -155,28 +155,28 @@ class Cart
     }
 
     /**
-     * @param ArrayCollection $products
+     * @param ArrayCollection $cartProducts
      * @return Cart
      */
-    public function setProducts(ArrayCollection $products)
+    public function setCartProducts(ArrayCollection $cartProducts)
     {
-        $this->products = new ArrayCollection();
+        $this->cartProducts = new ArrayCollection();
 
-        foreach ($products As $product) {
-            $this->addProduct($product);
+        foreach ($cartProducts As $cartProduct) {
+            $this->addCartProduct($cartProduct);
         }
         
         return $this;
     }
 
     /**
-     * @param CartProduct $product
+     * @param CartProduct $cartProduct
      * @return Cart
      */
-    public function addProduct(CartProduct $product)
+    public function addCartProduct(CartProduct $cartProduct)
     {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
+        if (!$this->cartProducts->contains($cartProduct)) {
+            $this->cartProducts->add($cartProduct);
         }
 
         return $this;
@@ -185,9 +185,9 @@ class Cart
     /**
      * @return ArrayCollection
      */
-    public function getProducts()
+    public function getCartProducts()
     {
-        return $this->products;
+        return $this->cartProducts;
     }
 
     /**
@@ -196,8 +196,8 @@ class Cart
     public function getLength()
     {
         $length = 0;
-        foreach ($this->products as $product) {
-            $length += $product->getQuantity();
+        foreach ($this->cartProducts as $cartProduct) {
+            $length += $cartProduct->getQuantity();
         }
 
         return $length;
@@ -209,7 +209,7 @@ class Cart
     public function getPrice()
     {
         $price = 0;
-        foreach ($this->products as $cartProduct) {
+        foreach ($this->cartProducts as $cartProduct) {
             $price += $cartProduct->getPrice();
         }
 

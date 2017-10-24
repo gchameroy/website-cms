@@ -18,7 +18,7 @@ security:
             security: false
 
         user:
-            pattern: ^/client
+            pattern: ^/
             provider: user
             anonymous: ~
             form_login:
@@ -29,7 +29,7 @@ security:
                 path: client_logout
 
         admin:
-            pattern: ^/admin
+            pattern: ^/
             provider: admin
             anonymous: ~
             form_login:

@@ -1,0 +1,22 @@
+{% extends "front/layout.html.twig" %}
+
+{% block sections %}
+    <section class="section-order-confirmation">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Commande Validée</h2>
+                    <div class="section-content bg-white">
+                        <p>La commande a été prise en compte, nous reprendrons contact avec vous prochainement pour converser ensemble sur le paiement de la commande.</p>
+                        <p>A très bientôt</p>
+                        <p>La Coutellerie Legendre</p>
+                    </div>
+                    <p class="text-center">
+                        <a class="btn btn-primary" href="{{ path('front_home') }}">Retour à l'accueil</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
+{% endblock %}

@@ -55,6 +55,14 @@ h3 {
     color: #64453b !important;
 }
 
+.bg-white {
+    background: #fff;
+}
+
+.bg-white a{
+    color: #64453b;
+}
+
 .cart-bar {
     background: #2c1613;
 }
@@ -338,6 +346,61 @@ ul.product-price span + span {
 .newsletter-image {
     max-height: 320px;
     overflow-y: hidden;
+}
+.section-order-confirmation {
+    margin-bottom: 60px;
+}
+
+.section-order-confirmation .section-content{
+    margin: 80px 0 50px;
+    padding: 100px 50px 200px;
+}
+
+.section-cart h4 {
+    color: #fff;
+}
+
+.section-cart h4.bg-white {
+    color: #000;
+}
+
+.section-cart .table td{
+    vertical-align: middle;
+    color: #64453b;
+}
+
+.section-cart .table td em{
+    color: #000;
+}
+
+.section-cart .table thead tr th {
+    font-weight: normal;
+    border-bottom: 1px solid #e9e7e7;
+}
+
+.section-cart .table tbody tr td {
+    border-top: none;
+    border-bottom: 1px solid #2c1613;
+    color: #64453b;
+}
+
+.section-cart .table tfoot tr td {
+    border-top: none;
+}
+
+.section-cart .table tfoot tr td.border {
+    border-bottom: 1px solid #2c1613;
+}
+
+.section-cart .td-image {
+    width: 112px;
+}
+
+.section-cart .form-title {
+    color: #3e180b;
+    font-weight: bold;
+    font-size: 26px;
+    margin-top: 70px;
 }
 
 .form-control {

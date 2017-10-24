@@ -75,6 +75,8 @@ class CartProductController extends Controller
                 );
                 $em->persist($cartProduct2);
             }
+            dump($cartProduct);
+            dump($cartProduct2);
 
             $em->flush();
 

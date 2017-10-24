@@ -26,8 +26,8 @@ class CartProduct
 
     /**
      * @var Cart
-     * @ORM\ManyToOne(targetEntity="Cart", inversedBy="products")
-     * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Cart", inversedBy="cartProducts")
+     * @ORM\JoinColumn(name="cart_id", referencedColumnName="id")
      */
     private $cart;
 

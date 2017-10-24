@@ -1,80 +1,150 @@
 {% extends "front/layout.html.twig" %}
 
 {% block sections %}
-    <section id="register_form">
+    <section class="section-cart m-b-xxl" id="register_form">
         <div class="container">
+            <h2 class="m-b-md">Panier</h2>
+            <p class="indent m-b-md">Notre site ne dispose actuellement d’aucun système de paiement en ligne, nous vous contacterons directement pour finaliser ensemble votre commande. Nous restons à votre disposition pour toutes questions.</p>
             <div class="row">
-                <div class="col-lg-12">
-                    <h2>Adresse de Livraison</h2>
-                    {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
-                    <div class="form-group">
-                        <div class="col-lg-10">
-                            <div class="form-group">
-                                {{ form_widget(form.deliveryAddress.lastName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom du client', 'value' : user.lastName} }) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.deliveryAddress.firstName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Prénom du cient', 'value' : user.firstName} }) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.deliveryAddress.company, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom entreprise si existante'} }) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.deliveryAddress.address, {'attr' : {'class' : 'form-control', 'placeholder' : 'Adresse*', 'required' : 'true'} }) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.deliveryAddress.zipCode, {'attr' : {'class' : 'form-control', 'placeholder' : 'Code Postal*', 'required' : 'true'} }) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.deliveryAddress.city, {'attr' : {'class' : 'form-control', 'placeholder' : 'Ville*', 'required' : 'true'} }) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.deliveryAddress.country, {'attr' : {'class' : 'form-control', 'placeholder' : 'Pays*', 'required' : 'true'} }) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.isBillingAddress) }} Utiliser l'adresse de livraison comme adresse de facturation
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-lg-10">
-                            <div id="billing_address">
-                                <h2>Adresse de Facturation</h2>
-                                <div class="form-group">
-                                    {{ form_widget(form.billingAddress.lastName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom du client'} }) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_widget(form.billingAddress.firstName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Prénom du cient'} }) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_widget(form.billingAddress.company, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom entreprise si existante'} }) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_widget(form.billingAddress.address, {'attr' : {'class' : 'form-control', 'placeholder' : 'Adresse*', 'required' : 'true'} }) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_widget(form.billingAddress.zipCode, {'attr' : {'class' : 'form-control', 'placeholder' : 'Code Postal*', 'required' : 'true'} }) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_widget(form.billingAddress.city, {'attr' : {'class' : 'form-control', 'placeholder' : 'Ville*', 'required' : 'true'} }) }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form_widget(form.billingAddress.country, {'attr' : {'class' : 'form-control', 'placeholder' : 'Pays*', 'required' : 'true'} }) }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.comment, {'attr' : {'class' : 'form-control', 'placeholder' : 'N\'hésitez pas à nous  transmettre toute information complémentaire dans cet encadré'} }) }}
-                            </div>
-                            <button class="btn btn-sm btn-primary" type="submit">
-                                <strong>Enregistrer</strong>
-                            </button>
-                        </div>
-                    </div>
-                    {{ form_rest(form) }}
-                    {{ form_end(form) }}
+                <div class="col-md-3">
+                    <h4 class="p-h-xs p-w-md m-n">1. Résumé</h4>
+                </div>
+                <div class="col-md-3">
+                    <h4 class="p-h-xs p-w-md m-n">2. Identifiez-vous</h4>
+                </div>
+                <div class="col-md-3">
+                    <h4 class="bg-white p-h-xs p-w-md m-n">3. Adresse</h4>
+                </div>
+                <div class="col-md-3">
+                    <h4 class="p-h-xs p-w-md m-n">4. Validation</h4>
                 </div>
             </div>
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="bg-white p-w-md m-b-md">
+                        <div class="row p-w-xl">
+                            <div class="col-lg-12 p-w-xl">
+                                <h3 class="form-title m-b-xl">Adresse de livraison</h3>
+                                <div class="row">
+                                    <div class="col-md-6 p-r-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.deliveryAddress.lastName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom du client', 'value' : user.lastName} }) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 p-l-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.deliveryAddress.firstName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Prénom du cient', 'value' : user.firstName} }) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-t-md">
+                                    <div class="col-md-6 p-r-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.deliveryAddress.company, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom entreprise si existante'} }) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-t-md">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            {{ form_widget(form.deliveryAddress.address, {'attr' : {'class' : 'form-control', 'placeholder' : 'Adresse*', 'required' : 'true'} }) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-t-md">
+                                    <div class="col-md-6 p-r-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.deliveryAddress.zipCode, {'attr' : {'class' : 'form-control', 'placeholder' : 'Code Postal*', 'required' : 'true'} }) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 p-l-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.deliveryAddress.city, {'attr' : {'class' : 'form-control', 'placeholder' : 'Ville*', 'required' : 'true'} }) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-t-md">
+                                    <div class="col-md-6 p-r-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.deliveryAddress.country, {'attr' : {'class' : 'form-control', 'placeholder' : 'Pays*', 'required' : 'true'} }) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-t-md">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            {{ form_widget(form.comment, {'attr' : {'class' : 'form-control', 'placeholder' : 'N\'hésitez pas à nous transmettre toutes informations complémentaires'} }) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-t-md">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            {{ form_widget(form.isBillingAddress) }} Utiliser l'adresse de livraison comme adresse de facturation
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="billing_address">
+                                    <h3 class="form-title m-b-xl">Adresse de facturation</h3>
+                                    <div class="row">
+                                        <div class="col-md-6 p-r-xl">
+                                            <div class="form-group">
+                                                {{ form_widget(form.billingAddress.lastName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom du client', 'value' : user.lastName} }) }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 p-l-xl">
+                                            <div class="form-group">
+                                                {{ form_widget(form.billingAddress.firstName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Prénom du cient', 'value' : user.firstName} }) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row m-t-md">
+                                        <div class="col-md-6 p-r-xl">
+                                            <div class="form-group">
+                                                {{ form_widget(form.billingAddress.company, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom entreprise si existante'} }) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row m-t-md">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{ form_widget(form.billingAddress.address, {'attr' : {'class' : 'form-control', 'placeholder' : 'Adresse*', 'required' : 'true'} }) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row m-t-md">
+                                        <div class="col-md-6 p-r-xl">
+                                            <div class="form-group">
+                                                {{ form_widget(form.billingAddress.zipCode, {'attr' : {'class' : 'form-control', 'placeholder' : 'Code Postal*', 'required' : 'true'} }) }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 p-l-xl">
+                                            <div class="form-group">
+                                                {{ form_widget(form.billingAddress.city, {'attr' : {'class' : 'form-control', 'placeholder' : 'Ville*', 'required' : 'true'} }) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row m-t-md">
+                                        <div class="col-md-6 p-r-xl">
+                                            <div class="form-group">
+                                                {{ form_widget(form.billingAddress.country, {'attr' : {'class' : 'form-control', 'placeholder' : 'Pays*', 'required' : 'true'} }) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary pull-right" type="submit">Enregistrer</button>
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
         </div>
     </section>
+    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
 {% endblock %}
 {% block javascripts %}
     <script>

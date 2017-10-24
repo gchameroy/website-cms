@@ -32,26 +32,6 @@ class CartManager
     }
 
     /**
-     * @param $product
-     * @return Cart
-     */
-    public function addProduct($product)
-    {
-        $product = $this->em
-            ->getRepository(Product::class)
-            ->find($product);
-        $this->checkProduct($product);
-
-        $cart = $this->getCurrentCart();
-        $cart->addProduct($product);
-
-        $this->em->persist($cart);
-        $this->em->flush();
-
-        return $cart;
-    }
-
-    /**
      * @return Cart
      */
     public function getCurrentCart()

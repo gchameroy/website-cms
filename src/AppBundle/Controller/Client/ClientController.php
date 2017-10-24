@@ -127,7 +127,6 @@ class ClientController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $em->persist($data['deliveryAddress']);
-            $em->flush();
             $user->setDeliveryAddress($data['deliveryAddress']);
 
             $order = (new Order())
@@ -135,17 +134,19 @@ class ClientController extends Controller
                 ->setDeliveryAddress($data['deliveryAddress'])
                 ->setComment($data['comment']);
 
-            foreach ($cart->getProducts() As $cartProduct) {
+            foreach ($cart->getCartProducts() As $cartProduct) {
                 $orderProduct = (new OrderProduct())
                     ->setQuantity($cartProduct->getQuantity())
                     ->setPrice($cartProduct->getPrice())
                     ->setProduct($cartProduct->getProduct());
                 $em->persist($orderProduct);
-                $em->flush();
                 $order->addOrderProduct($orderProduct);
             }
             $em->persist($order);
-            $em->flush();
+
+            $cart->setOrderedAt(new \DateTime())
+                ->setToken(null);
+            $em->persist($cart);
 
             if ($data['isBillingAddress']) {
                 $user->setBillingAddress($data['deliveryAddress']);
@@ -153,14 +154,14 @@ class ClientController extends Controller
             }
             else{
                 $em->persist($data['billingAddress']);
-                $em->flush();
                 $user->setBillingAddress($data['billingAddress']);
                 $order->setBillingAddress($data['billingAddress']);
             }
             $em->persist($user);
+
             $em->flush();
 
-            return $this->redirectToRoute('client_register_address');
+            return $this->redirectToRoute('client_order_confirmation');
         }
 
         return $this->render('client/address.html.twig', [
@@ -169,4 +170,13 @@ class ClientController extends Controller
         ]);
     }
 
+    /**
+     * @Route("/order-confirmation", name="client_order_confirmation")
+     * @Method({"GET"})
+     * @return Response
+     */
+    public function orderConfirmation()
+    {
+        return $this->render('client/order/confirmation.html.twig');
+    }
 }

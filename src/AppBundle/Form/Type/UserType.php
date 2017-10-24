@@ -40,9 +40,6 @@ class UserType extends AbstractType
             ])
             ->add('lastName', TextType::class)
             ->add('firstName', TextType::class)
-            ->add('company', TextType::class, [
-                'required' => false
-            ])
             ->add('birthDate', TextType::class)
             ->add('isInformations', CheckboxType::class, [
                 'required' => false

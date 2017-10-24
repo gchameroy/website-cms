@@ -5,60 +5,86 @@
 {% endblock %}
 
 {% block sections %}
-    <section id="register_form">
+    <section class="section-cart m-b-xxl" id="register_form">
         <div class="container">
+            <h2>Inscription</h2>
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>Création d'un compte client</h2>
-                    {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
-                    <div class="form-group">
-                        <div class="col-lg-10">
-                            <div class="form-group">
-                                {{ form_widget(form.email.first, {'attr' : {'class' : 'form-control', 'placeholder' : 'Votre adresse mail*', 'value' : email} }) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.email.second, {'attr' : {'class' : 'form-control', 'placeholder' : 'Confirmez votre adresse mail*'} }) }}
-                                {{ form_errors(form.email.first) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.plainPassword.first, {'attr' : {'class' : 'form-control', 'placeholder' : 'Choisissez un mot de passe*'} }) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.plainPassword.second, {'attr' : {'class' : 'form-control', 'placeholder' : 'Confirmez votre mot de passe*'} }) }}
-                                {{ form_errors(form.plainPassword.first) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Votre Nom*'} }) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Votre Prénom*'} }) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_widget(form.company, {'attr' : {'class' : 'form-control', 'placeholder' : 'Le nom de votre entreprise*'} }) }}
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group date">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </span>
-                                    {{ form_widget(form.birthDate, {'attr' : {'class' : 'form-control', 'placeholder' : 'Votre Date de Naissance*'} }) }}
+                    <div class="bg-white p-w-md m-b-xl p-b-md">
+                        <div class="row p-w-xl">
+                            <div class="col-lg-12 p-w-xl">
+                                <h3 class="form-title m-b-xxl">Création d'un compte client</h3>
+                                <div class="row">
+                                    <div class="col-md-6 p-r-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.email.first, {'attr' : {'class' : 'form-control', 'placeholder' : 'Votre adresse mail*', 'value' : email} }) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 p-l-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.email.second, {'attr' : {'class' : 'form-control', 'placeholder' : 'Confirmez votre adresse mail*'} }) }}
+                                            {{ form_errors(form.email.first) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-t-md">
+                                    <div class="col-md-6 p-r-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.plainPassword.first, {'attr' : {'class' : 'form-control', 'placeholder' : 'Choisissez un mot de passe*'} }) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 p-l-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.plainPassword.second, {'attr' : {'class' : 'form-control', 'placeholder' : 'Confirmez votre mot de passe*'} }) }}
+                                            {{ form_errors(form.plainPassword.first) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-t-md">
+                                    <div class="col-md-6 p-r-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Votre Nom*'} }) }}
+                                            {{ form_errors(form.lastName) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 p-l-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder' : 'Votre Prénom*'} }) }}
+                                            {{ form_errors(form.firstName) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-t-md">
+                                    <div class="col-md-6 p-r-xl">
+                                        <div class="form-group">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                                {{ form_widget(form.birthDate, {'attr' : {'class' : 'form-control', 'placeholder' : 'Votre Date de Naissance*'} }) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-t-md">
+                                    <div class="col-md-6 p-r-xl">
+                                        <div class="form-group">
+                                            {{ form_widget(form.isInformations) }} Utiliser l'adresse email pour recevoir des informations de notre site
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                {{ form_widget(form.isInformations) }} Utiliser l'adresse email pour recevoir des informations de notre site
-                            </div>
-
-                            <button class="btn btn-sm btn-primary" type="submit">
-                                <strong>Enregistrer</strong>
-                            </button>
                         </div>
                     </div>
-                    {{ form_rest(form) }}
-                    {{ form_end(form) }}
+                    <button class="btn btn-sm btn-primary pull-right" type="submit">Enregistrer</button>
                 </div>
             </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
         </div>
     </section>
+    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
 {% endblock %}
 {% block javascripts %}
     <script src="{{ asset('inspinia/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
