@@ -7,15 +7,21 @@ security:
             entity:
                 class: AppBundle\Entity\User
                 property: email
-        admin:
-            entity:
-                class: AppBundle\Entity\User
-                property: email
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        admin:
+            pattern: ^/admin
+            provider: user
+            anonymous: ~
+            form_login:
+                login_path: admin_login
+                check_path: admin_login
+            logout:
+                path: admin_logout
 
         user:
             pattern: ^/
@@ -27,16 +33,6 @@ security:
                 default_target_path: client_register_address
             logout:
                 path: client_logout
-
-        admin:
-            pattern: ^/
-            provider: admin
-            anonymous: ~
-            form_login:
-                login_path: admin_login
-                check_path: admin_login
-            logout:
-                path: admin_logout
 
     access_control:
         - { path: ^/client/sign-in, roles: IS_AUTHENTICATED_ANONYMOUSLY }

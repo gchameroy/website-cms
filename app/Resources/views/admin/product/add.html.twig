@@ -65,15 +65,26 @@
                             <div class="btn btn-sm btn-primary modal_add_category">Ajouter une Categorie</div>
                         </div>
                     </div>
-                    {% for category_attribute in categories_attribute %}
-                        <div class="form-group">
-                            <h5 class="clickCategoryAttribute" data-id="{{ category_attribute.id }}">
-                                {{ category_attribute.label }}
-                                <i class="fa fa-arrow-down"></i>
-                            </h5>
-                            <div class="listAttribute" style="display: none"></div>
+                    <div class="row">
+                        <label class="col-lg-2 control-label">Attributs</label>
+                        <div class="col-lg-10">
+                            {% for category_attribute in categories_attribute %}
+                                <div class="col-xs-3">
+                                    <h5 class="clickCategoryAttribute" data-id="{{ category_attribute.id }}">
+                                        <span class="label label-info">{{ category_attribute.label }}</span>
+                                    </h5>
+                                    <div class="listAttribute">
+                                        {% for attribute in category_attribute.attributes %}
+                                            <p>
+                                                <input class="i-checks" type="checkbox" name="attributes[]" value="{{ attribute.id }}">
+                                                <span>{{ attribute.label }}</span>
+                                            </p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
+                    </div>
 
                     <div class="form-group">
                         <div class="col-lg-2"></div>
@@ -88,33 +99,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-{% block javascripts %}
-    <script>
-        $('.modal_add_category').click(function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            $.get('{{ path('admin_add_category') }}').done(function(response){
-                $(response).modal();
-            });
-        });
-        $('.clickCategoryAttribute').click(function (e) {
-            var listAttributes = $(this).parent().find('.listAttribute');
-            var category_id = $(this).attr('data-id');
-            listAttributes.toggle();
-            $(this).find('i').toggleClass('fa-arrow-down', 'fa-arrow-up');
-            $(this).find('i').toggleClass('fa-arrow-up', 'fa-arrow-down');
-
-            $.ajax({
-                type: 'POST',
-                url: '{{ path('admin_add_product_attributes') }}',
-                data: {
-                    category_id: category_id
-                },
-                success: function(jqXHR){
-                    listAttributes.html(jqXHR);
-                }
-            });
-        });
-    </script>
 {% endblock %}

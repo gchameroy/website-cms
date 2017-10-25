@@ -15,7 +15,7 @@
         </div>
         <div class="col-lg-2">
             <div class="title-action">
-                <a href="{{ path('admin_categories_attribute_add') }}" class="btn btn-primary btn-sm">Ajouter une catégorie</a>
+                <a href="{{ path('admin_categories_attribute_add') }}" class="btn btn-primary btn-sm">Ajouter un attribut</a>
             </div>
         </div>
     </div>
@@ -34,27 +34,32 @@
                             <tbody>
                             {% for categoryAttribute in categoriesAttribute %}
                                 <tr>
-                                    <td class="project-title" nowrap>
-                                        {{ categoryAttribute.label }}
+                                    <td nowrap>
+                                        <strong>{{ categoryAttribute.label }}</strong>
                                     </td>
-                                    <td class="project-title" nowrap>
+                                    <td nowrap>
                                         {% for attribute in categoryAttribute.attributes %}
-                                            - {{ attribute.label }}
-                                            <a href="{{ path('admin_attribute_delete', {'id': attribute.id }) }}"><i class="fa fa-times"></i></a>
-                                            <a href="{{ path('admin_attribute_edit', {'id': attribute.id }) }}"><i class="fa fa-pencil"></i></a>
-                                            <br>
+                                            <div class="row m-b-xs">
+                                                <div class="col-xs-9">
+                                                    <span>{{ attribute.label }}</span>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <a class="btn btn-primary btn-xs" href="{{ path('admin_attribute_edit', {'id': attribute.id }) }}"><i class="fa fa-pencil"></i></a>
+                                                    <a class="btn btn-danger btn-xs" href="{{ path('admin_attribute_delete', {'id': attribute.id }) }}"><i class="fa fa-times"></i></a>
+                                                </div>
+                                            </div>
                                         {% endfor %}
-                                        <a href="{{ path('admin_attributes_add', {'id': categoryAttribute.id }) }}"><u>+ Ajouter un attribut</u></a>
+                                        <a class="btn btn-primary btn-sm" href="{{ path('admin_attributes_add', {'id': categoryAttribute.id }) }}">Ajouter une valeur</a>
                                     </td>
                                     <td class="project-actions">
-                                        <a href="{{ path('admin_category_attribute_edit', {'id': categoryAttribute.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                        <a href="{{ path('admin_category_attribute_edit', {'id': categoryAttribute.id }) }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> Modifier</a>
                                         <a href="{{ path('admin_category_attribute_delete', {'id': categoryAttribute.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
                                     </td>
                                 </tr>
                             {% else %}
                                 <tr>
                                     <td>
-                                        <a href="{{ path('admin_categories_attribute_add') }}" class="btn btn-primary btn-sm">Ajouter une catégorie</a>
+                                        <a href="{{ path('admin_categories_attribute_add') }}" class="btn btn-primary btn-sm">Ajouter un attribut</a>
                                     </td>
                                 </tr>
                             {% endfor %}

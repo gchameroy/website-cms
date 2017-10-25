@@ -53,7 +53,9 @@ class ProductController extends Controller
      */
     public function addAction(Request $request) {
         $product = new Product();
-        $categoriesAttribute = $this->getDoctrine()->getRepository(CategoryAttribute::class)->findAll();
+        $categoriesAttribute = $this->getDoctrine()
+            ->getRepository(CategoryAttribute::class)
+            ->findAll();
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -121,7 +123,9 @@ class ProductController extends Controller
      * @return RedirectResponse|Response
      */
     public function editAction(Request $request, $id) {
-        $categoriesAttribute = $this->getDoctrine()->getRepository(CategoryAttribute::class)->findAll();
+        $categoriesAttribute = $this->getDoctrine()
+            ->getRepository(CategoryAttribute::class)
+            ->findAll();
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
             ->find($id);
@@ -198,10 +202,17 @@ class ProductController extends Controller
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
             ->find($id);
+
         $this->checkProduct($product);
 
+        $categoriesAttribute = $this->getDoctrine()
+            ->getRepository(CategoryAttribute::class)
+            ->findAll();
+
+
         return $this->render('admin/product/view.html.twig', [
-            'product' => $product
+            'product' => $product,
+            'categories_attribute' => $categoriesAttribute
         ]);
     }
 
@@ -278,35 +289,6 @@ class ProductController extends Controller
 
         return $this->render("admin/product/modal/add_category.html.twig", array(
             'form'  =>  $form->createView()
-        ));
-    }
-
-    /**
-     * @Route("/add_attributes", name="admin_add_product_attributes")
-     * @Method({"POST"})
-     * @param Request $request
-     * @return Response
-     */
-    public function addAttributeAction(Request $request) {
-        $product_id = $request->request->get('product_id');
-        $category_id = $request->request->get('category_id');
-
-        $productAttributes = array();
-        if (null != $product_id) {
-            $product = $this->getDoctrine()
-                ->getRepository(Product::class)
-                ->find($product_id);
-            $this->checkProduct($product);
-            $productAttributes = $product->getAttributes();
-        }
-        $categoryAttribute = $this->getDoctrine()
-            ->getRepository(CategoryAttribute::class)
-            ->find($category_id);
-        $this->checkCategoryAttribute($categoryAttribute);
-
-        return $this->render("admin/product/add_attributes.html.twig", array(
-            'attributes'  =>  $categoryAttribute->getAttributes(),
-            'products_attributes' => $productAttributes
         ));
     }
 

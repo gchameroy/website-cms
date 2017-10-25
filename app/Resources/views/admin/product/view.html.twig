@@ -79,6 +79,28 @@
                                     <dt>Description SEO</dt>
                                     <dd>{{ product.descriptionSEO }}</dd>
                                 </dl>
+                                <dl class="small m-t-md">
+                                    <dt></dt>
+                                    <dd>
+                                        <div class="row">
+                                            {% for category_attribute in categories_attribute %}
+                                                <div class="col-xs-3">
+                                                    <h5 class="clickCategoryAttribute" data-id="{{ category_attribute.id }}">
+                                                        <span class="label label-info">{{ category_attribute.label }}</span>
+                                                    </h5>
+                                                    <div class="listAttribute">
+                                                        {% for attribute in category_attribute.attributes %}
+                                                            <p>
+                                                                <input class="i-checks" type="checkbox" {% if attribute in product.attributes %} checked {% endif %} name="attributes[]" value="{{ attribute.id }}" disabled>
+                                                                <span>{{ attribute.label }}</span>
+                                                            </p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </dd>
+                                </dl>
                                 <p>
                                     <button class="btn btn-primary action_product_image_add">Ajouter une image</button>
                                 </p>

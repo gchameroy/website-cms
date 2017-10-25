@@ -65,15 +65,26 @@
                             <div class="btn btn-sm btn-primary modal_add_category">Ajouter une categorie</div>
                         </div>
                     </div>
-                    {% for category_attribute in categories_attribute %}
-                        <div class="form-group">
-                            <h5 class="clickCategoryAttribute" data-id="{{ category_attribute.id }}">
-                                <span>{{ category_attribute.label }}</span>
-                                <i class="fa fa-arrow-down"></i>
-                            </h5>
-                            <div class="listAttribute" style="display: none"></div>
+                    <div class="row">
+                        <label class="col-lg-2 control-label">Attributs</label>
+                        <div class="col-lg-10">
+                            {% for category_attribute in categories_attribute %}
+                                <div class="col-xs-3">
+                                    <h5 class="clickCategoryAttribute" data-id="{{ category_attribute.id }}">
+                                        <span class="label label-info">{{ category_attribute.label }}</span>
+                                    </h5>
+                                    <div class="listAttribute">
+                                        {% for attribute in category_attribute.attributes %}
+                                            <p>
+                                                <input class="i-checks" type="checkbox" {% if attribute in product.attributes %} checked {% endif %} name="attributes[]" value="{{ attribute.id }}">
+                                                <span>{{ attribute.label }}</span>
+                                            </p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
+                    </div>
                     <div class="form-group">
                         <div class="col-lg-2"></div>
                         <div class="col-lg-10">
@@ -87,60 +98,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-{% block javascripts %}
-    <script>
-        $(document).ready(function(){
-           $('.clickCategoryAttribute').each(function(){
-               var category_id = $(this).attr('data-id');
-               getAttributes(category_id, true);
-           });
-        });
-        $('.modal_add_category').click(function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            $.get('{{ path('admin_add_category') }}').done(function(response){
-                $(response).modal();
-            });
-        });
-        $('.clickCategoryAttribute').click(function (e) {
-            var listAttributes = $(this).parent().find('.listAttribute');
-            var category_id = $(this).attr('data-id');
-
-            listAttributes.toggle();
-            $(this).find('i').toggleClass('fa-arrow-down', 'fa-arrow-up');
-            $(this).find('i').toggleClass('fa-arrow-up', 'fa-arrow-down');
-
-            getAttributes(category_id, false);
-        });
-        function getAttributes(category_id, start)
-        {
-            var divCategory = $('.clickCategoryAttribute[data-id='+category_id+']');
-            var listAttributes = divCategory.parent().find('.listAttribute');
-            $.ajax({
-                type: 'POST',
-                url: '{{ path('admin_add_product_attributes') }}',
-                data: {
-                    category_id: category_id,
-                    product_id: "{{ product.id }}"
-                },
-                success: function(jqXHR){
-                    listAttributes.html(jqXHR);
-                    if (start) {
-                        var display = false;
-                        listAttributes.find('input').each(function(){
-                            if ($(this).is(':checked')) {
-                                display = true;
-                            }
-                        });
-                        if (display) {
-                            listAttributes.toggle();
-                            divCategory.find('i').toggleClass('fa-arrow-down', 'fa-arrow-up');
-                            divCategory.find('i').toggleClass('fa-arrow-up', 'fa-arrow-down');
-                        }
-                    }
-                }
-            });
-        }
-    </script>
 {% endblock %}
