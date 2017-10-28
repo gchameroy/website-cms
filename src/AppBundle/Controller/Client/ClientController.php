@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller\Client;
 
+use AppBundle\Entity\CartProduct;
 use AppBundle\Entity\Order;
 use AppBundle\Entity\OrderProduct;
 use AppBundle\Entity\User;
@@ -133,16 +134,18 @@ class ClientController extends Controller
                 ->setUser($user)
                 ->setDeliveryAddress($data['deliveryAddress'])
                 ->setComment($data['comment']);
+            $em->persist($order);
 
+            /** @var CartProduct $cartProduct */
             foreach ($cart->getCartProducts() As $cartProduct) {
                 $orderProduct = (new OrderProduct())
                     ->setQuantity($cartProduct->getQuantity())
-                    ->setPrice($cartProduct->getPrice())
-                    ->setProduct($cartProduct->getProduct());
+                    ->setPrice($cartProduct->getProduct()->getPrice())
+                    ->setProduct($cartProduct->getProduct())
+                    ->setAttributes($cartProduct->getAttributes())
+                    ->setOrder($order);
                 $em->persist($orderProduct);
-                $order->addOrderProduct($orderProduct);
             }
-            $em->persist($order);
 
             $cart->setOrderedAt(new \DateTime())
                 ->setToken(null);

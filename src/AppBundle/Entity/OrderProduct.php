@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,17 +47,24 @@ class OrderProduct
     /**
      * @var Product
      *
-     * @ORM\ManyToOne(targetEntity="Product", inversedBy="orderProducts")
+     * @ORM\ManyToOne(targetEntity="Product")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
 
     /**
-     * @var Attribute
-     * @ORM\ManyToOne(targetEntity="Attribute", inversedBy="orderProducts")
-     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="Attribute")
      */
-    private $attribute;
+    private $attributes;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->attributes = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -157,30 +165,60 @@ class OrderProduct
     }
 
     /**
-     * @param Attribute $attribute
-     * @return OrderProduct
-     */
-    public function setAttribute(Attribute $attribute)
-    {
-        $this->attribute = $attribute;
-
-        return $this;
-    }
-
-    /**
-     * @return Attribute
-     */
-    public function getAttribute()
-    {
-        return $this->attribute;
-    }
-
-    /**
      * @return float
      */
     public function getTotal()
     {
         return $this->quantity * $this->price;
     }
-}
 
+    /**
+     * Set attributes
+     *
+     * @param $attributes
+     *
+     * @return OrderProduct
+     */
+    public function setAttributes($attributes)
+    {
+        foreach ($attributes as $attribute) {
+            $this->addAttribute($attribute);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add attribute
+     *
+     * @param Attribute $attribute
+     *
+     * @return OrderProduct
+     */
+    public function addAttribute(Attribute $attribute)
+    {
+        $this->attributes[] = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * Remove attribute
+     *
+     * @param Attribute $attribute
+     */
+    public function removeAttribute(Attribute $attribute)
+    {
+        $this->attributes->removeElement($attribute);
+    }
+
+    /**
+     * Get attributes
+     *
+     * @return ArrayCollection
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+}

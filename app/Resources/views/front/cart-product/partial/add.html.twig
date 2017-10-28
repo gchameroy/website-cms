@@ -5,12 +5,24 @@
         {{ form_widget(form.quantity, {'attr' : {'class' : 'form-control'} }) }}
     </div>
 </div>
-<div class="row m-b-sm {% if product.attributes|length == 0 %}hidden{% endif %}">
-    <div class="col-md-offset-8 col-md-2 text-right">Modèle : </div>
-    <div class="col-md-2">
-        {{ form_widget(form.attribute, {'attr' : {'class' : 'form-control'} }) }}
-    </div>
-</div>
+{% if product.attributes|length > 0 %}
+    {% for category in categories_attribute %}
+        {% if product.category(category) %}
+            <div class="row m-b-sm">
+                <div class="col-md-offset-8 col-md-2 text-right">{{ category.label }}</div>
+                <div class="col-md-2">
+                    <select class="form-control" id="form_attributes_{{ loop.index0 }}" name="form_attributes[]">
+                        {% for attribute in category.attributes %}
+                            {% if attribute in product.attributes %}
+                                <option value="{{ attribute.id }}">{{ attribute.label }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
 <div class="row">
     <div class="col-md-offset-10 col-md-2">
         <button class="btn btn-primary" type="submit">Commander</button>

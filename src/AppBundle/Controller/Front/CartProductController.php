@@ -4,14 +4,12 @@ namespace AppBundle\Controller\Front;
 
 use AppBundle\Entity\Attribute;
 use AppBundle\Entity\CartProduct;
+use AppBundle\Entity\CategoryAttribute;
 use AppBundle\Entity\Product;
 use AppBundle\Service\CartManager;
-use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,6 +31,10 @@ class CartProductController extends Controller
             ->find($product);
         $this->checkProduct($product);
 
+        $categoriesAttribute = $this->getDoctrine()
+            ->getRepository(CategoryAttribute::class)
+            ->findAll();
+
         $cartProduct = new CartProduct();
         $cartProduct->setProduct($product);
         $cartProduct->setCart($cartManager->getCurrentCart());
@@ -42,41 +44,40 @@ class CartProductController extends Controller
                 'product' => $product->getId()
             ]))
             ->add('quantity', IntegerType::class)
-            ->add('attribute', EntityType::class, [
-                'class' => Attribute::class,
-                'choice_label' => function (Attribute $attribute) {
-                    return $attribute->getLabel();
-                },
-                'query_builder' => function (EntityRepository $er) use ($product) {
-                    return $er->createQueryBuilder('a')
-                        ->join('a.products', 'p')
-                        ->where('p.id = :product')
-                        ->setParameter('product', $product->getId())
-                        ->orderBy('a.label', 'ASC');
-                }
-            ])
             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
+            $attributesIds = [];
+            foreach ($request->request->get('form_attributes') as $attribute) {
+                $attribute = $em->getRepository(Attribute::class)
+                    ->find($attribute);
+
+                if (!$attribute) {
+                    continue;
+                }
+
+                $cartProduct->addAttribute($attribute);
+                $attributesIds[] = $attribute->getId();
+            }
+            $cartProduct->setAttributesIds($attributesIds);
+
             $cartProduct2 = $em->getRepository(CartProduct::class)
                 ->findOneBy([
                    'cart' => $cartProduct->getCart(),
                    'product' => $cartProduct->getProduct(),
-                   'attribute' => $cartProduct->getAttribute(),
+                   'attributesIds' => implode(',', $cartProduct->getAttributesIds()),
                 ]);
             if (!$cartProduct2) {
                 $em->persist($cartProduct);
             } else {
                 $cartProduct2->setQuantity(
-                    $cartProduct2->getQuantity() + 1
+                    $cartProduct2->getQuantity() + $cartProduct->getQuantity()
                 );
                 $em->persist($cartProduct2);
             }
-            dump($cartProduct);
-            dump($cartProduct2);
 
             $em->flush();
 
@@ -87,12 +88,13 @@ class CartProductController extends Controller
 
         return $this->render('front/cart-product/partial/add.html.twig', [
             'product' => $product,
+            'categories_attribute' => $categoriesAttribute,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     *@param $product
+     * @param $product
      */
     private function checkProduct($product) {
         if (!$product) {

@@ -63,6 +63,7 @@ class Order
      */
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->orderProducts = new ArrayCollection();
     }
 

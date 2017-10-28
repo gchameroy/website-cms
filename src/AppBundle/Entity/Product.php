@@ -68,22 +68,10 @@ class Product
     private $images;
 
     /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="OrderProduct", mappedBy="product", cascade={"remove", "persist"})
-     */
-    private $orderProducts;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Attribute", inversedBy="products", cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity="Attribute")
      * @ORM\JoinTable(name="products_attributes")
      */
     private $attributes;
-
-    /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="CartProduct", mappedBy="product", cascade={"remove", "persist"})
-     */
-    private $cartProducts;
 
     /**
      * Product constructor.
@@ -91,9 +79,7 @@ class Product
     public function __construct()
     {
         $this->images = new ArrayCollection();
-        $this->orderProducts = new ArrayCollection();
         $this->attributes = new ArrayCollection();
-        $this->cartProducts = new ArrayCollection();
     }
 
     /**
@@ -254,53 +240,6 @@ class Product
     }
 
     /**
-     * @param ArrayCollection $orderProducts
-     * @return Product
-     */
-    public function setOrderProducts(ArrayCollection $orderProducts)
-    {
-        $this->orderProducts = new ArrayCollection();
-
-        foreach ($orderProducts As $orderProduct) {
-            $this->addOrderProduct($orderProduct);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param OrderProduct $orderProduct
-     * @return Product
-     */
-    public function addOrderProduct(OrderProduct $orderProduct)
-    {
-        if (!$this->orderProducts->contains($orderProduct)) {
-            $this->orderProducts->add($orderProduct);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param OrderProduct $orderProduct
-     * @return Product
-     */
-    public function removeOrderProduct(OrderProduct $orderProduct)
-    {
-        $this->orderProducts->removeElement($orderProduct);
-
-        return $this;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getOrderProducts()
-    {
-        return $this->orderProducts;
-    }
-
-    /**
      * Add attribute
      *
      * @param Attribute $attribute
@@ -347,48 +286,20 @@ class Product
         return $this->attributes;
     }
 
-
     /**
-     * @param ArrayCollection $cartProducts
-     * @return Product
+     * @param int $category
+     * @return bool
      */
-    public function setCartProducts(ArrayCollection $cartProducts)
+    public function hasCategory(int $category)
     {
-        foreach ($cartProducts As $cartProduct) {
-            $this->addCartProduct($cartProduct);
+        /** @var Attribute $attribute */
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->getCategoryAttribute()->getId() == $category) {
+                return true;
+            }
         }
 
-        return $this;
-    }
-
-    /**
-     * @param CartProduct $cartProduct
-     * @return Product
-     */
-    public function addCartProduct(CartProduct $cartProduct)
-    {
-        $this->cartProducts[] = $cartProduct;
-
-        return $this;
-    }
-
-    /**
-     * @param CartProduct $cartProduct
-     * @return Product
-     */
-    public function removeCartProduct(CartProduct $cartProduct)
-    {
-        $this->cartProducts->removeElement($cartProduct);
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCartProducts()
-    {
-        return $this->cartProducts;
+        return false;
     }
 
     /**
