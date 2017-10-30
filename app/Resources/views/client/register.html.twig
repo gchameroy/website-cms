@@ -88,13 +88,15 @@
 {% endblock %}
 {% block javascripts %}
     <script src="{{ asset('inspinia/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('inspinia/plugins/datapicker/locales/bootstap-datepicker.fr.min.js') }}"></script>
     <script>
         $('.input-group.date').datepicker({
             todayBtn: "linked",
             keyboardNavigation: false,
-            forceParse: false,
+            forceParse: true,
             calendarWeeks: true,
-            autoclose: true
+            autoclose: true,
+            language: 'fr'
         });
     </script>
 {% endblock %}

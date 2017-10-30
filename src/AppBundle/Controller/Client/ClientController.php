@@ -36,7 +36,9 @@ class ClientController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $user->setBirthDate(new \DateTime($user->getBirthDate()));
+            $date = explode('/', $user->getBirthDate());
+            $date = $date[2].'-'.$date[1].'-'.$date[0];
+            $user->setBirthDate(new \DateTime($date));
 
             $password = $this->container->get('security.password_encoder')
                 ->encodePassword($user, $user->getPlainPassword());
