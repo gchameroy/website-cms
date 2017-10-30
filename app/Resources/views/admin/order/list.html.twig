@@ -29,6 +29,20 @@
                             <tbody>
                             {% for order in orders %}
                                 <tr>
+                                    <td>
+                                        {% if order.isPaid %}
+                                            <span class="label label-info">Réglé</span>
+                                        {% else %}
+                                            <span class="label label-danger">Non Réglé</span>
+                                        {% endif %}
+                                        {% if order.status == 1 %}
+                                            <span class="label label-warning">En préparation</span>
+                                        {% elseif order.status == 2 %}
+                                            <span class="label label-info">Envoyé</span>
+                                        {% else %}
+                                            <span class="label label-default">Annulé</span>
+                                        {% endif %}
+                                    </td>
                                     <td>#{{ order.id }}</td>
                                     <td>{{ order.user.email }}</td>
                                     <td>{{ order.createdAt|date('Y-m-d H:i') }}</td>

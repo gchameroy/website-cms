@@ -249,5 +249,10 @@ class Address
     {
         return $this->country;
     }
+
+    public function getFullName()
+    {
+        return $this->lastName.' '.$this->firstName;
+    }
 }
 

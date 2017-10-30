@@ -11,6 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Order
 {
+    const STATUS_IN_PREPARE = 1;
+    const STATUS_SENT = 2;
+    const STATUS_CANCELED = 3;
+
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
@@ -30,6 +34,18 @@ class Order
      * @ORM\Column(name="comment", type="string", length=255, nullable=true)
      */
     private $comment;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="is_paid", type="boolean")
+     */
+    private $isPaid;
+
+    /**
+     * @var int
+     * @ORM\Column(name="status", type="integer")
+     */
+    private $status;
 
     /**
      * @var User
@@ -65,6 +81,8 @@ class Order
     {
         $this->createdAt = new \DateTime();
         $this->orderProducts = new ArrayCollection();
+        $this->isPaid = false;
+        $this->status = self::IN_PREPARE;
     }
 
     /**
@@ -247,5 +265,62 @@ class Order
 
         return $total;
     }
-}
 
+    /**
+     * Set isPaid
+     *
+     * @param boolean $isPaid
+     *
+     * @return Order
+     */
+    public function setIsPaid($isPaid)
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
+    }
+
+    /**
+     * Get isPaid
+     *
+     * @return boolean
+     */
+    public function getIsPaid()
+    {
+        return $this->isPaid;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     *
+     * @return Order
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Remove orderProduct
+     *
+     * @param \AppBundle\Entity\OrderProduct $orderProduct
+     */
+    public function removeOrderProduct(\AppBundle\Entity\OrderProduct $orderProduct)
+    {
+        $this->orderProducts->removeElement($orderProduct);
+    }
+}
