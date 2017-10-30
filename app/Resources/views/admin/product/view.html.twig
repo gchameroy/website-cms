@@ -40,6 +40,11 @@
                                     {% for image in product.images %}
                                         <div>
                                             <div class="image-imitation">
+                                                <a href="{{ path('delete_product_image', { 'id' : image.id, 'product_id' : product.id }) }}">
+                                                    <span class="pull-right border-bottom border-left p-xxs">
+                                                        <i class="fa fa-trash text-danger"></i>
+                                                    </span>
+                                                </a>
                                                 <img alt="image" class="img-preview" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': image.id}) }}" />
                                             </div>
                                         </div>

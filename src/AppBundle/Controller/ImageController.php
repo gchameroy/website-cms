@@ -4,10 +4,13 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Newsletter;
+use AppBundle\Entity\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route("/")
@@ -61,6 +64,31 @@ class ImageController Extends Controller
         $file = $filePath.$image->getPath();
 
         return new BinaryFileResponse($file);
+    }
+
+    /**
+     * @Route(
+     *     "/image/p-{product_id}/{id}/delete", name="delete_product_image",
+     *     requirements={"id": "\d+","product_id": "\d+"}
+     * )
+     * @Method({"GET"})
+     * @param int $id
+     * @param int $product_id
+     * @return Response
+     */
+    public function deleteImage($id, $product_id) {
+        $image = $this->getDoctrine()
+            ->getRepository(Image::class)
+            ->find($id);
+        $this->checkImage($image);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($image);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_product', [
+            'id' => $product_id
+        ]);
     }
 
     /**
