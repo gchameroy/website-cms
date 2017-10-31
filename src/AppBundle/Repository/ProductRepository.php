@@ -45,7 +45,12 @@ class ProductRepository extends EntityRepository
             ->getQuery()
             ->getSingleScalarResult();
 
-        return ceil($nb / self::PER_PAGE);
+        $nbPage = ceil($nb / self::PER_PAGE);
+        if ($nbPage == 0) {
+            $nbPage = 1;
+        }
+
+        return $nbPage;
     }
 
     public function findLastPublished($max = 10)
