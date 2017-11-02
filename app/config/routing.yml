@@ -2,17 +2,18 @@ uploads:
     resource: '@AppBundle/Controller/ImageController.php'
     type: annotation
 
-front:
-    resource: '@AppBundle/Controller/Front/'
+admin:
+    resource: '@AppBundle/Controller/Admin/'
     type: annotation
-    prefix: '/'
+    prefix: '/admin'
 
 client:
     resource: '@AppBundle/Controller/Client/'
     type: annotation
     prefix: '/client'
 
-admin:
-    resource: '@AppBundle/Controller/Admin/'
+front:
+    resource: '@AppBundle/Controller/Front/'
     type: annotation
-    prefix: '/admin'
+    prefix: '/'
+

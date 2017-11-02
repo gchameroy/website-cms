@@ -1,0 +1,79 @@
+body {
+    background-color: #2d1713;
+}
+
+.pace .pace-progress {
+    background: #337ab7;
+}
+
+.gray-bg, .bg-muted {
+    background-color: #e8e3d9;
+}
+
+.nav-header {
+    background: #2d1713;
+    border-bottom: 1px solid #fff;
+}
+
+body.mini-navbar .nav-header {
+    background-color: #2d1713;
+}
+
+.nav > li > a {
+    color: #fff;
+}
+
+.nav.navbar-right > li > a {
+    color: #2c1613;
+}
+
+.navbar-default .nav > li > a:hover,
+.navbar-default .nav > li > a:focus {
+    background: inherit;
+}
+
+.btn-primary{
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.btn-primary.active:hover,
+.btn-primary.active:focus{
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+.row.wrapper.page-heading {
+    background: #fff url('../img/bg_header.png') center no-repeat;
+    padding-top: 20px;
+}
+
+h2 {
+    color: #fff;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+
+.breadcrumb {
+    background-color: transparent;
+    color: #fff;
+}
+
+.breadcrumb>li+li:before{
+    color: #fff;
+}
+
+.lazur-bg, .bg-info {
+    background-color: #54bae0;
+}
+
+.label-info, .badge-info {
+    background-color: #54bae0;
+}
