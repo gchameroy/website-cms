@@ -4,7 +4,7 @@
             <ul class="list-inline">
                 <li><a href="{{ path('front_home') }}">Présentation</a></li>
                 {% for category in categories %}
-                    <li><a href="{{ path('front_products', {category: category.id, page: 1}) }}">{{ category.label }}</a></li>
+                    <li><a href="{{ path('front_products', {category: category.slug, page: 1}) }}">{{ category.label }}</a></li>
                 {% endfor %}
                 <li><a href="#">Table/Cuisine</a></li>
                 <li><a href="{{ path('front_contact') }}">Contact</a></li>

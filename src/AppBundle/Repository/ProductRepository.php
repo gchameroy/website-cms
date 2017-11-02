@@ -9,13 +9,13 @@ class ProductRepository extends EntityRepository
 {
     const PER_PAGE = 9;
 
-    public function findOnePublished($product)
+    public function findOnePublished(string $slug)
     {
         return $this->createQueryBuilder('p')
             ->where('p.publishedAt <= :now')
                 ->setParameter('now', new \DateTime())
-            ->andWhere('p.id = :product')
-                ->setParameter('product', $product)
+            ->andWhere('p.slug = :slug')
+                ->setParameter('slug', $slug)
             ->getQuery()
             ->getOneOrNullResult();
     }

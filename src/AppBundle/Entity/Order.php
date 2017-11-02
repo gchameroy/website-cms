@@ -82,7 +82,7 @@ class Order
         $this->createdAt = new \DateTime();
         $this->orderProducts = new ArrayCollection();
         $this->isPaid = false;
-        $this->status = self::IN_PREPARE;
+        $this->status = self::STATUS_IN_PREPARE;
     }
 
     /**

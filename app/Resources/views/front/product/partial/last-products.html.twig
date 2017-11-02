@@ -19,7 +19,7 @@
                     </ul>
                     <br class="clear">
                     <p class="text-center m-t-lg m-b-lg">
-                        <a href="{{ path('front_product', {'product': product.id}) }}" class="btn btn-primary">+ de détails</a>
+                        <a href="{{ path('front_product', {'category': product.category.slug, 'product': product.slug}) }}" class="btn btn-primary">+ de détails</a>
                     </p>
                 </div>
             {% endfor %}

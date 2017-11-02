@@ -27,13 +27,13 @@ class PublishableEntityRepository extends EntityRepository
             ->getResult();
     }
 
-    public function findOnePublished($id)
+    public function findOnePublished(string $slug)
     {
         return $this->createQueryBuilder('e')
             ->where('e.publishedAt <= :now')
                 ->setParameter('now', new \DateTime())
-            ->andWhere('e.id = :id')
-                ->setParameter('id', $id)
+            ->andWhere('e.slug = :slug')
+                ->setParameter('slug', $slug)
             ->getQuery()
             ->getOneOrNullResult();
     }

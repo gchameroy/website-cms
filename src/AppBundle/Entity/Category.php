@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Category
@@ -28,6 +29,14 @@ class Category
      * @ORM\Column(name="label", type="string", length=255)
      */
     private $label;
+
+    /**
+     * @var string
+     *
+     * @Gedmo\Slug(fields={"label"})
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
 
     /**
      * @var string
@@ -85,6 +94,14 @@ class Category
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     /**

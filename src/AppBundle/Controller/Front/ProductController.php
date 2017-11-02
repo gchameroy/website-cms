@@ -12,21 +12,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends Controller
 {
     /**
-     * @Route("/categories/{category}-{page}", name="front_products")
+     * @Route("/{category}/page-{page}", name="front_products")
      * @Method({"GET"})
-     * @param int $category
+     * @param string $category
      * @param int $page
      * @return Response
      */
-    public function listAction($category, $page) {
+    public function listAction(string $category, int $page) {
         $category = $this->getDoctrine()
             ->getRepository(Category::class)
-            ->find($category);
+            ->findOneBySlug($category);
         $this->checkCategory($category);
 
         if ($page <= 0) {
             return $this->redirectToRoute('front_products', [
-                'category' => $category->getId(),
+                'category' => $category->getSlug(),
                 'page' => 1
             ]);
         }
@@ -37,7 +37,7 @@ class ProductController extends Controller
 
         if ($page > $nbPage) {
             return $this->redirectToRoute('front_products', [
-                'category' => $category->getId(),
+                'category' => $category->getSlug(),
                 'page' => $nbPage
             ]);
         }
@@ -55,12 +55,18 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/products/{product}", name="front_product")
+     * @Route("/{category}/{product}", name="front_product")
      * @Method({"GET"})
-     * @param int $product
+     * @param string $category
+     * @param string $product
      * @return Response
      */
-    public function viewAction($product) {
+    public function viewAction(string $category, string $product) {
+        $category = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->findOneBySlug($category);
+        $this->checkCategory($category);
+
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
             ->findOnePublished($product);
