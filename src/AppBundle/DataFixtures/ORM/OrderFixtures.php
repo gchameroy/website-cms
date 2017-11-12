@@ -15,6 +15,7 @@ class OrderFixtures extends Fixture
                 $order = (new Order())
                     ->setUser($this->getReference('user-admin'))
                     ->setDeliveryAddress($this->getReference('address-' . $i . '-' . $j))
+                    ->setBillingAddress($this->getReference('address-' . $i . '-' . $j))
                     ->setCreatedAt(new \DateTime());
                 $this->setReference('order-' . $i . '-' . $j, $order);
                 $manager->persist($order);
