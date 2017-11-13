@@ -37,4 +37,14 @@ class PublishableEntityRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findPublished()
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.publishedAt <= :now')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('e.publishedAt', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
 }
