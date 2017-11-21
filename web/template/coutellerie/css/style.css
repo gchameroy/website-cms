@@ -207,6 +207,14 @@ h3 {
     font-style: italic;
 }
 
+.contact-information td {
+    vertical-align: top;
+}
+
+.contact-information td:first-child {
+    width: 30px;
+}
+
 .aside {
     border: 10px solid #1a0b0b;
     background: #fff;
