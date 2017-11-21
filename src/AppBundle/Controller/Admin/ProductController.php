@@ -116,6 +116,42 @@ class ProductController extends Controller
     }
 
     /**
+     * @Route("/{id}/unpublish", name="admin_product_unpublish", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse|Response
+     */
+    public function unpublishAction(Request $request, $id) {
+        $product = $this->getDoctrine()
+            ->getRepository(Product::class)
+            ->find($id);
+        $this->checkProduct($product);
+
+        if (null === $product->getPublishedAt()) {
+            return $this->redirectToRoute('admin_products');
+        }
+
+        $form = $this->createForm(ProductPublishType::class, $product);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $product->setPublishedAt(null);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($product);
+            $em->flush();
+
+            $this->addFlash('success', 'Product unpublished successfully.');
+
+            return $this->redirectToRoute('admin_products');
+        }
+
+        return $this->render('admin/product/unpublish.html.twig', [
+            'form' => $form->createView(),
+            'product' => $product,
+        ]);
+    }
+
+    /**
      * @Route("/{id}/edit", name="admin_product_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request

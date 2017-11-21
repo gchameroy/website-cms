@@ -51,7 +51,9 @@
                                     <td nowrap>{{ product.price|number_format(2, '.') }}€</td>
                                     <td nowrap>{{ product.category.label }}</td>
                                     <td class="project-actions text-right">
-                                        {% if not product.published %}
+                                        {% if product.published %}
+                                            <a href="{{ path('admin_product_unpublish', {'id': product.id }) }}" class="btn btn-warning btn-sm">Dépublier</a>
+                                        {% else %}
                                             <a href="{{ path('admin_product_publish', {'id': product.id }) }}" class="btn btn-primary btn-sm">Publier</a>
                                         {% endif %}
                                         <a href="{{ path('admin_product', {'id': product.id }) }}" class="btn btn-primary btn-sm">Détails</a>
