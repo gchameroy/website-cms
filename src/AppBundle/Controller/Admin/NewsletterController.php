@@ -114,6 +114,42 @@ class NewsletterController extends Controller
     }
 
     /**
+     * @Route("/{id}/unpublish", name="admin_newsletter_unpublish", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse|Response
+     */
+    public function unpublishAction(Request $request, $id) {
+        $newsletter = $this->getDoctrine()
+            ->getRepository(Newsletter::class)
+            ->find($id);
+        $this->checkNewsletter($newsletter);
+
+        if (null === $newsletter->getPublishedAt()) {
+            return $this->redirectToRoute('admin_newsletters');
+        }
+
+        $form = $this->createForm(NewsletterPublishType::class, $newsletter);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newsletter->setPublishedAt(null);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newsletter);
+            $em->flush();
+
+            $this->addFlash('success', 'Newsletter unpublished successfully.');
+
+            return $this->redirectToRoute('admin_newsletters');
+        }
+
+        return $this->render('admin/newsletter/unpublish.html.twig', [
+            'form' => $form->createView(),
+            'newsletter' => $newsletter,
+        ]);
+    }
+
+    /**
      * @Route("/{id}/edit", name="admin_newsletter_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request

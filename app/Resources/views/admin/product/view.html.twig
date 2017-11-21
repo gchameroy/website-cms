@@ -18,7 +18,9 @@
         </div>
         <div class="col-lg-2">
             <div class="title-action">
-                {% if not product.published %}
+                {% if product.published %}
+                    <a href="{{ path('admin_product_unpublish', {'id': product.id }) }}" class="btn btn-warning btn-sm">Dépublier</a>
+                {% else %}
                     <a href="{{ path('admin_product_publish', {'id': product.id }) }}" class="btn btn-primary btn-sm">Publier</a>
                 {% endif %}
                 <a href="{{ path('admin_product_edit', {'id': product.id}) }}" class="btn btn-primary btn-sm">Editer</a>
