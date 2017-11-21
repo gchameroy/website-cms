@@ -2,6 +2,10 @@ uploads:
     resource: '@AppBundle/Controller/ImageController.php'
     type: annotation
 
+elfinder:
+    resource: "@FMElfinderBundle/Resources/config/routing.yml"
+    prefix: '/admin'
+
 admin:
     resource: '@AppBundle/Controller/Admin/'
     type: annotation

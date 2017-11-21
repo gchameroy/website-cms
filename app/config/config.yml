@@ -5,6 +5,7 @@ imports:
 
 parameters:
     locale: fr
+    uploads: 'uploads'
 
 framework:
     secret: '%secret%'
@@ -63,3 +64,37 @@ stof_doctrine_extensions:
     orm:
         default:
             sluggable: true
+
+ivory_ck_editor:
+    configs:
+        my_config:
+            toolbar: my_config
+            filebrowserBrowseRoute: elfinder
+            filebrowserBrowseRouteParameters:
+                instance: ckeditor
+    toolbars:
+        configs:
+            my_config: [ "@bloc_5", "@bloc_1", "@bloc_3", "@bloc_2", "@bloc_4" ]
+        items:
+            bloc_1: [ 'Bold', 'Italic', 'Underline', 'Blockquote', '-', 'RemoveFormat' ]
+            bloc_2: [ 'NumberedList', 'BulletedList' ]
+            bloc_3: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ]
+            bloc_4: [ 'Image' ]
+            bloc_5: [ 'Format' ]
+
+fm_elfinder:
+    instances:
+        ckeditor:
+            locale: "%locale%"
+            editor: ckeditor
+            fullscreen: false
+            include_assets: true
+            connector:
+                debug: false
+                roots:
+                    uploads:
+                        driver: LocalFileSystem
+                        path: %uploads%
+                        upload_allow: [ 'image/png', 'image/jpg', 'image/jpeg' ]
+                        upload_deny: [ 'all' ]
+                        upload_max_size: 2M

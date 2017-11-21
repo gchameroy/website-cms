@@ -59,7 +59,7 @@
                                 </h2>
                                 <hr>
                                 <h4>Contenu</h4>
-                                <div class="small text-muted">{{ newsletter.content|nl2br }}</div>
+                                <div class="small text-muted">{{ newsletter.content|raw }}</div>
                                 <p class="m-t">
                                     {% if newsletter.image %}
                                         <button class="btn btn-primary action_newsletter_image_add">Modifier l'image</button>

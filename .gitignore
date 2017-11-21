@@ -11,10 +11,12 @@
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/
-/web/bundles/
-
+/web/bundles/*
+/web/assets/*
 /uploads/*
 !/uploads/.gitkeep
 !/uploads/product/.gitkeep
 !/uploads/newsletter/.gitkeep
+/web/uploads/*
+!/web/uploads/.gitkeep
 *~
