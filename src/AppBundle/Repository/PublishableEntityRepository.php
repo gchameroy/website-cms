@@ -6,6 +6,13 @@ use Doctrine\ORM\EntityRepository;
 
 class PublishableEntityRepository extends EntityRepository
 {
+    /**
+     * @param int $perPage
+     * @param int $page
+     * @param string $order
+     * @param bool $published
+     * @return array
+     */
     public function findAll($perPage = 10, $page = 1, $order = 'asc', $published = true)
     {
         $qb = $this->createQueryBuilder('e');
@@ -27,6 +34,10 @@ class PublishableEntityRepository extends EntityRepository
             ->getResult();
     }
 
+    /**
+     * @param string $slug
+     * @return mixed
+     */
     public function findOnePublished(string $slug)
     {
         return $this->createQueryBuilder('e')
@@ -38,6 +49,9 @@ class PublishableEntityRepository extends EntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * @return array
+     */
     public function findPublished()
     {
         return $this->createQueryBuilder('e')

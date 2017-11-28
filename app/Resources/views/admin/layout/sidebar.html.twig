@@ -40,6 +40,12 @@
                     <span class="nav-label">Actualités</span>
                 </a>
             </li>
+            <li class="{% if app.request.attributes.get('_route') in ['admin_static_pages', 'admin_static_pages_add', 'admin_static_page', 'admin_static_page_edit', 'admin_static_page_publish', 'admin_static_page_unpublish', 'admin_static_page_delete'] %}active{% endif %}">
+                <a href="{{ url('admin_static_pages') }}">
+                    <i class="fa fa-th-large"></i>
+                    <span class="nav-label">Gestion des pages</span>
+                </a>
+            </li>
             <li>
                 <a href="{{ url('admin_categories_attribute') }}">
                     <i class="fa fa-th-large"></i>
