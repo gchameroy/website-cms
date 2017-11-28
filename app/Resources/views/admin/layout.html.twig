@@ -14,7 +14,9 @@
         <link href="{{ asset('inspinia/plugins/slick/slick.css') }}" rel="stylesheet">
         <link href="{{ asset('inspinia/plugins/slick/slick-theme.css') }}" rel="stylesheet">
         <link href="{{ asset('inspinia/css/style.css') }}" rel="stylesheet">
-        <link href="{{ asset('template/coutellerie/css/style-inspinia.css') }}" rel="stylesheet">
+        {% if theme != 'default' %}
+            <link href="{{ asset('template/' ~ theme ~ '/css/style-inspinia.css') }}" rel="stylesheet">
+        {% endif %}
         {% block stylesheets '' %}
     </head>
 

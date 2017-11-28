@@ -11,3 +11,5 @@ parameters:
     mailer_password: ~
 
     secret: ChangeItAsSoonAsPossible
+
+    theme: default
