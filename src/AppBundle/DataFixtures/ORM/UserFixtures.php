@@ -12,6 +12,10 @@ class UserFixtures extends Fixture
     {
         $user = new User();
         $user->setEmail('admin@test.fr')
+            ->setPhone('0123456789')
+            ->setFirstName('Admin')
+            ->setLastName('Smith')
+            ->setCompany('My company')
             ->setPlainPassword('admin');
         $password = $this->container->get('security.password_encoder')
             ->encodePassword($user, $user->getPlainPassword());

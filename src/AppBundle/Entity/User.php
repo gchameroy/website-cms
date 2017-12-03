@@ -30,6 +30,12 @@ class User implements UserInterface
 
     /**
      * @var string
+     * @ORM\Column(name="phone", type="string", length=255)
+     */
+    private $phone;
+
+    /**
+     * @var string
      * @ORM\Column(name="password", type="string", length=60)
      */
     private $password;
@@ -158,6 +164,25 @@ class User implements UserInterface
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @param $phone
+     * @return User
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
     }
 
     /**
@@ -349,6 +374,20 @@ class User implements UserInterface
     public function getOrders()
     {
         return $this->orders;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        $total = 0;
+        /** @var Order $order */
+        foreach ($this->orders as $order) {
+            $total += $order->getTotal();
+        }
+
+        return $total;
     }
 
     /**
