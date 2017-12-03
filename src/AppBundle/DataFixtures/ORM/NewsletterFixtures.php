@@ -2,21 +2,19 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\DataFixtures\Helper\FixtureHelper;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Newsletter;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Faker\Factory as Faker;
 
-class NewsletterFixtures extends Fixture
+class NewsletterFixtures extends FixtureHelper
 {
     public function load(ObjectManager $manager)
     {
-        $faker = Faker::create();
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= self::NB_NEWSLETTER; $i++) {
             $newsletter = new Newsletter();
             $newsletter->setTitle('Titre de l\'actualité')
-                ->setContent($faker->paragraph(100))
+                ->setContent($this->faker->paragraph(100))
                 ->setPublishedAt(new \DateTime())
                 ->setImage($this->loadImage($manager));
 
@@ -28,11 +26,10 @@ class NewsletterFixtures extends Fixture
 
     private function loadImage(objectManager $manager)
     {
-        $faker = Faker::create();
         $uploadPath =  __DIR__ . '/../../../../uploads/newsletter';
         $fixturesPath =  __DIR__ . '/../img/newsletter';
 
-        $file = $faker->file($fixturesPath, $uploadPath, false);
+        $file = $this->faker->file($fixturesPath, $uploadPath, false);
         $image = new Image();
         $image->setPath($file);
         $manager->persist($image);

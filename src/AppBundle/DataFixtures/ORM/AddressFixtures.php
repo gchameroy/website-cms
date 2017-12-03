@@ -2,27 +2,59 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\DataFixtures\Helper\FixtureHelper;
 use AppBundle\Entity\Address;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Faker\Factory as Faker;
 
-class AddressFixtures extends Fixture
+class AddressFixtures extends FixtureHelper
 {
     public function load(ObjectManager $manager)
     {
-        $faker = Faker::create();
-        for ($i = 1; $i <= 3; $i++) {
-            for ($j = 1; $j <= 10; $j++) {
-                $address = (new Address())
-                    ->setAddress($faker->sentence(15))
-                    ->setCity($faker->sentence(10))
-                    ->setCountry($faker->sentence(10))
-                    ->setZipCode($faker->randomNumber(5));
-                $this->setReference('address-' . $i . '-' . $j, $address);
-                $manager->persist($address);
-            }
+        $this->loafForAdmin($manager);
+        $this->loafForUser($manager);
+        $this->loadForPro($manager);
+    }
+
+    private function loafForAdmin(ObjectManager $manager)
+    {
+        $address = (new Address())
+            ->setAddress($this->faker->address)
+            ->setCity($this->faker->city)
+            ->setCountry($this->faker->country)
+            ->setZipCode($this->faker->numberBetween(52000, 52999));
+        $this->setReference('address-admin', $address);
+        $manager->persist($address);
+
+        $manager->flush();
+    }
+
+    private function loafForUser(ObjectManager $manager)
+    {
+        for ($i = 1; $i <= self::NB_USER; $i++) {
+            $address = (new Address())
+                ->setAddress($this->faker->address)
+                ->setCity($this->faker->city)
+                ->setCountry($this->faker->country)
+                ->setZipCode($this->faker->numberBetween(52000, 52999));
+            $this->setReference('address-user-' . $i, $address);
+            $manager->persist($address);
         }
+
+        $manager->flush();
+    }
+
+    private function loadForPro(ObjectManager $manager)
+    {
+        for ($i = 1; $i <= self::NB_PRO; $i++) {
+            $address = (new Address())
+                ->setAddress($this->faker->address)
+                ->setCity($this->faker->city)
+                ->setCountry($this->faker->country)
+                ->setZipCode($this->faker->numberBetween(52000, 52999));
+            $this->setReference('address-pro-' . $i, $address);
+            $manager->persist($address);
+        }
+
         $manager->flush();
     }
 }

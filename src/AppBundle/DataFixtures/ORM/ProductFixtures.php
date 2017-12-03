@@ -2,29 +2,25 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\DataFixtures\Helper\FixtureHelper;
 use AppBundle\Entity\Product;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Faker\Factory as Faker;
 
-class ProductFixtures extends Fixture
+class ProductFixtures extends FixtureHelper
 {
     public function load(ObjectManager $manager)
     {
-        $faker = Faker::create();
-        for ($i = 1; $i <= 2; $i++) {
-            $date = new \DateTime();
-            for ($j = 1; $j <= 15; $j++) {
-                $product = new Product();
-                $product->setLabel('Product 1')
-                    ->setDescription($faker->paragraph(3))
-                    ->setPrice($faker->numberBetween(10, 25))
-                    ->setPublishedAt($date)
-                    ->setCategory($this->getReference('product-category-' . $i));
+        $date = new \DateTime();
+        for ($p = 1; $p <= self::NB_PRODUCT; $p++) {
+            $product = new Product();
+            $product->setLabel('Product ' . $p)
+                ->setDescription($this->faker->paragraph(3))
+                ->setPrice($this->faker->numberBetween(10, 25))
+                ->setPublishedAt($date)
+                ->setCategory($this->getReference('product-category-' . $this->faker->numberBetween(1, self::NB_PRODUCT_CATEGORY)));
 
-                $this->setReference('product-' . $i . '-' . $j, $product);
-                $manager->persist($product);
-            }
+            $this->setReference('product-' . $p, $product);
+            $manager->persist($product);
         }
         $manager->flush();
     }

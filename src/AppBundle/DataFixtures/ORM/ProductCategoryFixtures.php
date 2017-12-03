@@ -2,26 +2,21 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\DataFixtures\Helper\FixtureHelper;
 use AppBundle\Entity\Category;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Faker\Factory as Faker;
 
-class ProductCategoryFixtures extends Fixture
+class ProductCategoryFixtures extends FixtureHelper
 {
     public function load(ObjectManager $manager)
     {
-        $categories = ['Vannerie', 'Coutellerie'];
-
-        $i = 1;
-        foreach ($categories as $label) {
+        for ($c = 1; $c <= self::NB_PRODUCT_CATEGORY; $c++) {
             $category = new Category();
-            $category->setLabel($label)
-                ->setDescription('');
+            $category->setLabel($this->faker->jobTitle)
+                ->setDescription($this->faker->sentence());
             $category->setPublishedAt(new \DateTime());
-            $this->setReference('product-category-' . $i, $category);
+            $this->setReference('product-category-' . $c, $category);
             $manager->persist($category);
-            ++$i;
         }
 
         $manager->flush();
