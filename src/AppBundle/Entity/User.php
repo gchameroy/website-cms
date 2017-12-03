@@ -96,6 +96,12 @@ class User implements UserInterface
     private $billingAddress;
 
     /**
+     * @var UserOffer
+     * @ORM\ManyToOne(targetEntity="UserOffer", cascade={"remove", "persist"})
+     */
+    private $offer;
+
+    /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Order", mappedBy="user", cascade={"remove", "persist"})
      */
@@ -295,6 +301,26 @@ class User implements UserInterface
     {
         return $this->billingAddress;
     }
+
+    /**
+     * @param UserOffer $offer
+     * @return User
+     */
+    public function setOffer(UserOffer $offer)
+    {
+        $this->offer = $offer;
+
+        return $this;
+    }
+
+    /**
+     * @return UserOffer
+     */
+    public function getOffer()
+    {
+        return $this->offer;
+    }
+
     /**
      * @param Order $order
      * @return User

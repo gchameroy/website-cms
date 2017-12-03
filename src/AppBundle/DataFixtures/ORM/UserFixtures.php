@@ -18,10 +18,16 @@ class UserFixtures extends Fixture
         $user->setPassword($password)
             ->eraseCredentials();
         $user->setIsAdmin(true);
+        $user->setOffer($this->getReference('user-offer-pro'));
 
         $this->setReference('user-admin', $user);
         $manager->persist($user);
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [UserOfferFixtures::class];
     }
 }

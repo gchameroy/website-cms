@@ -7,7 +7,7 @@ use AppBundle\Entity\Contact;
 use AppBundle\Entity\Newsletter;
 use AppBundle\Entity\Product;
 use AppBundle\Form\Type\Contact\ContactType;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -85,10 +85,10 @@ class HomeController extends Controller
     /**
      * @Route("/sitemap.{_format}", name="front_site_map", requirements={"_format": "xml"})
      * @Method({"GET"})
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      * @return Response
      */
-    public function siteMapAction(EntityManager $em) {
+    public function siteMapAction(EntityManagerInterface $em) {
         /** @var Product $lastProduct */
         $lastProduct = $em->getRepository(Product::class)
             ->findLastPublished()[0];

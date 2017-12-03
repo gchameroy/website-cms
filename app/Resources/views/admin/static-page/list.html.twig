@@ -46,7 +46,7 @@
                                         {% endif %}
                                     </td>
                                     <td class="project-title" nowrap>
-                                        <a href="{{ path('admin_static_pages', {'id': staticPage.id }) }}">{{ staticPage.title }}</a>
+                                        <a href="{{ path('admin_static_page', {'id': staticPage.id }) }}">{{ staticPage.title }}</a>
                                         <br>
                                         <p style="width:350px;overflow: hidden; text-overflow: ellipsis;">
                                             <small>{{ staticPage.content|striptags }}</small>
