@@ -15,7 +15,7 @@
         </div>
         <div class="col-lg-2">
             <div class="title-action">
-                <a href="#" class="btn btn-primary btn-sm">Ajouter un client</a>
+                <a href="{{ path('admin_users_add') }}" class="btn btn-primary btn-sm">Ajouter un client</a>
             </div>
         </div>
     </div>
@@ -35,10 +35,10 @@
                             {% for user in users %}
                                 <tr>
                                     <td width="10">
-                                        {% if user.offer.label %}
+                                        {% if user.offer %}
                                             <label class="label label-primary">{{ user.offer.label|lower }}</label>
                                         {% else %}
-                                            <label class="label label-info">aucune offre</label>
+                                            <label class="label label-info">sans offre</label>
                                         {% endif %}
                                     </td>
                                     <td class="project-title" nowrap>
@@ -55,13 +55,13 @@
                                     </td>
                                     <td class="text-center">Inscrit le {{ user.registeredAt|date('d/m/Y') }}</td>
                                     <td width="10" class="project-actions">
-                                        <a href="#" class="btn btn-primary btn-sm">Editer</a>
+                                        <a href="{{ path('admin_user', {id: user.id}) }}" class="btn btn-primary btn-sm">Détails</a>
                                     </td>
                                 </tr>
                             {% else %}
                                 <tr>
                                     <td>
-                                        <a href="#" class="btn btn-primary btn-sm">Ajouter un client</a>
+                                        <a href="{{ path('admin_users_add') }}" class="btn btn-primary btn-sm">Ajouter un client</a>
                                     </td>
                                 </tr>
                             {% endfor %}

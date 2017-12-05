@@ -1,0 +1,163 @@
+{% extends "admin/layout.html.twig" %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('admin_home') }}">Dashboard</a>
+                </li>
+                <li>
+                    <a href="{{ path('admin_users') }}">Liste des clients</a>
+                </li>
+                <li class="active">
+                    <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+            <div class="title-action">
+                <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn btn-primary btn-sm">Editer</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block wrapper_content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox product-detail">
+                    <div class="ibox-title">
+                        <h2>Informations du client</h2>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <p class="text-right"><strong>Offre</strong></p>
+                            </div>
+                            <div class="col-md-10">
+                                {% if user.offer %}
+                                    <label class="label label-primary">{{ user.offer.label|lower }}</label>
+                                {% else %}
+                                    <label class="label label-info">sans offre</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <p class="text-right"><strong>Prénom / Nom</strong></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p>{{ user.firstName }} {{ user.lastName }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <p class="text-right"><strong>Société</strong></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p>{{ user.company }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <p class="text-right"><strong>Email</strong></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p>{{ user.email }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <p class="text-right"><strong>Téléphone</strong></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p>{{ user.phone }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                {% set address = user.billingAddress %}
+                <div class="ibox product-detail">
+                    <div class="ibox-title">
+                        <h2>Adresse de factuation</h2>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p class="text-right"><strong>Prénom / Nom</strong></p>
+                            </div>
+                            <div class="col-md-9">
+                                <p>{{ address.firstName }} {{ address.lastName }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p class="text-right"><strong>Société</strong></p>
+                            </div>
+                            <div class="col-md-9">
+                                <p>{{ address.company }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p class="text-right"><strong>Adresse</strong></p>
+                            </div>
+                            <div class="col-md-9">
+                                <p>
+                                    {{- address.address -}}
+                                    <br>{{ address.zipCode }} {{ address.city -}}
+                                    <br>{{ address.country }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                {% set address = user.deliveryAddress %}
+                <div class="ibox product-detail">
+                    <div class="ibox-title">
+                        <h2>Adresse de livraison</h2>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p class="text-right"><strong>Prénom / Nom</strong></p>
+                            </div>
+                            <div class="col-md-9">
+                                <p>{{ address.firstName }} {{ address.lastName }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p class="text-right"><strong>Société</strong></p>
+                            </div>
+                            <div class="col-md-9">
+                                <p>{{ address.company }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p class="text-right"><strong>Adresse</strong></p>
+                            </div>
+                            <div class="col-md-9">
+                                <p>
+                                    {{- address.address -}}
+                                    <br>{{ address.zipCode }} {{ address.city -}}
+                                    <br>{{ address.country }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
