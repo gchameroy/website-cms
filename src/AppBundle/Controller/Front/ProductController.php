@@ -19,6 +19,7 @@ class ProductController extends Controller
      * @return Response
      */
     public function listAction(string $category, int $page) {
+        /** @var Cate $category */
         $category = $this->getDoctrine()
             ->getRepository(Category::class)
             ->findOneBySlug($category);
@@ -55,7 +56,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/{category}/{product}", name="front_product")
+     * @Route("/categories/{category}/{product}", name="front_product")
      * @Method({"GET"})
      * @param string $category
      * @param string $product

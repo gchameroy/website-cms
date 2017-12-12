@@ -14,7 +14,7 @@
         <link href="{{ asset('inspinia/plugins/slick/slick.css') }}" rel="stylesheet">
         <link href="{{ asset('inspinia/plugins/slick/slick-theme.css') }}" rel="stylesheet">
         <link href="{{ asset('inspinia/css/style.css') }}" rel="stylesheet">
-        {% if theme != 'default' %}
+        {% if config.theme != 'default' %}
             <link href="{{ asset('template/' ~ theme ~ '/css/style-inspinia.css') }}" rel="stylesheet">
         {% endif %}
         {% block stylesheets '' %}
@@ -34,10 +34,7 @@
                         {% block breadcrumb '' %}
                         {% block wrapper_content '' %}
 
-                        <div class="footer">
-                            <div class="pull-right">made with <i class="fa fa-heart m-l-xs m-r-xs"></i> by <strong>Geoffrey Chameroy</strong></div>
-                            <div><strong>Copyright</strong> Coutellerie Legendre &copy; 2017</div>
-                        </div>
+                        {% include 'admin/layout/footer.html.twig' %}
                     </div>
                 {% endblock %}
             </div>

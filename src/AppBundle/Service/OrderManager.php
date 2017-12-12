@@ -2,13 +2,8 @@
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\Cart;
 use AppBundle\Entity\Order;
-use AppBundle\Entity\Product;
-use AppBundle\Repository\CartRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class OrderManager

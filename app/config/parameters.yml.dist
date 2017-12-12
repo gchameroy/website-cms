@@ -12,4 +12,5 @@ parameters:
 
     secret: ChangeItAsSoonAsPossible
 
-    theme: default
+    app_theme: default
+    app_company_name: 'Zen Panda'

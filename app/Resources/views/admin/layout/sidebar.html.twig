@@ -67,6 +67,12 @@
                     <span class="nav-label">Gestion des pages</span>
                 </a>
             </li>
+            <li class="{% if app.request.attributes.get('_route') in ['admin_menus'] %}active{% endif %}">
+                <a href="{{ url('admin_menus') }}">
+                    <i class="fa fa-th-large"></i>
+                    <span class="nav-label">Gestion des menus</span>
+                </a>
+            </li>
             <li>
                 <a href="{{ url('admin_categories_attribute') }}">
                     <i class="fa fa-th-large"></i>

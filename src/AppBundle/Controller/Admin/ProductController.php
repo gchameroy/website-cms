@@ -215,7 +215,7 @@ class ProductController extends Controller
             $em->remove($product);
             $em->flush();
 
-            $this->addFlash('success', 'Newsletter deleted successfully.');
+            $this->addFlash('success', 'Product deleted successfully.');
 
             return $this->redirectToRoute('admin_products', [
                 'id' => $id,
@@ -224,7 +224,7 @@ class ProductController extends Controller
 
         return $this->render('admin/product/delete.html.twig', [
             'form' => $form->createView(),
-            'product' => $product,
+            'product' => $product
         ]);
     }
 

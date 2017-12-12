@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Attribute;
 use AppBundle\Entity\CategoryAttribute;
-use AppBundle\Form\Type\Attribute\AttributeDeleteType;
 use AppBundle\Form\Type\Attribute\AttributeType;
 use AppBundle\Form\Type\CategoryAttribute\CategoryAttributeType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
