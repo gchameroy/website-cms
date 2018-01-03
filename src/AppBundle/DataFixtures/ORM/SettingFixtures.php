@@ -19,12 +19,11 @@ class SettingFixtures extends FixtureHelper
     {
         $setting = (new setting())
                 ->setPresentation('Ma belle presentation')
-                ->setAdresse('Ici et la')
-                ->setTelephone('+33678451298')
-                ->setTitreSeo('Titre SEO')
+                ->setAdress($this->getReference('address-user-1'))
+                ->setPhone('+33678451298')
+                ->setTitleSeo('Titre SEO')
                 ->setDescriptionSeo('Description SEO')
-                ->setPhotoPres('..\..photo45.jpg')
-                ->setReseauxSociaux('http://facedebook/#128');
+                ->setSocialNetwork('http://facedebook/#128');
                 
         $this->setReference('mon_setting', $setting);
         $manager->persist($setting);
@@ -36,12 +35,11 @@ class SettingFixtures extends FixtureHelper
     {
         $setting = (new setting())
                 ->setPresentation('Presentation commerciale qui déchire')
-                ->setAdresse('Dans le coin pas loin')
-                ->setTelephone('+33655555555')
-                ->setTitreSeo('SEO quand tu nous tiens')
+                ->setAdress($this->getReference('address-user-2'))
+                ->setPhone('+33655555555')
+                ->setTitleSeo('SEO quand tu nous tiens')
                 ->setDescriptionSeo('SEO est super sympa et mignon, il faut vraiment essayer')
-                ->setPhotoPres('..\..photo38.jpg')
-                ->setReseauxSociaux('http://fessedebouc/#437');
+                ->setSocialNetwork('http://fessedebouc/#437');
                 
         $this->setReference('the_setting', $setting);
         $manager->persist($setting);

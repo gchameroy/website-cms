@@ -24,30 +24,30 @@ class Setting
     /**
      * @var string
      *
-     * @ORM\Column(name="presentation", type="string", length=255)
+     * @ORM\Column(name="presentation", type="text")
      */
     private $presentation;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="adresse", type="string", length=255)
+     * @var Address
+     * @ORM\ManyToOne(targetEntity="Address", cascade={"remove", "persist"})
+     * @ORM\JoinColumn(name="adress", referencedColumnName="id")
      */
-    private $adresse;
+    private $adress;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="telephone", type="string", length=12)
+     * @ORM\Column(name="phone", type="string", length=255)
      */
-    private $telephone;
+    private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="titre_seo", type="string", length=255)
+     * @ORM\Column(name="title_seo", type="string", length=255)
      */
-    private $titreSeo;
+    private $titleSeo;
 
     /**
      * @var string
@@ -56,19 +56,19 @@ class Setting
      */
     private $descriptionSeo;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="photo_pres", type="string", length=255)
+     /**
+     * @var Image
+     * @ORM\ManyToOne(targetEntity="Image", inversedBy="setting")
+     * @ORM\JoinColumn(name="photo_pres", referencedColumnName="id", nullable=true)
      */
     private $photoPres;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="reseaux_sociaux", type="string", length=255)
+     * @ORM\Column(name="social_network", type="string", length=255)
      */
-    private $reseauxSociaux;
+    private $socialNetwork;
 
 
     /**
@@ -106,75 +106,74 @@ class Setting
     }
 
     /**
-     * Set adresse
+     * Set adress
      *
-     * @param string $adresse
-     *
+     * @param Address $adress
      * @return Setting
      */
-    public function setAdresse($adresse)
+    public function setAdress(Adress $adress)
     {
-        $this->adresse = $adresse;
+        $this->adress = $adress;
 
         return $this;
     }
 
     /**
-     * Get adresse
+     * Get adress
      *
-     * @return string
+     * @return Adress
      */
-    public function getAdresse()
+    public function getAdress()
     {
-        return $this->adresse;
+        return $this->adress;
     }
 
     /**
-     * Set telephone
+     * Set phone
      *
-     * @param string $telephone
+     * @param string $phone
      *
      * @return Setting
      */
-    public function setTelephone($telephone)
+    public function setPhone($phone)
     {
-        $this->telephone = $telephone;
+        $this->phone = $phone;
 
         return $this;
     }
 
     /**
-     * Get telephone
+     * Get phone
      *
      * @return string
      */
-    public function getTelephone()
+    public function getPhone()
     {
-        return $this->telephone;
+        return $this->phone;
     }
 
     /**
-     * Set titreSeo
+     * Set titleSeo
      *
-     * @param string $titreSeo
+     * @param string $titleSeo
      *
      * @return Setting
      */
-    public function setTitreSeo($titreSeo)
+    public function setTitleSeo($titleSeo)
     {
-        $this->titreSeo = $titreSeo;
+        $this->titleSeo = $titleSeo;
 
         return $this;
     }
 
     /**
-     * Get titreSeo
+     * Get titleSeo
      *
      * @return string
      */
-    public function getTitreSeo()
+    public function getTitleSeo()
     {
-        return $this->titreSeo;
+        return $this->titleSeo;
     }
 
     /**
@@ -204,11 +203,11 @@ class Setting
     /**
      * Set photoPres
      *
-     * @param string $photoPres
+     * @param Image $photoPres
      *
      * @return Setting
      */
-    public function setPhotoPres($photoPres)
+    public function setPhotoPres(Image $photoPres)
     {
         $this->photoPres = $photoPres;
 
@@ -216,9 +215,21 @@ class Setting
     }
 
     /**
+     * Set image
+     *
+     * @return Setting
+     */
+    public function removePhotoPres()
+    {
+        $this->photoPres = null;
+
+        return $this;
+    }
+
+    /**
      * Get photoPres
      *
-     * @return string
+     * @return Image
      */
     public function getPhotoPres()
     {
@@ -226,27 +237,27 @@ class Setting
     }
 
     /**
-     * Set reseauxSociaux
+     * Set socialNetwork
      *
-     * @param string $reseauxSociaux
+     * @param string $socialNetwork
      *
      * @return Setting
      */
-    public function setReseauxSociaux($reseauxSociaux)
+    public function setSocialNetwork($socialNetwork)
     {
-        $this->reseauxSociaux = $reseauxSociaux;
+        $this->socialNetwork = $socialNetwork;
 
         return $this;
     }
 
     /**
-     * Get reseauxSociaux
+     * Get socialNetwork
      *
      * @return string
      */
-    public function getReseauxSociaux()
+    public function getSocialNetwork()
     {
-        return $this->reseauxSociaux;
+        return $this->socialNetwork;
     }
 }
 
