@@ -1,26 +1,27 @@
 <?php
 
-namespace AppBundle\Form\Type\CategoryAttribute;
+namespace AppBundle\Form\Type\ProductSkill;
 
-use AppBundle\Entity\CategoryAttribute;
+use AppBundle\Entity\ProductSkill;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CategoryAttributeType extends AbstractType
+class ProductSkillType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('label', TextType::class)
+            ->add('value', TextType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => CategoryAttribute::class
+            'data_class' => ProductSkill::class
         ]);
     }
 }

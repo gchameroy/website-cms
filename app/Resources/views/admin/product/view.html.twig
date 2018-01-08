@@ -24,7 +24,6 @@
                     <a href="{{ path('admin_product_publish', {'id': product.id }) }}" class="btn btn-primary btn-sm">Publier</a>
                 {% endif %}
                 <a href="{{ path('admin_product_edit', {'id': product.id}) }}" class="btn btn-primary btn-sm">Editer</a>
-                <a href="{{ path('admin_product_delete', {'id': product.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
             </div>
         </div>
     </div>
@@ -34,11 +33,11 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-lg-12">
-                <div class="ibox product-detail">
+                <div class="ibox">
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-md-5">
-                                <div class="product-images" >
+                            <div class="col-md-3">
+                                <div class="product-images">
                                     {% for image in product.images %}
                                         <div>
                                             <div class="image-imitation">
@@ -47,7 +46,8 @@
                                                         <i class="fa fa-trash text-danger"></i>
                                                     </span>
                                                 </a>
-                                                <img alt="image" class="img-preview" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': image.id}) }}" />
+                                                <img alt="image" class="img-preview"
+                                                     src="{{ path('product_image_view', {'product_id': product.id, 'image_id': image.id}) }}"/>
                                             </div>
                                         </div>
                                     {% else %}
@@ -56,62 +56,58 @@
                                         </div>
                                     {% endfor %}
                                 </div>
+                                <div class="m-t-md text-center">
+                                    <button class="btn btn-primary btn-sm action_product_image_add">Ajouter une image</button></p>
+                                </div>
                             </div>
-                            <div class="col-md-7">
-                                <h2 class="font-bold m-b-xs">
-                                    <span>{{ product.label }}</span>
-                                    {% if product.published %}
-                                        <label class="label label-info m-l-md">en ligne</label>
-                                    {% else %}
-                                        <label class="label label-default m-l-md">hors ligne</label>
-                                    {% endif %}
-                                </h2>
+                            <div class="col-md-offset-1 col-md-8">
+                                <div>
+                                    <h2 class="font-bold">
+                                        <span>{{ product.label }}</span>
+                                        {% if product.published %}
+                                            <label class="label label-info m-l-md">en ligne</label>
+                                        {% else %}
+                                            <label class="label label-default m-l-md">hors ligne</label>
+                                        {% endif %}
+                                    </h2>
+                                    <p class="small text-muted">{{ product.description|nl2br }}</p>
+                                </div>
+
                                 <div class="m-t-md">
-                                    <h2 class="product-main-price">{{ product.price|number_format(2, '.') }}€ <small class="text-muted">Hors Taxes</small> </h2>
+                                    <h4>Catégorie</h4>
+                                    <p>{{ product.category.label }}</p>
                                 </div>
-                                <hr>
-                                <h4>Description</h4>
-                                <div class="small text-muted">
-                                    {{ product.description|nl2br }}
+                                <div class="m-t-md">
+                                    <h4>Titre SEO</h4>
+                                    <p>{{ product.titleSEO|default('Aucun titre SEO') }}</p>
                                 </div>
-                                <dl class="small m-t-md">
-                                    <dt>Categorie</dt>
-                                    <dd>{{ product.category.label }}</dd>
-                                </dl>
-                                <dl class="small m-t-md">
-                                    <dt>Titre SEO</dt>
-                                    <dd>{{ product.titleSEO }}</dd>
-                                </dl>
-                                <dl class="small m-t-md">
-                                    <dt>Description SEO</dt>
-                                    <dd>{{ product.descriptionSEO }}</dd>
-                                </dl>
-                                <dl class="small m-t-md">
-                                    <dt></dt>
-                                    <dd>
-                                        <div class="row">
-                                            {% for category_attribute in categories_attribute %}
-                                                <div class="col-xs-3">
-                                                    <h5 class="clickCategoryAttribute" data-id="{{ category_attribute.id }}">
-                                                        <span class="label label-info">{{ category_attribute.label }}</span>
-                                                    </h5>
-                                                    <div class="listAttribute">
-                                                        {% for attribute in category_attribute.attributes %}
-                                                            <p>
-                                                                <input class="i-checks" type="checkbox" {% if attribute in product.attributes %} checked {% endif %} name="attributes[]" value="{{ attribute.id }}" disabled>
-                                                                <span>{{ attribute.label }}</span>
-                                                            </p>
-                                                        {% endfor %}
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    </dd>
-                                </dl>
-                                <p>
-                                    <button class="btn btn-primary action_product_image_add">Ajouter une image</button>
-                                </p>
+                                <div class="m-t-md">
+                                    <h4>Description SEO</h4>
+                                    <p>{{ product.descriptionSEO|default('Aucune description SEO') }}</p>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row m-b-md">
+            <div class="col-lg-12">
+                <div class="tabs-container">
+                    <div class="tabs-left">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#tab-product">Produit</a></li>
+                            {% for product in product.variants %}
+                                <li><a data-toggle="tab" href="#tab-product-variant-{{ product.id }}">Variante N°{{ loop.index }}</a></li>
+                            {% endfor %}
+                            <li class=""><a class="action_product_variant_add">Ajouter une variante</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            {% include 'admin/product/variant.html.twig' with {'tabId': 'tab-product', 'selected': true} %}
+                            {% for product in product.variants %}
+                                {% include 'admin/product/variant.html.twig' with {'tabId': 'tab-product-variant-' ~ product.id, 'selected': false} %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -122,15 +118,55 @@
 
 {% block javascripts %}
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('.product-images').slick({
                 dots: true
             });
         });
-        $('.action_product_image_add').click(function(e){
+        $('.action_product_image_add').click(function (e) {
             e.preventDefault();
             e.stopPropagation();
-            $.get('{{ path('admin_product_add_image', { id: product.id }) }}').done(function(response){
+            $.get('{{ path('admin_product_add_image', { id: product.id }) }}').done(function (response) {
+                $(response).modal();
+            });
+        });
+
+        $('.action_product_price_add').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $.get('{{ path('admin_product_skill_add', { id: product.id }) }}').done(function (response) {
+                $(response).modal();
+            });
+        });
+
+        $('.action_product_price_edit').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var skill = $(this).data('skill');
+
+            $.get('{{ path('admin_product_skill_edit', { id: product.id }) }}', {
+                'skill': skill
+            }).done(function (response) {
+                $(response).modal();
+            });
+        });
+
+        $('.action_product_variant_add').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $.get('{{ path('admin_product_variant_add', { id: product.id }) }}').done(function (response) {
+                $(response).modal();
+            });
+        });
+
+        $('.action_product_variant_edit').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var variant = $(this).data('variant');
+
+            $.get('{{ path('admin_product_variant_edit', { id: product.id }) }}', {
+                'variant': variant
+            }).done(function (response) {
                 $(response).modal();
             });
         });

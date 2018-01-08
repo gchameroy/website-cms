@@ -25,7 +25,8 @@ class UserType extends AbstractType
                 'class' => UserOffer::class,
                 'choice_label' => function (UserOffer $offer) {
                     return $offer->getLabel();
-                }
+                },
+                'preferred_choices' => array('Sans offre')
             ])
             ->add('billingAddress', AddressType::class)
             ->add('deliveryAddress', AddressType::class)

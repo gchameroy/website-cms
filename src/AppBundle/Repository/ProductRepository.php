@@ -9,10 +9,19 @@ class ProductRepository extends EntityRepository
 {
     const PER_PAGE = 9;
 
+    public function findAll()
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.parent is null')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findPublished()
     {
         return $this->createQueryBuilder('p')
             ->where('p.publishedAt <= :now')
+            ->andWhere('p.parent is null')
             ->setParameter('now', new \DateTime())
             ->orderBy('p.publishedAt', 'desc')
             ->getQuery()
@@ -26,6 +35,7 @@ class ProductRepository extends EntityRepository
                 ->setParameter('now', new \DateTime())
             ->andWhere('p.slug = :slug')
                 ->setParameter('slug', $slug)
+            ->andWhere('p.parent is null')
             ->getQuery()
             ->getOneOrNullResult();
     }
@@ -37,6 +47,7 @@ class ProductRepository extends EntityRepository
                 ->setParameter('now', new \DateTime())
             ->andWhere('p.category = :category')
                 ->setParameter('category', $category)
+            ->andWhere('p.parent is null')
             ->orderBy('p.publishedAt', 'desc')
             ->setFirstResult(($page - 1) * self::PER_PAGE)
             ->setMaxResults(self::PER_PAGE)
@@ -52,6 +63,7 @@ class ProductRepository extends EntityRepository
                 ->setParameter('now', new \DateTime())
             ->andWhere('p.category = :category')
                 ->setParameter('category', $category)
+            ->andWhere('p.parent is null')
             ->getQuery()
             ->getSingleScalarResult();
 
@@ -68,6 +80,7 @@ class ProductRepository extends EntityRepository
         return $this->createQueryBuilder('p')
             ->where('p.publishedAt <= :now')
                 ->setParameter('now', new \DateTime())
+            ->andWhere('p.parent is null')
             ->orderBy('p.publishedAt', 'desc')
             ->setMaxResults($max)
             ->getQuery()

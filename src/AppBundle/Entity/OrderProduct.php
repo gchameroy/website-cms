@@ -53,20 +53,6 @@ class OrderProduct
     private $product;
 
     /**
-     * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Attribute")
-     */
-    private $attributes;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->attributes = new ArrayCollection();
-    }
-
-    /**
      * Get id
      *
      * @return int
@@ -170,55 +156,5 @@ class OrderProduct
     public function getTotal()
     {
         return $this->quantity * $this->price;
-    }
-
-    /**
-     * Set attributes
-     *
-     * @param $attributes
-     *
-     * @return OrderProduct
-     */
-    public function setAttributes($attributes)
-    {
-        foreach ($attributes as $attribute) {
-            $this->addAttribute($attribute);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add attribute
-     *
-     * @param Attribute $attribute
-     *
-     * @return OrderProduct
-     */
-    public function addAttribute(Attribute $attribute)
-    {
-        $this->attributes[] = $attribute;
-
-        return $this;
-    }
-
-    /**
-     * Remove attribute
-     *
-     * @param Attribute $attribute
-     */
-    public function removeAttribute(Attribute $attribute)
-    {
-        $this->attributes->removeElement($attribute);
-    }
-
-    /**
-     * Get attributes
-     *
-     * @return ArrayCollection
-     */
-    public function getAttributes()
-    {
-        return $this->attributes;
     }
 }

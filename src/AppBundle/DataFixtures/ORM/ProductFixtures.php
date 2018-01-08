@@ -15,7 +15,7 @@ class ProductFixtures extends FixtureHelper
             $product = new Product();
             $product->setLabel('Product ' . $p)
                 ->setDescription($this->faker->paragraph(3))
-                ->setPrice($this->faker->numberBetween(10, 25))
+                ->setReference('P' . $date->format('ym') . '-' . str_pad($p, 3, '0', STR_PAD_LEFT))
                 ->setPublishedAt($date)
                 ->setCategory($this->getReference('product-category-' . $this->faker->numberBetween(1, self::NB_PRODUCT_CATEGORY)));
 

@@ -112,7 +112,7 @@ class Image
         $this->newsletters = new ArrayCollection();
 
         foreach ($newsletters As $newsletter) {
-            $this->addAttribute($newsletter);
+            $this->addNewsletter($newsletter);
         }
     }
 

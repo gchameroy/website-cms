@@ -22,29 +22,35 @@ class Product
 
     /**
      * @var string
-     * @ORM\Column(name="label", type="string", length=255)
+     * @ORM\Column(name="label", type="string", length=255, nullable=true)
      */
     private $label;
 
     /**
      * @var string
+     * @ORM\Column(name="reference", type="string", length=255, unique=true)
+     */
+    private $reference;
+
+    /**
+     * @var string
+     * @ORM\Column(name="variant_name", type="string", length=255)
+     */
+    private $variantName;
+
+    /**
+     * @var string
      *
      * @Gedmo\Slug(fields={"label"})
-     * @ORM\Column(length=128, unique=true)
+     * @ORM\Column(length=128, unique=true, nullable=true)
      */
     private $slug;
 
     /**
      * @var string
-     * @ORM\Column(name="description", type="string", length=1000)
+     * @ORM\Column(name="description", type="string", length=1000, nullable=true)
      */
     private $description;
-
-    /**
-     * @var float
-     * @ORM\Column(name="price", type="float")
-     */
-    private $price;
 
     /**
      * @var \DateTime
@@ -63,24 +69,44 @@ class Product
      * @ORM\Column(name="description_seo", type="string", length=255, nullable=true)
      */
     private $descriptionSEO;
+
     /**
      * @var Category
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $category;
 
     /**
-     * @var ArrayCollection
+     * @var Product
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="variants")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $parent;
+
+    /**
+     * @var Product[]
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="parent", cascade={"remove", "persist"})
+     */
+    private $variants;
+
+    /**
+     * @var Image[]
      * @ORM\OneToMany(targetEntity="Image", mappedBy="product", cascade={"remove", "persist"})
      */
     private $images;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Attribute")
-     * @ORM\JoinTable(name="products_attributes")
+     * @var ProductPrice[]
+     * @ORM\OneToMany(targetEntity="ProductPrice", mappedBy="product", cascade={"remove", "persist"})
      */
-    private $attributes;
+    private $prices;
+
+    /**
+     * @var ProductSkill[]
+     * @ORM\OneToMany(targetEntity="ProductSkill", mappedBy="product", cascade={"remove", "persist"})
+     */
+    private $skills;
 
     /**
      * Product constructor.
@@ -88,7 +114,7 @@ class Product
     public function __construct()
     {
         $this->images = new ArrayCollection();
-        $this->attributes = new ArrayCollection();
+        $this->variantName = 'Produit Principal';
     }
 
     /**
@@ -115,7 +141,7 @@ class Product
      */
     public function getLabel()
     {
-        return $this->label;
+        return $this->parent === null ? $this->label : $this->parent->getLabel();
     }
 
     /**
@@ -142,26 +168,7 @@ class Product
      */
     public function getDescription()
     {
-        return $this->description;
-    }
-
-    /**
-     * @param $price
-     * @return Product
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPrice()
-    {
-        return $this->price;
+        return $this->parent === null ? $this->description : $this->parent->getDescription();
     }
 
     /**
@@ -180,7 +187,7 @@ class Product
      */
     public function getPublishedAt()
     {
-        return $this->publishedAt;
+        return $this->parent === null ? $this->publishedAt : $this->parent->getPublishedAt();
     }
 
     /**
@@ -188,7 +195,8 @@ class Product
      */
     public function isPublished()
     {
-        return $this->publishedAt ? true : false;
+        $publishedAt =  $this->parent === null ? $this->publishedAt : $this->parent->getPublishedAt();
+        return $publishedAt ? true : false;
     }
 
     /**
@@ -207,7 +215,7 @@ class Product
      */
     public function getCategory()
     {
-        return $this->category;
+        return $this->parent === null ? $this->category : $this->parent->getCategory();
     }
 
     /**
@@ -253,70 +261,7 @@ class Product
      */
     public function getImages()
     {
-        return $this->images;
-    }
-
-    /**
-     * Add attribute
-     *
-     * @param Attribute $attribute
-     *
-     * @return Product
-     */
-    public function addAttribute(Attribute $attribute)
-    {
-        $this->attributes[] = $attribute;
-
-        return $this;
-    }
-
-    /**
-     * Remove attribute
-     *
-     * @param Attribute $attribute
-     *
-     * @return Product
-     */
-    public function removeAttribute(Attribute $attribute)
-    {
-        $this->attributes->removeElement($attribute);
-
-        return $this;
-    }
-
-    /**
-     * @return Product
-     */
-    public function removeAttributes()
-    {
-        $this->attributes->clear();
-
-        return $this;
-    }
-    /**
-     * Get attributes
-     *
-     * @return ArrayCollection
-     */
-    public function getAttributes()
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * @param int $category
-     * @return bool
-     */
-    public function hasCategory(int $category)
-    {
-        /** @var Attribute $attribute */
-        foreach ($this->attributes as $attribute) {
-            if ($attribute->getCategoryAttribute()->getId() == $category) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->parent === null ? $this->images : $this->parent->getImages();
     }
 
     /**
@@ -340,7 +285,7 @@ class Product
      */
     public function getTitleSEO()
     {
-        return $this->titleSEO;
+        return $this->parent === null ? $this->titleSEO : $this->parent->getTitleSEO();
     }
 
     /**
@@ -364,6 +309,206 @@ class Product
      */
     public function getDescriptionSEO()
     {
-        return $this->descriptionSEO;
+        return $this->parent === null ? $this->descriptionSEO : $this->parent->getDescriptionSEO();
+    }
+
+    /**
+     * Set reference
+     *
+     * @param string $reference
+     *
+     * @return Product
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return string
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return Product
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param Product $parent
+     *
+     * @return Product
+     */
+    public function setParent(Product $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return Product
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add price
+     *
+     * @param ProductPrice $price
+     *
+     * @return Product
+     */
+    public function addPrice(ProductPrice $price)
+    {
+        $this->prices[] = $price;
+
+        return $this;
+    }
+
+    /**
+     * Remove price
+     *
+     * @param ProductPrice $price
+     */
+    public function removePrice(ProductPrice $price)
+    {
+        $this->prices->removeElement($price);
+    }
+
+    /**
+     * Get prices
+     *
+     * @return ProductPrice[]
+     */
+    public function getPrices()
+    {
+        return $this->prices;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDefaultPrice()
+    {
+        foreach ($this->prices as $price) {
+            return $price->getPrice();
+        }
+
+        return 0;
+    }
+
+    /**
+     * Add skill
+     *
+     * @param ProductSkill $skill
+     *
+     * @return Product
+     */
+    public function addSkill(ProductSkill $skill)
+    {
+        $this->skills[] = $skill;
+
+        return $this;
+    }
+
+    /**
+     * Remove skill
+     *
+     * @param ProductSkill $skill
+     */
+    public function removeSkill(ProductSkill $skill)
+    {
+        $this->skills->removeElement($skill);
+    }
+
+    /**
+     * Get skills
+     *
+     * @return ProductSkill[]
+     */
+    public function getSkills()
+    {
+        return $this->skills;
+    }
+
+    /**
+     * Add variant
+     *
+     * @param Product $variant
+     *
+     * @return Product
+     */
+    public function addVariant(Product $variant)
+    {
+        $this->variants[] = $variant;
+
+        return $this;
+    }
+
+    /**
+     * Remove variant
+     *
+     * @param Product $variant
+     */
+    public function removeVariant(Product $variant)
+    {
+        $this->variants->removeElement($variant);
+    }
+
+    /**
+     * Get variants
+     *
+     * @return Product[]
+     */
+    public function getVariants()
+    {
+        return $this->variants;
+    }
+
+    /**
+     * Set variantName
+     *
+     * @param string $variantName
+     *
+     * @return Product
+     */
+    public function setVariantName($variantName)
+    {
+        $this->variantName = $variantName;
+
+        return $this;
+    }
+
+    /**
+     * Get variantName
+     *
+     * @return string
+     */
+    public function getVariantName()
+    {
+        return $this->variantName;
     }
 }

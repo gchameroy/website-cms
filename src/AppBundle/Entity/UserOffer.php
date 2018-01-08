@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserOffer
 {
+    const FORM_NAME = 'product_price_';
+
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
@@ -24,6 +26,12 @@ class UserOffer
      * @ORM\Column(name="label", type="string", length=255)
      */
     private $label;
+
+    /**
+     * @var ProductPrice[]
+     * @ORM\OneToMany(targetEntity="ProductPrice", mappedBy="offer", cascade={"remove", "persist"})
+     */
+    private $prices;
 
     /**
      * UserOffer constructor.
@@ -58,5 +66,47 @@ class UserOffer
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormName()
+    {
+        return self::FORM_NAME . $this->getId();
+    }
+
+    /**
+     * Add price
+     *
+     * @param \AppBundle\Entity\ProductPrice $price
+     *
+     * @return UserOffer
+     */
+    public function addPrice(\AppBundle\Entity\ProductPrice $price)
+    {
+        $this->prices[] = $price;
+
+        return $this;
+    }
+
+    /**
+     * Remove price
+     *
+     * @param \AppBundle\Entity\ProductPrice $price
+     */
+    public function removePrice(\AppBundle\Entity\ProductPrice $price)
+    {
+        $this->prices->removeElement($price);
+    }
+
+    /**
+     * Get prices
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPrices()
+    {
+        return $this->prices;
     }
 }

@@ -2,9 +2,7 @@
 
 namespace AppBundle\Controller\Front;
 
-use AppBundle\Entity\Attribute;
 use AppBundle\Entity\CartProduct;
-use AppBundle\Entity\CategoryAttribute;
 use AppBundle\Entity\Product;
 use AppBundle\Service\CartManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -31,10 +29,6 @@ class CartProductController extends Controller
             ->find($product);
         $this->checkProduct($product);
 
-        $categoriesAttribute = $this->getDoctrine()
-            ->getRepository(CategoryAttribute::class)
-            ->findAll();
-
         $cartProduct = new CartProduct();
         $cartProduct->setProduct($product);
         $cartProduct->setCart($cartManager->getCurrentCart());
@@ -50,25 +44,10 @@ class CartProductController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
-            $attributesIds = [];
-            foreach ($request->request->get('form_attributes') as $attribute) {
-                $attribute = $em->getRepository(Attribute::class)
-                    ->find($attribute);
-
-                if (!$attribute) {
-                    continue;
-                }
-
-                $cartProduct->addAttribute($attribute);
-                $attributesIds[] = $attribute->getId();
-            }
-            $cartProduct->setAttributesIds($attributesIds);
-
             $cartProduct2 = $em->getRepository(CartProduct::class)
                 ->findOneBy([
                    'cart' => $cartProduct->getCart(),
-                   'product' => $cartProduct->getProduct(),
-                   'attributesIds' => implode(',', $cartProduct->getAttributesIds()),
+                   'product' => $cartProduct->getProduct()
                 ]);
             if (!$cartProduct2) {
                 $em->persist($cartProduct);
@@ -88,8 +67,7 @@ class CartProductController extends Controller
 
         return $this->render('front/cart-product/partial/add.html.twig', [
             'product' => $product,
-            'categories_attribute' => $categoriesAttribute,
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ]);
     }
 

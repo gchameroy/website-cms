@@ -86,7 +86,7 @@ $(document).ready(function () {
         railOpacity: 0.4
     });
 
-    // Small todo handler
+    // Small task handler
     $('.check-link').on('click', function () {
         var button = $(this).find('i');
         var label = $(this).next('span');

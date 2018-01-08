@@ -5,6 +5,7 @@ use AppBundle\Entity\CartProduct;
 use AppBundle\Entity\Order;
 use AppBundle\Entity\OrderProduct;
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserOffer;
 use AppBundle\Form\Type\AddressType;
 use AppBundle\Form\Type\UserType;
 use AppBundle\Service\CartManager;
@@ -35,15 +36,19 @@ class ClientController extends Controller
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $defaultOffer = $em->getRepository(UserOffer::class)
+                ->findOneBy(['label' => 'Sans offre']);
+
             $user = $form->getData();
             $date = explode('/', $user->getBirthDate());
             $date = $date[2].'-'.$date[1].'-'.$date[0];
             $user->setBirthDate(new \DateTime($date));
+            $user->setOffer($defaultOffer);
 
             $password = $this->container->get('security.password_encoder')
                 ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
-            $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
@@ -144,7 +149,6 @@ class ClientController extends Controller
                     ->setQuantity($cartProduct->getQuantity())
                     ->setPrice($cartProduct->getProduct()->getPrice())
                     ->setProduct($cartProduct->getProduct())
-                    ->setAttributes($cartProduct->getAttributes())
                     ->setOrder($order);
                 $em->persist($orderProduct);
             }

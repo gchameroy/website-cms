@@ -2,15 +2,17 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\Attribute;
 use AppBundle\Entity\Category;
-use AppBundle\Entity\CategoryAttribute;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\ProductPrice;
+use AppBundle\Entity\ProductSkill;
+use AppBundle\Entity\UserOffer;
 use AppBundle\Form\Type\Category\CategoryType;
 use AppBundle\Form\Type\ImageType;
 use AppBundle\Form\Type\Product\ProductPublishType;
-use AppBundle\Form\Type\Product\ProductDeleteType;
+use AppBundle\Form\Type\Product\ProductVariantType;
+use AppBundle\Form\Type\ProductSkill\ProductSkillType;
 use AppBundle\Form\Type\Product\ProductType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -30,7 +32,8 @@ class ProductController extends Controller
      * @Route("/", name="admin_products")
      * @return Response
      */
-    public function listAction() {
+    public function listAction()
+    {
         $options = [
             'perPage' => 0,
             'order' => 'desc',
@@ -51,25 +54,28 @@ class ProductController extends Controller
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request) {
-        $product = new Product();
-        $categoriesAttribute = $this->getDoctrine()
-            ->getRepository(CategoryAttribute::class)
+    public function addAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $offers = $em->getRepository(UserOffer::class)
             ->findAll();
+
+        $product = new Product();
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $attributes = $request->request->get('attributes');
-            foreach ($attributes As $attribute_id) {
-                $attribute = $this->getDoctrine()->getRepository(Attribute::class)->find($attribute_id);
-                $product->addAttribute($attribute);
+            $em->persist($product);
+
+            foreach ($offers as $offer) {
+                $price = (new ProductPrice())
+                    ->setProduct($product)
+                    ->setOffer($offer)
+                    ->setPrice($request->request->all()['product'][$offer->getFormName()]);
+                $em->persist($price);
             }
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($product);
             $em->flush();
-
             $this->addFlash('success', 'Product added successfully.');
 
             return $this->redirectToRoute('admin_product', [
@@ -79,18 +85,21 @@ class ProductController extends Controller
 
         return $this->render('admin/product/add.html.twig', [
             'form' => $form->createView(),
-            'categories_attribute' => $categoriesAttribute
+            'product' => $product,
+            'offers' => $offers
         ]);
     }
 
     /**
+     * /**
      * @Route("/{id}/publish", name="admin_product_publish", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function publishAction(Request $request, $id) {
+    public function publishAction(Request $request, $id)
+    {
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
             ->find($id);
@@ -122,7 +131,8 @@ class ProductController extends Controller
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function unpublishAction(Request $request, $id) {
+    public function unpublishAction(Request $request, $id)
+    {
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
             ->find($id);
@@ -158,9 +168,10 @@ class ProductController extends Controller
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, $id) {
-        $categoriesAttribute = $this->getDoctrine()
-            ->getRepository(CategoryAttribute::class)
+    public function editAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $offers = $em->getRepository(UserOffer::class)
             ->findAll();
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
@@ -170,15 +181,19 @@ class ProductController extends Controller
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $product->removeAttributes();
-            $attributes = $request->request->get('attributes');
-            foreach ($attributes As $attribute_id) {
-                $attribute = $this->getDoctrine()->getRepository(Attribute::class)->find($attribute_id);
-                $product->addAttribute($attribute);
+            foreach ($product->getPrices() as $price) {
+                $em->remove($price);
+            }
+            $em->persist($product);
+
+            foreach ($offers as $offer) {
+                $price = (new ProductPrice())
+                    ->setProduct($product)
+                    ->setOffer($offer)
+                    ->setPrice($request->request->all()['product'][$offer->getFormName()]);
+                $em->persist($price);
             }
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($product);
             $em->flush();
 
             $this->addFlash('success', 'Product edited successfully.');
@@ -191,40 +206,7 @@ class ProductController extends Controller
         return $this->render('admin/product/edit.html.twig', [
             'form' => $form->createView(),
             'product' => $product,
-            'categories_attribute' => $categoriesAttribute
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/delete", name="admin_product_delete", requirements={"id": "\d+"})
-     * @Method({"GET", "POST"})
-     * @param $id
-     * @param Request $request
-     * @return RedirectResponse|Response
-     */
-    public function deleteAction($id, Request $request) {
-        $product = $this->getDoctrine()
-            ->getRepository(Product::class)
-            ->find($id);
-        $this->checkProduct($product);
-
-        $form = $this->createForm(ProductDeleteType::class, $product);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($product);
-            $em->flush();
-
-            $this->addFlash('success', 'Product deleted successfully.');
-
-            return $this->redirectToRoute('admin_products', [
-                'id' => $id,
-            ]);
-        }
-
-        return $this->render('admin/product/delete.html.twig', [
-            'form' => $form->createView(),
-            'product' => $product
+            'offers' => $offers
         ]);
     }
 
@@ -234,21 +216,16 @@ class ProductController extends Controller
      * @param integer $id
      * @return Response
      */
-    public function viewAction($id) {
+    public function viewAction($id)
+    {
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
             ->find($id);
 
         $this->checkProduct($product);
 
-        $categoriesAttribute = $this->getDoctrine()
-            ->getRepository(CategoryAttribute::class)
-            ->findAll();
-
-
         return $this->render('admin/product/view.html.twig', [
-            'product' => $product,
-            'categories_attribute' => $categoriesAttribute
+            'product' => $product
         ]);
     }
 
@@ -259,7 +236,8 @@ class ProductController extends Controller
      * @param integer $id
      * @return RedirectResponse|Response
      */
-    public function addImageAction(Request $request, $id) {
+    public function addImageAction(Request $request, $id)
+    {
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
             ->find($id);
@@ -274,7 +252,7 @@ class ProductController extends Controller
             /** @var UploadedFile $file */
             $file = $image->getPath();
             $fileName = md5(uniqid(null, true));
-            $filePath = $this->get('kernel')->getRootDir().'/../uploads/product/';
+            $filePath = $this->get('kernel')->getRootDir() . '/../uploads/product/';
             $file->move($filePath, $fileName);
             $image->setPath($fileName);
 
@@ -301,7 +279,8 @@ class ProductController extends Controller
      * @param Request $request
      * @return JsonResponse|Response
      */
-    public function addCategoryAction(Request $request) {
+    public function addCategoryAction(Request $request)
+    {
         $category = new Category();
 
         $form = $this->createForm(CategoryType::class, $category);
@@ -318,31 +297,248 @@ class ProductController extends Controller
                 return new JsonResponse([
                     'success' => true,
                     'id' => $category->getId(),
-                    'label'  => $category->getLabel()
+                    'label' => $category->getLabel()
                 ]);
             }
         }
 
         return $this->render("admin/product/modal/add_category.html.twig", array(
-            'form'  =>  $form->createView()
+            'form' => $form->createView()
         ));
     }
 
     /**
-     * @param $product
+     * @Route("/{id}/add_skill", name="admin_product_skill_add", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param int $id
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
-    private function checkProduct($product) {
+    public function addSkillAction(int $id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $skill = new ProductSkill();
+        $product = $em->getRepository(Product::class)
+            ->find($id);
+        $this->checkProduct($product);
+
+        $form = $this->createForm(ProductSkillType::class, $skill);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $skill->setProduct($product);
+            $em->persist($skill);
+
+            $em->flush();
+
+            $this->addFlash('success', 'Skill added successfully.');
+
+            return $this->redirectToRoute('admin_product', [
+                'id' => $product->getId()
+            ]);
+        }
+
+        return $this->render('admin/product/modal/add_skill.html.twig', [
+            'form' => $form->createView(),
+            'product' => $product
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit_skill", name="admin_product_skill_edit", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param int $id
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function editSkillAction(int $id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $skill = $em->getRepository(ProductSkill::class)
+            ->findOneBy([
+                'id' => $request->query->get('skill'),
+                'product' => $id
+            ]);
+        $this->checkSkill($skill);
+
+        $form = $this->createForm(ProductSkillType::class, $skill);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($skill);
+
+            $em->flush();
+
+            $this->addFlash('success', 'Skill edited successfully.');
+
+            return $this->redirectToRoute('admin_product', [
+                'id' => $skill->getProduct()->getId()
+            ]);
+        }
+
+        return $this->render('admin/product/modal/edit_skill.html.twig', [
+            'form' => $form->createView(),
+            'skill' => $skill
+        ]);
+    }
+
+    /**
+     * @Route("/{product}/delete_skill", name="admin_product_skill_delete", requirements={"product": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param int $product
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function deleteSkillAction(int $product, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $skill = $em->getRepository(ProductSkill::class)
+            ->findOneBy([
+                'id' => $request->request->get('skill'),
+                'product' => $product
+            ]);
+        $this->checkSkill($skill);
+
+        $token = $request->request->get('token');
+        if ($this->isCsrfTokenValid('product-skill-delete', $token)) {
+            $em->remove($skill);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('admin_product', [
+            'id' => $skill->getProduct()->getId()
+        ]);
+    }
+
+    /**
+     * @param ProductSkill|null $skill
+     */
+    private function checkSkill(?ProductSkill $skill)
+    {
+        if (!$skill) {
+            throw $this->createNotFoundException('Skill Not Found.');
+        }
+    }
+
+    /**
+     * @param Product|null $product
+     */
+    private function checkProduct(?Product $product)
+    {
         if (!$product) {
             throw $this->createNotFoundException('Product Not Found.');
         }
     }
 
     /**
-     * @param $categoryAttribute
+     * @Route("/{id}/add_variant", name="admin_product_variant_add", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param int $id
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
-    private function checkCategoryAttribute($categoryAttribute) {
-        if (!$categoryAttribute) {
-            throw $this->createNotFoundException('Category Attribute Not Found.');
+    public function addVariantAction(int $id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $variant = (new Product())
+            ->setVariantName('');
+
+        $product = $em->getRepository(Product::class)
+            ->find($id);
+        $this->checkProduct($product);
+
+        $offers = $em->getRepository(UserOffer::class)
+            ->findAll();
+
+        $form = $this->createForm(ProductVariantType::class, $variant);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $variant->setParent($product);
+            $em->persist($variant);
+
+            foreach ($offers as $offer) {
+                $price = (new ProductPrice())
+                    ->setProduct($variant)
+                    ->setOffer($offer)
+                    ->setPrice($request->request->all()['product'][$offer->getFormName()]);
+                $em->persist($price);
+            }
+
+            $em->flush();
+
+            $this->addFlash('success', 'Variant added successfully.');
+
+            return $this->redirectToRoute('admin_product', [
+                'id' => $product->getId()
+            ]);
         }
+
+        return $this->render('admin/product/modal/add_variant.html.twig', [
+            'form' => $form->createView(),
+            'product' => $product,
+            'offers' => $offers
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit_variant", name="admin_product_variant_edit", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param int $id
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function editVariantAction(int $id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $variant = $em->getRepository(Product::class)
+            ->findOneBy([
+                'id' => $request->query->get('variant'),
+                'parent' => $id
+            ]);
+        if (!$variant) {
+            $variant = $em->getRepository(Product::class)
+                ->findOneBy([
+                    'id' => $request->query->get('variant'),
+                    'parent' => null
+                ]);
+            $product = $variant;
+        } else {
+            $product = $variant->getParent();
+        }
+        $this->checkProduct($variant);
+
+        $offers = $em->getRepository(UserOffer::class)
+            ->findAll();
+
+        $form = $this->createForm(ProductVariantType::class, $variant);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($variant->getPrices() as $price) {
+                $em->remove($price);
+            }
+            $em->flush();
+            $em->persist($variant);
+
+            foreach ($offers as $offer) {
+                $price = (new ProductPrice())
+                    ->setProduct($variant)
+                    ->setOffer($offer)
+                    ->setPrice($request->request->all()['product'][$offer->getFormName()]);
+                $em->persist($price);
+            }
+
+            $em->flush();
+
+            $this->addFlash('success', 'Variant added successfully.');
+
+            return $this->redirectToRoute('admin_product', [
+                'id' => $product->getId()
+            ]);
+        }
+
+        return $this->render('admin/product/modal/edit_variant.html.twig', [
+            'form' => $form->createView(),
+            'variant' => $variant,
+            'product' => $product,
+            'offers' => $offers
+        ]);
     }
 }

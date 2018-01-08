@@ -30,7 +30,7 @@
                         <a href="{{ url('admin_products') }}">Liste des produits</a>
                     </li>
                     <li class="{% if app.request.attributes.get('_route') in ['admin_categories', 'admin_categories_add', 'admin_category_edit', 'admin_category_delete'] %}active{% endif %}">
-                        <a href="{{ url('admin_categories') }}">Liste des catégories</a>
+                        <a href="{# { url('admin_categories') } #}">Liste des catégories</a>
                     </li>
                 </ul>
             </li>
@@ -74,7 +74,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ url('admin_categories_attribute') }}">
+                <a href="{# { url('admin_categories_attribute') } #}">
                     <i class="fa fa-th-large"></i>
                     <span class="nav-label">Attributs</span>
                 </a>

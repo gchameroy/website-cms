@@ -38,8 +38,10 @@
                                         {{- offer.label -}}
                                     </td>
                                     <td class="project-actions">
-                                        <a href="{{ path('admin_user_offer_edit', {'id': offer.id }) }}" class="btn btn-primary btn-sm">Editer</a>
-                                        <a href="{{ path('admin_user_offer_delete', {'id': offer.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                                        {% if offer.label != 'Sans offre' %}
+                                            <a href="{{ path('admin_user_offer_edit', {'id': offer.id }) }}" class="btn btn-primary btn-sm">Editer</a>
+                                            <a href="{{ path('admin_user_offer_delete', {'id': offer.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% else %}

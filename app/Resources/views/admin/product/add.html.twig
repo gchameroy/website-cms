@@ -26,6 +26,7 @@
                 <div class="ibox-content">
                     <h4>Ajouter un produit</h4>
                     {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
+
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Nom</label>
                         <div class="col-lg-10">
@@ -33,15 +34,23 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-lg-2 control-label">Référence</label>
+                        <div class="col-lg-10">
+                            {{ form_widget(form.reference, {'attr' : {'class' : 'form-control'} }) }}
+                        </div>
+                    </div>
+                    {% for offer in offers %}
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Prix ({{ offer.label }})</label>
+                            <div class="col-lg-10">
+                                <input type="text" id="product_price_{{ offer.id }}" name="product[product_price_{{ offer.id }}]" required="required" class="form-control">
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="form-group">
                         <label class="col-lg-2 control-label">Description</label>
                         <div class="col-lg-10">
                             {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label">Prix</label>
-                        <div class="col-lg-10">
-                            {{ form_widget(form.price, {'attr' : {'class' : 'form-control'} }) }}
                         </div>
                     </div>
                     <div class="form-group">
@@ -65,26 +74,6 @@
                             <div class="btn btn-sm btn-primary modal_add_category">Ajouter une Categorie</div>
                         </div>
                     </div>
-                    <div class="row">
-                        <label class="col-lg-2 control-label">Attributs</label>
-                        <div class="col-lg-10">
-                            {% for category_attribute in categories_attribute %}
-                                <div class="col-xs-3">
-                                    <h5 class="clickCategoryAttribute" data-id="{{ category_attribute.id }}">
-                                        <span class="label label-info">{{ category_attribute.label }}</span>
-                                    </h5>
-                                    <div class="listAttribute">
-                                        {% for attribute in category_attribute.attributes %}
-                                            <p>
-                                                <input class="i-checks" type="checkbox" name="attributes[]" value="{{ attribute.id }}">
-                                                <span>{{ attribute.label }}</span>
-                                            </p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
 
                     <div class="form-group">
                         <div class="col-lg-2"></div>
@@ -94,7 +83,8 @@
                             </button>
                         </div>
                     </div>
-                    {{ form_end(form) }}
+                    {{ form_widget(form._token) }}
+                    {{ form_end(form, {'render_rest': false}) }}
                 </div>
             </div>
         </div>

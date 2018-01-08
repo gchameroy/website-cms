@@ -25,6 +25,7 @@ class UserFixtures extends FixtureHelper
             ->setLastName($this->faker->lastName)
             ->setCompany($this->faker->company)
             ->setIsAdmin(true)
+            ->setOffer($this->getReference('user-offer-none'))
             ->setBillingAddress($this->getReference('address-admin'))
             ->setDeliveryAddress($this->getReference('address-admin'));
 
@@ -50,6 +51,7 @@ class UserFixtures extends FixtureHelper
                 ->setFirstName($this->faker->firstName())
                 ->setLastName($this->faker->lastName)
                 ->setPlainPassword($this->faker->password)
+                ->setOffer($this->getReference('user-offer-none'))
                 ->setBillingAddress($this->getReference('address-user-' . $i))
                 ->setDeliveryAddress($this->getReference('address-user-' . $i));
 

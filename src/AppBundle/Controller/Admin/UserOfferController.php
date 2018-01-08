@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Product;
+use AppBundle\Entity\ProductPrice;
 use AppBundle\Entity\UserOffer;
 use AppBundle\Form\Type\UserOffer\UserOfferDeleteType;
 use AppBundle\Form\Type\UserOffer\UserOfferType;
@@ -46,6 +48,18 @@ class UserOfferController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($offer);
+
+            $products = $em->getRepository(Product::class)
+                ->findAll();
+            /** @var Product $product */
+            foreach ($products as $product) {
+                $price = (new ProductPrice())
+                    ->setOffer($offer)
+                    ->setProduct($product)
+                    ->setPrice($product->getDefaultPrice());
+                $em->persist($price);
+            }
+
             $em->flush();
 
             $this->addFlash('success', 'Offer added successfully.');
@@ -121,11 +135,15 @@ class UserOfferController extends Controller
     }
 
     /**
-     * @param $offer
+     * @param UserOffer|null $offer
      */
-    private function checkOffer($offer) {
+    private function checkOffer(?UserOffer $offer) {
         if (!$offer) {
             throw $this->createNotFoundException('Offer Not Found.');
+        }
+
+        if ($offer->getLabel() === 'Sans offre') {
+            throw $this->createAccessDeniedException('This offer cannot be modified.');
         }
     }
 }

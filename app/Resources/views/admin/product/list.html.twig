@@ -48,7 +48,13 @@
                                             <small>{{ product.description }}</small>
                                         </p>
                                     </td>
-                                    <td nowrap>{{ product.price|number_format(2, '.') }}€</td>
+                                    {% set product_price = 0 %}
+                                    {% for price in product.prices %}
+                                        {% if loop.index == 1 %}
+                                            {% set product_price = price.price %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <td nowrap>{{ product_price|number_format(2, ',', ' ') }} €</td>
                                     <td nowrap>{{ product.category.label }}</td>
                                     <td class="project-actions text-right">
                                         {% if product.published %}
@@ -57,7 +63,6 @@
                                             <a href="{{ path('admin_product_publish', {'id': product.id }) }}" class="btn btn-primary btn-sm">Publier</a>
                                         {% endif %}
                                         <a href="{{ path('admin_product', {'id': product.id }) }}" class="btn btn-primary btn-sm">Détails</a>
-                                        <a href="{{ path('admin_product_delete', {'id': product.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
                                     </td>
                                 </tr>
                             {% else %}

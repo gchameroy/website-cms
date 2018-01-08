@@ -40,24 +40,11 @@ class CartProduct
     private $product;
 
     /**
-     * @var string
-     * @ORM\Column(name="attributes_ids", type="string", length=255, nullable=true)
-     */
-    private $attributesIds;
-
-    /**
-     * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Attribute")
-     */
-    private $attributes;
-
-    /**
      * CartProduct constructor.
      */
     public function __construct()
     {
         $this->quantity = 1;
-        $this->attributes = new ArrayCollection();
     }
 
     /**
@@ -131,63 +118,5 @@ class CartProduct
     public function getPrice()
     {
         return $this->product->getPrice() * $this->quantity;
-    }
-
-    /**
-     * Set attributesIds
-     *
-     * @param array $attributesIds
-     *
-     * @return CartProduct
-     */
-    public function setAttributesIds(array $attributesIds)
-    {
-        $this->attributesIds = implode(',', $attributesIds);
-
-        return $this;
-    }
-
-    /**
-     * Get attributesIds
-     *
-     * @return array
-     */
-    public function getAttributesIds()
-    {
-        return explode(',', $this->attributesIds);
-    }
-
-    /**
-     * Add attribute
-     *
-     * @param Attribute $attribute
-     *
-     * @return CartProduct
-     */
-    public function addAttribute(Attribute $attribute)
-    {
-        $this->attributes[] = $attribute;
-
-        return $this;
-    }
-
-    /**
-     * Remove attribute
-     *
-     * @param Attribute $attribute
-     */
-    public function removeAttribute(Attribute $attribute)
-    {
-        $this->attributes->removeElement($attribute);
-    }
-
-    /**
-     * Get attributes
-     *
-     * @return ArrayCollection
-     */
-    public function getAttributes()
-    {
-        return $this->attributes;
     }
 }
