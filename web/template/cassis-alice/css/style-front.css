@@ -127,6 +127,10 @@ h2.background:before {
     border-radius: 0!important;
     cursor: pointer!important;
     font-size: 1.4em!important;
+    color: #fff!important;
+}
+.btn-primary:not(.background){
+    padding: 20px 60px 20px 60px!important;
 }
 .btn-primary .text, .btn-secondary .text{
     text-align:center;
@@ -193,6 +197,12 @@ h2.background:before {
 .tab-content{
     background-color: #fff!important;
     padding: 10px;
+}
+
+.products .product-title {
+    position: absolute;
+    width: 100%;
+    margin-top: 220px;
 }
 
 footer {
