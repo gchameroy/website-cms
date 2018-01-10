@@ -62,4 +62,27 @@ class LayoutController extends Controller
             'cart' => $cart
         ]);
     }
+
+    /**
+     * @return Response
+     */
+    public function footerAction() {
+        $menus = $this->getDoctrine()
+            ->getRepository(Menu::class)
+            ->findPublished();
+
+        $categories = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->findPublished();
+
+        $newsletters = $this->getDoctrine()
+            ->getRepository(Newsletter::class)
+            ->findAll(6, 1, 'desc');
+
+        return $this->render('front/layout/footer.html.twig', [
+            'menus' => $menus,
+            'categories' => $categories,
+            'newsletters' => $newsletters
+        ]);
+    }
 }

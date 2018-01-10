@@ -11,15 +11,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class NewsletterController extends Controller
 {
     /**
-     * @Route("/actualites/{newsletter}", name="front_newsletter")
+     * @Route("/actualites/{slug}", name="front_newsletter")
      * @Method({"GET"})
-     * @param string $newsletter
+     * @param string $slug
      * @return Response
      */
-    public function viewAction(string $newsletter) {
+    public function viewAction(string $slug) {
         $newsletter = $this->getDoctrine()
             ->getRepository(Newsletter::class)
-            ->findOnePublished($newsletter);
+            ->findOnePublished($slug);
         $this->checkNewsletter($newsletter);
 
         return $this->render('front/newsletter/newsletter.html.twig', [

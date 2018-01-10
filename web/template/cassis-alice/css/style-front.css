@@ -8,12 +8,13 @@ grey : #5a6779
 *************************************/
 
 body{
-    background-image: url('../img/pattern.png');
+    background: #fafaf9 url('../img/pattern.png');
     font-family: 'Roboto', sans-serif!important;
     color: #5a6779!important;
 }
 a{
     text-decoration: none!important;
+    color: #5a6779!important;
 }
 .bg-white {
     background-color:#fff;;
@@ -88,7 +89,7 @@ h1, h2, h3, h4, h5, h6{
 /***********************************************/
 .bgred,.bgred a, .bgred a:visited,.bgred a:hover, .bgred a:active{
     background-color: #e20045;
-    color: #fff;
+    color: #fff!important;
 }
 .bgwhite,.bgwhite a,.bgwhite a:visited,.bgwhite  a:hover, .bgwhite  a:active{
     color: #5a6779;
@@ -192,4 +193,17 @@ h2.background:before {
 .tab-content{
     background-color: #fff!important;
     padding: 10px;
+}
+
+footer {
+    background: #fff;
+    padding: 40px 0 100px;
+}
+
+footer ul {
+    padding: 0;
+}
+
+footer li {
+    list-style-type: none;
 }

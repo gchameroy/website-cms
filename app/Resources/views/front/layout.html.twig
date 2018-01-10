@@ -17,6 +17,7 @@
         <link href="{{ asset('template/' ~ config.theme ~ '/favicon/safari-pinned-tab.svg') }}" rel="mask-icon" color="#5bbad5">
         <meta name="theme-color" content="#ffffff">
 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css?family=Parisienne|Playfair+Display|Roboto" rel="stylesheet">
         <link href="{{ asset('inspinia/fonts/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
         <link href="{{ asset('inspinia/css/animate.css') }}" rel="stylesheet">
@@ -31,11 +32,10 @@
         {% block content %}
             {% include 'front/layout/header.html.twig' %}
             {% block sections '' %}
-            {% include 'front/layout/footer.html.twig' %}
+            {{ render(controller('AppBundle:Front/Layout:footer')) }}
         {% endblock %}
 
         <script src="{{ asset('inspinia/js/jquery-3.1.1.min.js') }}"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
         {% block javascripts '' %}
     </body>
 </html>

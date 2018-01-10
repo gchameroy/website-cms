@@ -1,10 +1,6 @@
 <header>
     {{ render(controller('AppBundle:Front/Layout:menu')) }}
-
     {% include('front/layout/partial/logo.html.twig') %}
     {% include('front/layout/partial/social.html.twig') %}
-
     {{ render(controller('AppBundle:Front/Layout:subMenu')) }}
-
-    {{ render(controller('AppBundle:Front/Layout:cart')) }}
 </header>
