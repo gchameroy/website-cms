@@ -1,0 +1,195 @@
+/***********************************
+font-family: 'Playfair Display', serif;
+font-family: 'Parisienne', cursive;
+font-family: 'Roboto', sans-serif;
+************************************
+red : #e20045
+grey : #5a6779
+*************************************/
+
+body{
+    background-image: url('../img/pattern.png');
+    font-family: 'Roboto', sans-serif!important;
+    color: #5a6779!important;
+}
+a{
+    text-decoration: none!important;
+}
+.bg-white {
+    background-color:#fff;;
+}
+.bg-brown {
+    background-color:#fafaf9;
+}
+.mt-6 {
+    margin-top: 5rem;
+}
+.mt-7 {
+    margin-top: 8rem;
+}
+.mt-8 {
+    margin-top: 12rem;
+}
+/**********************************************/
+h1, h2, h3, h4, h5, h6{
+    font-family: 'Parisienne', cursive!important;
+    color: #e20045!important;
+}
+/**********************************************/
+.section-menu {
+    height: 57px;
+    background: #fff;
+}
+.section-sub-menu {
+    border-top: 2px solid #fafaf9;
+    height: 50px;
+    background: #fff;
+    padding: 10px 0;
+}
+.section-header {
+    margin-top: 157px;
+    height: 557px;
+    background: url('../img/header.jpg');
+    background-size: cover;
+    border-bottom: 3px solid #e20045;
+}
+.section-header .social-network{
+    height: 96px;
+    padding: 37px 0;
+}
+.section-social-network a {
+    margin-left: 19px;
+}
+.menu {
+    margin: 0.5rem 0 0.3rem;
+}
+.menu a {
+    font-family: 'Playfair Display', serif!important;
+    color: #e20045!important;
+    font-size: 1.3em!important;
+    margin-right: 0.5rem;
+}
+.submenu li, .submenu li a{
+    font-family: 'Playfair Display', serif!important;
+    color: #e20045!important;
+    font-size: 1em!important;
+    text-transform: uppercase;
+}
+.submenu li:not(:last-child):after{
+    content: "|";
+}
+
+.logo {
+    position: absolute;
+    margin: 16px auto;
+    width: 100%;
+    text-align: center;
+}
+/***********************************************/
+.bgred,.bgred a, .bgred a:visited,.bgred a:hover, .bgred a:active{
+    background-color: #e20045;
+    color: #fff;
+}
+.bgwhite,.bgwhite a,.bgwhite a:visited,.bgwhite  a:hover, .bgwhite  a:active{
+    color: #5a6779;
+}
+/**********************************************/
+h2.background {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-top: 30px;
+    font-family: 'Parisienne', cursive!important;
+}
+h2.background:after {
+    display: inline-block;
+    margin: 0 0 8px 5px;
+    content: " ";
+    text-shadow: none;
+    width:35%;
+    border-top : 1px dashed #e20045;
+}
+h2.background:before {
+    display: inline-block;
+    margin: 0 5px 8px 0;
+    content: " ";
+    text-shadow: none;
+    width:35%;
+    border-top : 1px dashed #e20045;
+}
+/**********************************************/
+.btn-primary{
+    background-color: #e20045!important;
+    font-family: 'Parisienne', cursive!important;
+    padding: 20px 60px 5px 60px!important;
+    border-color:transparent!important;
+    border-radius: 0!important;
+    cursor: pointer!important;
+    font-size: 1.4em!important;
+}
+.btn-primary .text, .btn-secondary .text{
+    text-align:center;
+}
+.btn-primary .icon, .btn-secondary .icon{
+    width: 53px;
+    height:11px;
+}
+.btn-secondary{
+    background-color: #e20045!important;
+    font-family: 'Parisienne', cursive!important;
+    width:218px!important;
+    height:228px;
+    padding: 20px 60px 5px 60px!important;
+    border-color:transparent!important;
+    border-radius: 0!important;
+    cursor: pointer!important;
+    font-size: 1.4em!important;
+    color:#fff!important;
+}
+/**********************************************/
+.baseline{
+    font-family: 'Parisienne', cursive!important;
+    text-align: center;
+    font-size: 3em;
+}
+/**********************************************/
+.imageContainer {
+    display: inline-block;
+    position: relative;
+}
+
+.imageContainer::before {
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    width: 94%;
+    height: 94%;
+    border: 1px solid #e20045;
+    content: '';
+}
+/*********************************************/
+.form-control {
+    font-size: 0.8em!important;
+    color: #5a6779!important;
+    border: 0!important;
+    border-radius: 0!important;
+}
+/***************************************************************/
+
+.nav-tabs .nav-link {
+    border: 1px solid transparent;
+    border-top-right-radius: 0!important;
+    border-top-left-radius: 0!important;
+    font-family: 'Parisienne', cursive!important;
+    font-size: 1.4em!important;
+    color: #5a6779!important;
+}
+.nav-tabs .nav-link.active {
+    color: #5a6779!important;
+    background-color: #e20045!important;
+    border-color: #ddd #ddd #fff;
+}
+.tab-content{
+    background-color: #fff!important;
+    padding: 10px;
+}

@@ -1,17 +1,15 @@
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <ul class="list-inline">
-                <li><a href="{{ path('front_home') }}">Présentation</a></li>
-                {% for category in categories %}
-                    <li><a href="{{ path('front_products', {category: category.slug, page: 1}) }}">{{ category.label }}</a></li>
-                {% endfor %}
-                <li><a href="#">Table/Cuisine</a></li>
-                <li><a href="{{ path('front_contact') }}">Contact</a></li>
-            </ul>
-            <p class="separator m-t-md m-b-xl">
-                <img src="{{ asset('template/coutellerie/img/img_separator.png') }}" alt="">
-            </p>
+<section class="section-menu">
+    <div class="container">
+        <div class="row">
+            <nav class="col-md-12">
+                <ul class="list-inline menu">
+                    {% for menu in menus %}
+                        <li class="list-inline-item">
+                            <a href="{{ url(menu.routeName, {slug: menu.routeSlug}) }}">{{ menu.pageName }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
         </div>
     </div>
-</div>
+</section>

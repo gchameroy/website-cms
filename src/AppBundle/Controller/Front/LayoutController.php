@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller\Front;
 
+use AppBundle\Entity\Category;
+use AppBundle\Entity\Menu;
+use AppBundle\Entity\Newsletter;
 use AppBundle\Service\CartManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,11 +15,24 @@ class LayoutController extends Controller
      * @return Response
      */
     public function menuAction() {
-        $categories = $this->getDoctrine()
-            ->getRepository('AppBundle:Category')
-            ->findAll();
+        $menus = $this->getDoctrine()
+            ->getRepository(Menu::class)
+            ->findPublished();
 
         return $this->render('front/layout/partial/menu.html.twig', [
+            'menus' => $menus
+        ]);
+    }
+
+    /**
+     * @return Response
+     */
+    public function subMenuAction() {
+        $categories = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->findPublished();
+
+        return $this->render('front/layout/partial/sub-menu.html.twig', [
             'categories' => $categories
         ]);
     }
@@ -27,7 +43,7 @@ class LayoutController extends Controller
      */
     public function newslettersAction($max = 2) {
         $newsletters = $this->getDoctrine()
-            ->getRepository('AppBundle:Newsletter')
+            ->getRepository(Newsletter::class)
             ->findAll($max, 1, 'desc');
 
         return $this->render('front/home/partial/newsletters.html.twig', [

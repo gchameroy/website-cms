@@ -30,7 +30,7 @@ class MenuController Extends Controller
     public function listAction() {
         $menus = $this->getDoctrine()
             ->getRepository(Menu::class)
-            ->findAll();
+            ->findAll(0, 0, 'asc', false);
 
         return $this->render('admin/menu/list.html.twig', [
             'menus' => $menus

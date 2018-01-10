@@ -15,7 +15,7 @@
         <link href="{{ asset('inspinia/plugins/slick/slick-theme.css') }}" rel="stylesheet">
         <link href="{{ asset('inspinia/css/style.css') }}" rel="stylesheet">
         {% if config.theme != 'default' %}
-            <link href="{{ asset('template/' ~ theme ~ '/css/style-inspinia.css') }}" rel="stylesheet">
+            <link href="{{ asset('template/' ~ config.theme ~ '/css/style-admin.css') }}" rel="stylesheet">
         {% endif %}
         {% block stylesheets '' %}
     </head>

@@ -319,7 +319,7 @@ class Order
      *
      * @param \AppBundle\Entity\OrderProduct $orderProduct
      */
-    public function removeOrderProduct(\AppBundle\Entity\OrderProduct $orderProduct)
+    public function removeOrderProduct(OrderProduct $orderProduct)
     {
         $this->orderProducts->removeElement($orderProduct);
     }

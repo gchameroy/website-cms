@@ -1,0 +1,15 @@
+<section class="section-sub-menu">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-inline submenu">
+                    {% for category in categories %}
+                        <li class="list-inline-item">
+                            <a href="{{ path('front_category', {slug: category.slug}) }}">{{ category.label }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

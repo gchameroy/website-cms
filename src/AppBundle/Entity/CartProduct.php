@@ -117,6 +117,6 @@ class CartProduct
      */
     public function getPrice()
     {
-        return $this->product->getPrice() * $this->quantity;
+        return $this->product->getDefaultPrice() * $this->quantity;
     }
 }
