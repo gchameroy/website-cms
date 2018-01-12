@@ -19,7 +19,7 @@ class ProductController extends Controller
      * @return Response
      */
     public function listAction(string $category, int $page) {
-        /** @var Cate $category */
+        /** @var Category $category */
         $category = $this->getDoctrine()
             ->getRepository(Category::class)
             ->findOneBySlug($category);

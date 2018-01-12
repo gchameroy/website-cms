@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @ORM\Table(name="product")
@@ -109,10 +110,17 @@ class Product
     private $skills;
 
     /**
-     * Product constructor.
+     * @var SessionInterface
      */
-    public function __construct()
+    private $session;
+
+    /**
+     * Product constructor.
+     * @param SessionInterface $session
+     */
+    public function __construct(SessionInterface $session)
     {
+        $this->session = $session;
         $this->images = new ArrayCollection();
         $this->variantName = 'Produit Principal';
     }
@@ -375,30 +383,6 @@ class Product
     }
 
     /**
-     * Add price
-     *
-     * @param ProductPrice $price
-     *
-     * @return Product
-     */
-    public function addPrice(ProductPrice $price)
-    {
-        $this->prices[] = $price;
-
-        return $this;
-    }
-
-    /**
-     * Remove price
-     *
-     * @param ProductPrice $price
-     */
-    public function removePrice(ProductPrice $price)
-    {
-        $this->prices->removeElement($price);
-    }
-
-    /**
      * Get prices
      *
      * @return ProductPrice[]
@@ -409,12 +393,15 @@ class Product
     }
 
     /**
+     * @param UserOffer|null $offer
      * @return float
      */
-    public function getDefaultPrice()
+    public function getPrice(?UserOffer $offer)
     {
         foreach ($this->prices as $price) {
-            return $price->getPrice();
+            if ($price->getOffer() === $offer || ($offer === null && $price->getOffer()->getLabel() === 'Sans offre')) {
+                return $price->getPrice();
+            }
         }
 
         return 0;

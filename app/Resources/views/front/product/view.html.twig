@@ -6,8 +6,8 @@
 
 {% block sections %}
     <section class="section-product">
-        <div class="container">
-            <p class="m-t-md">
+        <div class="container bg-brown pt-3">
+            <p>
                 <a href="{{ path('front_products', {'category': product.category.slug, 'page': 1}) }}" class="return-link">
                     <i class="fa fa-chevron-left m-r-sm"></i>
                     <span>Retour aux produits</span>
@@ -29,13 +29,6 @@
                                     <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'product_id': 0, 'image_id':0}) }}" height="320" alt="">
                                 {% endif %}
                             </p>
-                            <ul class="product-price">
-                                <li>
-                                    <span>Prix:</span>
-                                    <span>{{ product.price|number_format(2, '.', ' ') }}€</span>
-                                </li>
-                            </ul>
-                            <br class="clear">
                         </div>
                     </div>
                 </div>
@@ -48,8 +41,6 @@
                     </aside>
                 </div>
             </div>
-            {{ render(controller('AppBundle:Front/CartProduct:add', {product: product.id})) }}
         </div>
     </section>
-    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
 {% endblock %}

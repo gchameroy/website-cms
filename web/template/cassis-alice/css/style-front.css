@@ -20,7 +20,7 @@ a{
     background-color:#fff;;
 }
 .bg-brown {
-    background-color:#fafaf9;
+    background-color:#fafafa;
 }
 .mt-6 {
     margin-top: 5rem;
@@ -218,10 +218,37 @@ h4 a {
     padding: 10px;
 }
 
-.products .product-title {
+.products .product-title, .product .product-title {
     position: absolute;
     width: 100%;
     margin-top: 220px;
+}
+
+.pagination {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pagination li {
+    width: 50px;
+    height: 50px;
+    background: #e6e6e6;
+    padding-top: 12px;
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+.pagination li a {
+    color: #e20145!important;
+}
+
+.pagination li.active {
+    background: #e20145;
+}
+
+.pagination li.active a {
+    color: #fff!important;
 }
 
 footer {
