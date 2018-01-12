@@ -118,6 +118,23 @@ h2.background:before {
     width:35%;
     border-top : 1px dashed #e20045;
 }
+h2.background-left:before {
+    width:5%;
+}
+h2.background-left:after {
+    width:75%;
+}
+
+h4 small {
+    color: #5a6779!important;
+    font-family: 'Roboto', sans-serif!important;
+    font-size: 1rem;
+}
+
+h4 a {
+    color: inherit!important;
+}
+
 /**********************************************/
 .btn-primary{
     background-color: #e20045!important;
@@ -158,18 +175,20 @@ h2.background:before {
     font-size: 3em;
 }
 /**********************************************/
-.imageContainer {
+.image-container {
     display: inline-block;
     position: relative;
+    max-height: 440px;
+    overflow-y: hidden;
 }
 
-.imageContainer::before {
+.image-container::before {
     position: absolute;
     top: 3%;
-    left: 3%;
-    width: 94%;
+    left: 2%;
+    width: 96%;
     height: 94%;
-    border: 1px solid #e20045;
+    border: 1px solid #fff;
     content: '';
 }
 /*********************************************/
