@@ -13,11 +13,11 @@
                         {% for product in products %}
                             <div class="col-md-4 product">
                                 <p class="product-title text-center">
-                                    <a href="{{ path('front_product', {category: product.category.slug, product: product.slug}) }}" class="btn btn-primary">{{ product.label }}</a>
+                                    <a href="{{ path('front_product', {category: product.category.slug, product: product.slug, page: page}) }}" class="btn btn-primary">{{ product.label }}</a>
                                 </p>
                                 <p class="product-image text-center">
-                                    {% if product.images|length > 0%}
-                                        <img class="img-fluid" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': product.images[0].id}) }}" alt="">
+                                    {% if product.image %}
+                                        <img class="img-fluid" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': product.image.id}) }}" alt="">
                                     {% else %}
                                         <img class="img-fluid" src="{{ path('product_image_view', {'product_id': 0, 'image_id':0}) }}" height="320" alt="">
                                     {% endif %}

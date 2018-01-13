@@ -8,7 +8,7 @@
                 </button>
                 <h4 class="modal-title">Ajouter une image</h4>
             </div>
-            {{ form_start(form, {'action': path('admin_product_add_image', {id: product.id})}) }}
+            {{ form_start(form, {'action': path('admin_product_add_image', {id: product.id, variant: variant.id})}) }}
             <div class="modal-body">
                 <div class="row">
                     <div class="form-group">

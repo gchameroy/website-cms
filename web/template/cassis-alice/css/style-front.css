@@ -36,6 +36,19 @@ h1, h2, h3, h4, h5, h6{
     font-family: 'Parisienne', cursive!important;
     color: #e20045!important;
 }
+
+.text-primary {
+    color: #e20045!important;
+}
+
+hr {
+    border-color: #e20045!important;
+}
+
+hr.dotted {
+    border-top: dashed 1px!important;
+    border-color: #e20045!important;
+}
 /**********************************************/
 .section-menu {
     height: 57px;
@@ -199,19 +212,21 @@ h4 a {
     border-radius: 0!important;
 }
 /***************************************************************/
-
+.nav-tabs {
+    border: none;
+    background: #fff;
+}
 .nav-tabs .nav-link {
-    border: 1px solid transparent;
+    border: none;
     border-top-right-radius: 0!important;
     border-top-left-radius: 0!important;
     font-family: 'Parisienne', cursive!important;
     font-size: 1.4em!important;
-    color: #5a6779!important;
+    color: #e20045!important;
 }
 .nav-tabs .nav-link.active {
-    color: #5a6779!important;
+    color: #fff!important;
     background-color: #e20045!important;
-    border-color: #ddd #ddd #fff;
 }
 .tab-content{
     background-color: #fff!important;

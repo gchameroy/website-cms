@@ -32,10 +32,9 @@ class Image
     /**
      * @var Product
      *
-     * @ORM\ManyToOne(targetEntity="Product", inversedBy="images")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="image")
      */
-    private $product;
+    private $products;
 
 
     /**
@@ -83,13 +82,13 @@ class Image
     }
 
     /**
-     * @param Product $product
+     * @param ArrayCollection $products
      *
      * @return $this
      */
-    public function setProduct(Product $product)
+    public function setProducts(ArrayCollection $products)
     {
-        $this->product = $product;
+        $this->products = $products;
 
         return $this;
     }
@@ -97,9 +96,9 @@ class Image
     /**
      * @return Product
      */
-    public function getProduct()
+    public function getProducts()
     {
-        return $this->product;
+        return $this->products;
     }
 
     /**

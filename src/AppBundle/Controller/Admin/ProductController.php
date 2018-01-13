@@ -184,7 +184,7 @@ class ProductController extends Controller
             foreach ($product->getPrices() as $price) {
                 $em->remove($price);
             }
-            $em->persist($product);
+            $em->flush();
 
             foreach ($offers as $offer) {
                 $price = (new ProductPrice())
@@ -238,13 +238,36 @@ class ProductController extends Controller
      */
     public function addImageAction(Request $request, $id)
     {
-        $product = $this->getDoctrine()
-            ->getRepository(Product::class)
-            ->find($id);
+        $em = $this->getDoctrine()->getManager();
+        $variant = $em->getRepository(Product::class)
+            ->findOneBy([
+                'id' => $request->query->get('variant'),
+                'parent' => $id
+            ]);
+        if (!$variant) {
+            $variant = $em->getRepository(Product::class)
+                ->findOneBy([
+                    'id' => $request->query->get('variant'),
+                    'parent' => null
+                ]);
+            $product = $variant;
+        } else {
+            $product = $variant->getParent();
+        }
+
+        $this->checkProduct($variant);
         $this->checkProduct($product);
 
+        $image = $variant->getImage();
+        if ($image) {
+            $em = $this->getDoctrine()->getManager();
+            $variant->setImage(null);
+            $em->persist($variant);
+            $em->remove($image);
+            $em->flush();
+        }
+
         $image = new Image();
-        $image->setProduct($product);
 
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
@@ -255,9 +278,11 @@ class ProductController extends Controller
             $filePath = $this->get('kernel')->getRootDir() . '/../uploads/product/';
             $file->move($filePath, $fileName);
             $image->setPath($fileName);
+            $variant->setImage($image);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($image);
+            $em->persist($variant);
             $em->flush();
 
             $this->addFlash('success_image', 'Image added successfully.');
@@ -269,7 +294,8 @@ class ProductController extends Controller
 
         return $this->render('admin/product/modal/add_image.html.twig', [
             'form' => $form->createView(),
-            'product' => $product,
+            'variant' => $variant,
+            'product' => $product
         ]);
     }
 
@@ -504,6 +530,7 @@ class ProductController extends Controller
             $product = $variant->getParent();
         }
         $this->checkProduct($variant);
+        $this->checkProduct($product);
 
         $offers = $em->getRepository(UserOffer::class)
             ->findAll();

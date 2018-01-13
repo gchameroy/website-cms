@@ -31,19 +31,30 @@ class ProductType extends AbstractType
         $builder
             ->add('label', TextType::class)
             ->add('reference', TextType::class)
-            ->add('description', TextareaType::class)
-            ->add('titleSEO', TextType::class, array(
+            ->add('description', TextareaType::class, [
                 'required' => false
-            ))
-            ->add('descriptionSEO', TextType::class, array(
+            ])
+            ->add('more1', TextareaType::class, [
                 'required' => false
-            ))
-            ->add('category', EntityType::class, array(
+            ])
+            ->add('more2', TextareaType::class, [
+                'required' => false
+            ])
+            ->add('more3', TextareaType::class, [
+                'required' => false
+            ])
+            ->add('titleSEO', TextType::class, [
+                    'required' => false
+            ])
+            ->add('descriptionSEO', TextType::class, [
+                'required' => false
+            ])
+            ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => function (Category $category) {
                     return $category->getLabel();
                 }
-            ))
+            ])
             ->addEventListener(
                 FormEvents::PRE_SET_DATA,
                 array($this, 'onPreSetData')

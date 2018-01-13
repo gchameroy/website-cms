@@ -26,7 +26,8 @@ class NewsletterController extends Controller
      * @Method({"GET"})
      * @return Response
      */
-    public function listAction() {
+    public function listAction()
+    {
         $newsletters = $this->getDoctrine()
             ->getRepository(Newsletter::class)
             ->findAll(0, null, 'desc', false);
@@ -42,7 +43,8 @@ class NewsletterController extends Controller
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request) {
+    public function addAction(Request $request)
+    {
         $newsletter = new Newsletter();
 
         $form = $this->createForm(NewsletterType::class, $newsletter);
@@ -70,7 +72,8 @@ class NewsletterController extends Controller
      * @param integer $id
      * @return Response
      */
-    public function viewAction($id) {
+    public function viewAction($id)
+    {
         $newsletter = $this->getDoctrine()
             ->getRepository(Newsletter::class)
             ->find($id);
@@ -88,7 +91,8 @@ class NewsletterController extends Controller
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function publishAction(Request $request, $id) {
+    public function publishAction(Request $request, $id)
+    {
         $newsletter = $this->getDoctrine()
             ->getRepository(Newsletter::class)
             ->find($id);
@@ -120,7 +124,8 @@ class NewsletterController extends Controller
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function unpublishAction(Request $request, $id) {
+    public function unpublishAction(Request $request, $id)
+    {
         $newsletter = $this->getDoctrine()
             ->getRepository(Newsletter::class)
             ->find($id);
@@ -156,7 +161,8 @@ class NewsletterController extends Controller
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, $id) {
+    public function editAction(Request $request, $id)
+    {
         $newsletter = $this->getDoctrine()
             ->getRepository(Newsletter::class)
             ->find($id);
@@ -187,7 +193,8 @@ class NewsletterController extends Controller
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function deleteAction($id, Request $request) {
+    public function deleteAction($id, Request $request)
+    {
         $newsletter = $this->getDoctrine()
             ->getRepository(Newsletter::class)
             ->find($id);
@@ -218,7 +225,8 @@ class NewsletterController extends Controller
      * @param integer $id
      * @return RedirectResponse|Response
      */
-    public function addImageAction(Request $request, $id) {
+    public function addImageAction(Request $request, $id)
+    {
         $newsletter = $this->getDoctrine()
             ->getRepository(Newsletter::class)
             ->find($id);
@@ -240,12 +248,13 @@ class NewsletterController extends Controller
             /** @var UploadedFile $file */
             $file = $image->getPath();
             $fileName = md5(uniqid(null, true));
-            $filePath = $this->get('kernel')->getRootDir().'/../uploads/newsletter/';
+            $filePath = $this->get('kernel')->getRootDir() . '/../uploads/newsletter/';
             $file->move($filePath, $fileName);
             $image->setPath($fileName);
             $newsletter->setImage($image);
 
             $em = $this->getDoctrine()->getManager();
+            $em->persist($newsletter);
             $em->persist($image);
             $em->flush();
 
@@ -265,7 +274,8 @@ class NewsletterController extends Controller
     /**
      * @param $newsletter
      */
-    private function checkNewsletter($newsletter) {
+    private function checkNewsletter($newsletter)
+    {
         if (!$newsletter) {
             throw $this->createNotFoundException('Newsletter Not Found.');
         }

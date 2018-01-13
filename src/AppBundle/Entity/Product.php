@@ -5,7 +5,6 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * @ORM\Table(name="product")
@@ -54,6 +53,24 @@ class Product
     private $description;
 
     /**
+     * @var string
+     * @ORM\Column(name="more_1", type="string", length=1000, nullable=true)
+     */
+    private $more1;
+
+    /**
+     * @var string
+     * @ORM\Column(name="more_2", type="string", length=1000, nullable=true)
+     */
+    private $more2;
+
+    /**
+     * @var string
+     * @ORM\Column(name="more_3", type="string", length=1000, nullable=true)
+     */
+    private $more3;
+    
+    /**
      * @var \DateTime
      * @ORM\Column(name="published_at", type="datetime", nullable=true)
      */
@@ -92,10 +109,11 @@ class Product
     private $variants;
 
     /**
-     * @var Image[]
-     * @ORM\OneToMany(targetEntity="Image", mappedBy="product", cascade={"remove", "persist"})
+     * @var Image
+     * @ORM\ManyToOne(targetEntity="Image", inversedBy="products")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $images;
+    private $image;
 
     /**
      * @var ProductPrice[]
@@ -110,19 +128,12 @@ class Product
     private $skills;
 
     /**
-     * @var SessionInterface
-     */
-    private $session;
-
-    /**
      * Product constructor.
-     * @param SessionInterface $session
      */
-    public function __construct(SessionInterface $session)
+    public function __construct()
     {
-        $this->session = $session;
-        $this->images = new ArrayCollection();
-        $this->variantName = 'Produit Principal';
+        $this->variantName = 'Pot de 50g';
+        $this->variants = new ArrayCollection();
     }
 
     /**
@@ -180,6 +191,63 @@ class Product
     }
 
     /**
+     * @param $more1
+     * @return Product
+     */
+    public function setMore1($more1)
+    {
+        $this->more1 = $more1;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMore1()
+    {
+        return $this->parent === null ? $this->more1 : $this->parent->getMore1();
+    }
+
+    /**
+     * @param $more2
+     * @return Product
+     */
+    public function setMore2($more2)
+    {
+        $this->more2 = $more2;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMore2()
+    {
+        return $this->parent === null ? $this->more2 : $this->parent->getMore2();
+    }
+
+    /**
+     * @param $more3
+     * @return Product
+     */
+    public function setMore3($more3)
+    {
+        $this->more3 = $more3;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMore3()
+    {
+        return $this->parent === null ? $this->more3 : $this->parent->getMore3();
+    }
+
+    /**
      * @param $publishedAt
      * @return Product
      */
@@ -224,52 +292,6 @@ class Product
     public function getCategory()
     {
         return $this->parent === null ? $this->category : $this->parent->getCategory();
-    }
-
-    /**
-     * @param ArrayCollection $images
-     * @return Product
-     */
-    public function setImages(ArrayCollection $images)
-    {
-        foreach ($images As $image) {
-            $this->addImage($image);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Image $image
-     * @return Product
-     */
-    public function addImage(Image $image)
-    {
-        $image->setProduct($this);
-        if (!$this->images->contains($image)) {
-            $this->images->add($image);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Image $image
-     * @return Product
-     */
-    public function removeImage(Image $image)
-    {
-        $this->images->removeElement($image);
-
-        return $this;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getImages()
-    {
-        return $this->parent === null ? $this->images : $this->parent->getImages();
     }
 
     /**
@@ -380,6 +402,30 @@ class Product
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Set image
+     *
+     * @param Image|null $image
+     *
+     * @return Product
+     */
+    public function setImage(?Image $image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return Image
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 
     /**

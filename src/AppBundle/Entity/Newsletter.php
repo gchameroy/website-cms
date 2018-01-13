@@ -47,7 +47,7 @@ class Newsletter
     /**
      * @var Image
      * @ORM\ManyToOne(targetEntity="Image", inversedBy="newsletters")
-     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $image;
 
@@ -153,25 +153,13 @@ class Newsletter
     /**
      * Set image
      *
-     * @param Image $image
+     * @param Image|null $image
      *
      * @return Newsletter
      */
-    public function setImage(Image $image)
+    public function setImage(?Image $image)
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * Set image
-     *
-     * @return Newsletter
-     */
-    public function removeImage()
-    {
-        $this->image = null;
 
         return $this;
     }

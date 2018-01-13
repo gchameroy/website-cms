@@ -17,7 +17,11 @@
                         <a href="{{ path('front_product', {'category': product.category.slug, 'product': product.slug}) }}" class="btn btn-primary">{{ product.label }}</a>
                     </p>
                     <p class="product-image text-center">
-                        <img class="img-fluid img-shadow" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': product.images[0].id}) }}" alt="">
+                        {% if product.variants[0].image %}
+                            <img class="img-fluid img-shadow" src="{{ path('product_image_view', {'image_id': product.variants[0].image.id}) }}" alt="">
+                        {% else %}
+                            <img class="img-fluid img-shadow" src="{{ path('product_image_view', {'image_id': 0}) }}" alt="">
+                        {% endif %}
                     </p>
                 </div>
             {% endfor %}

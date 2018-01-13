@@ -1,48 +1,60 @@
-<div id="{{ tabId }}" class="tab-pane {% if selected %}active{% endif %}">
+<div id="{{ tabId }}" data-variant="{{ product.id }}" class="tab-pane {% if selected %}active{% endif %}">
     <div class="panel-body">
-        <h2>{{ product.variantName }}</h2>
-        <h3><small>Réf.</small> {{ product.reference }}</h3>
-
-        <div class="m-t-md">
-            <table>
-                {% for price in product.prices %}
-                    <tr>
-                        <td width="200"><strong>{{ price.offer.label }}</strong></td>
-                        <td>{{ price.price|number_format(2, ',', ' ') }} € <small>HT</small></td>
-                    </tr>
-                {% endfor %}
-            </table>
-            <button data-variant="{{ product.id }}" class="m-t-sm btn btn-sm btn-primary action_product_variant_edit">Editer</button>
+        <div class="col-md-3">
+            {% if product.image %}
+                <img alt="image" class="img-responsive" src="{{ path('product_image_view', {'image_id': product.image.id}) }}" />
+                <button class="m-t-lg btn btn-primary action_product_image_add">Modifier l'image</button>
+            {% else %}
+                <button class="btn btn-primary action_product_image_add">Ajouter une image</button>
+            {% endif %}
         </div>
+        <div class="col-md-9">
+            <h2>{{ product.variantName }}</h2>
+            <h3><small>Réf.</small> {{ product.reference }}</h3>
 
-        <div class="m-t-md">
-            <h4>Caractéristiques</h4>
-            <table>
-                {% for skill in product.skills %}
-                    <tr>
-                        <td width="200"><strong>{{ skill.label }}</strong></td>
-                        <td width="200">{{ skill.value }}</td>
-                        <td>
-                            <button class="btn btn-link btn-xs action_product_price_edit" data-skill="{{ skill.id }}">
-                                <i class="fa fa-pencil text-primary"></i>
-                            </button>
-                            <form class="inline" action="{{ url('admin_product_skill_delete', { product: product.id }) }}" method="post">
-                                <input type="hidden" name="token"
-                                       value="{{ csrf_token('product-skill-delete') }}"/>
-                                <input type="hidden" name="skill" value="{{ skill.id }}"/>
-                                <button class="btn btn-link btn-xs action_product_price_delete">
-                                    <i class="fa fa-trash text-danger"></i>
+            <div class="m-t-md">
+                <table>
+                    {% for price in product.prices %}
+                        <tr>
+                            <td width="200"><strong>{{ price.offer.label }}</strong></td>
+                            <td>{{ price.price|number_format(2, ',', ' ') }} € <small>HT</small></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <button class="m-t-sm btn btn-sm btn-primary action_product_variant_edit">Editer</button>
+            </div>
+
+            {#
+            <div class="m-t-md">
+                <h4>Caractéristiques</h4>
+                <table>
+                    {% for skill in product.skills %}
+                        <tr>
+                            <td width="200"><strong>{{ skill.label }}</strong></td>
+                            <td width="200">{{ skill.value }}</td>
+                            <td>
+                                <button class="btn btn-link btn-xs action_product_price_edit" data-skill="{{ skill.id }}">
+                                    <i class="fa fa-pencil text-primary"></i>
                                 </button>
-                            </form>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td><em>Aucune caractéristique</em></td>
-                    </tr>
-                {% endfor %}
-            </table>
-            <button class="m-t-sm btn btn-sm btn-primary action_product_price_add">Ajouter une caractéristique</button>
+                                <form class="inline" action="{{ url('admin_product_skill_delete', { product: product.id }) }}" method="post">
+                                    <input type="hidden" name="token"
+                                           value="{{ csrf_token('product-skill-delete') }}"/>
+                                    <input type="hidden" name="skill" value="{{ skill.id }}"/>
+                                    <button class="btn btn-link btn-xs action_product_price_delete">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td><em>Aucune caractéristique</em></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <button class="m-t-sm btn btn-sm btn-primary action_product_price_add">Ajouter une caractéristique</button>
+            </div>
+            #}
         </div>
     </div>
 </div>
