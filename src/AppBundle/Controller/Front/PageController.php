@@ -17,4 +17,13 @@ class PageController extends Controller
     public function privacyAction() {
         return $this->render('front/page/privacy.html.twig');
     }
+
+    /**
+     * @Route("/presentation", name="front_presentation")
+     * @Method({"GET"})
+     * @return Response
+     */
+    public function presentationAction() {
+        return $this->render('front/page/presentation.html.twig');
+    }
 }

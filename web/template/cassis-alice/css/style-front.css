@@ -10,6 +10,7 @@ grey : #5a6779
 body{
     background: #fafaf9 url('../img/pattern.png');
     font-family: 'Roboto', sans-serif!important;
+    font-size: 14px;
     color: #5a6779!important;
 }
 a{
@@ -183,9 +184,19 @@ h4 a {
 }
 /**********************************************/
 .baseline{
-    font-family: 'Parisienne', cursive!important;
-    text-align: center;
-    font-size: 3em;
+    padding-top: 225px;
+    height: 774px;
+    background: url('../img/baseline.jpg');
+    background-size: cover;
+}
+
+.baseline h1 {
+    color: #fff!important;
+    font-size: 100px;
+}
+
+.baseline a .text {
+    font-size: 48px!important;
 }
 /**********************************************/
 .image-container {
@@ -203,6 +214,15 @@ h4 a {
     height: 94%;
     border: 1px solid #fff;
     content: '';
+}
+
+.image-container h1 {
+    position: absolute;
+    margin-top: 137px;
+    color: #fff!important;
+    text-align: center;
+    width: 100%;
+    font-size: 48px;
 }
 /*********************************************/
 .form-control {
@@ -277,4 +297,8 @@ footer ul {
 
 footer li {
     list-style-type: none;
+}
+
+.font-60 {
+    font-size: 60px!important;
 }
