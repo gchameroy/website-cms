@@ -5,13 +5,15 @@
                 <div class="dropdown profile-element">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <span class="clear">
-                            <span class="block m-t-xs">
-                                <strong class="font-bold">Coutellerie Legendre</strong>
+                            <span class="block">
+                                <img class="img-responsive" src="{{ asset('template/cassis-alice/img/logo.png') }}" alt="" />
                             </span>
                         </span>
                     </a>
                 </div>
-                <div class="logo-element">CL</div>
+                <div class="logo-element">
+                    <img class="img-responsive" src="{{ asset('template/cassis-alice/img/logo.png') }}" alt="" />
+                </div>
             </li>
             <li class="{% if app.request.attributes.get('_route') in ['admin_home'] %}active{% endif %}">
                 <a href="{{ url('admin_home') }}">

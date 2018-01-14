@@ -64,3 +64,8 @@ ul.nav-second-level > li.active > a {
 .nav > li.active {
     border-color: #fff;
 }
+
+.nav-header {
+    padding-top: 0;
+    padding-bottom: 0;
+}
