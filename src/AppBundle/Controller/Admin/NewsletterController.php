@@ -232,19 +232,20 @@ class NewsletterController extends Controller
             ->find($id);
         $this->checkNewsletter($newsletter);
 
-        $image = $newsletter->getImage();
-        if ($image) {
-            $em = $this->getDoctrine()->getManager();
-            $newsletter->removeImage();
-            $em->remove($image);
-            $em->flush();
-        }
-
         $image = new Image();
 
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $oldImage = $newsletter->getImage();
+            if ($oldImage) {
+                $newsletter->setImage(null);
+                $em->persist($newsletter);
+                $em->remove($oldImage);
+                $em->flush();
+            }
+
             /** @var UploadedFile $file */
             $file = $image->getPath();
             $fileName = md5(uniqid(null, true));
@@ -253,7 +254,6 @@ class NewsletterController extends Controller
             $image->setPath($fileName);
             $newsletter->setImage($image);
 
-            $em = $this->getDoctrine()->getManager();
             $em->persist($newsletter);
             $em->persist($image);
             $em->flush();
