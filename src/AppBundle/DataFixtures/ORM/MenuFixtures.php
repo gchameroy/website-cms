@@ -35,6 +35,14 @@ class MenuFixtures extends FixtureHelper
             ->setIsDeletable(false);
         $this->setReference('menu-home', $menu);
         $this->manager->persist($menu);
+
+        $menu = (new Menu())
+            ->setPageName('Présentation')
+            ->setRouteName('front_presentation')
+            ->setOrder($this->order++)
+            ->setPublishedAt(new \DateTime());
+        $this->setReference('menu-presentation', $menu);
+        $this->manager->persist($menu);
     }
 
     private function loadForCategories()

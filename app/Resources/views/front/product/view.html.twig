@@ -29,6 +29,16 @@
                     {% if product.variants|length > 1 %}
                         <p class="text-primary">Nos divers contenants :</p>
                         <div class="row">
+                            <div class="col-md-4">
+                                <p class="text-center">
+                                    {% if product.image %}
+                                        <img class="img-fluid" src="{{ path('product_image_view', {'image_id': product.image.id}) }}" alt="">
+                                    {% else %}
+                                        <img class="img-fluid" src="{{ path('product_image_view', {'image_id': 0}) }}" height="320" alt="">
+                                    {% endif %}
+                                </p>
+                                <h3 class="text-center">{{ product.variantName }}</h3>
+                            </div>
                             {% for variant in product.variants %}
                                 <div class="col-md-4">
                                     <p class="text-center">
@@ -38,14 +48,14 @@
                                             <img class="img-fluid" src="{{ path('product_image_view', {'image_id': 0}) }}" height="320" alt="">
                                         {% endif %}
                                     </p>
-                                    <h2 class="text-center">{{ variant.variantName }}</h2>
+                                    <h3 class="text-center">{{ variant.variantName }}</h3>
                                 </div>
                             {% endfor %}
                         </div>
                     {% endif %}
                 </div>
             </div>
-            <div class="row pb-5">
+            <div class="row mt-4 pb-5">
                 <div class="col-md-12 px-5 mb-5">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
