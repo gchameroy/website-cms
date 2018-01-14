@@ -1,0 +1,39 @@
+{% extends "front/layout.html.twig" %}
+
+{% block sections %}
+    <div class="section">
+        <div class="container bg-brown pt-4 pb-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="background">Nos Partenaires</h2>
+                    <p class="text-justify">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+                    <p class="text-justify">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."</p>
+                </div>
+            </div>
+            <div class="row pb-5">
+                {% for i in 1..12 %}
+                    <div class="col-md-6 mt-3">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <img class="img-fluid height-160" src="{{ asset('template/cassis-alice/img/partners_3.png') }}" alt="" />
+                            </div>
+                            <div class="col-sm-6 pt-5">
+                                <p>
+                                    <span class="text-primary">ADMA</span>
+                                    <br>Maison de l'Agriculture
+                                    <br>52000 CHAUMONT
+                                    <br>www.site.fr
+                                    <br>Tél. : 00 00 00 00 00
+                                </p>
+                            </div>
+                            <div class="col-md-12">
+                                <hr class="mt-0">
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% include 'front/layout/partial/baseline.html.twig' %}
+{% endblock %}

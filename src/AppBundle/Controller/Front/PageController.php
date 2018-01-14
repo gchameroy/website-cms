@@ -26,4 +26,13 @@ class PageController extends Controller
     public function presentationAction() {
         return $this->render('front/page/presentation.html.twig');
     }
+
+    /**
+     * @Route("/partenaires", name="front_partners")
+     * @Method({"GET"})
+     * @return Response
+     */
+    public function partnersAction() {
+        return $this->render('front/page/partners.html.twig');
+    }
 }
