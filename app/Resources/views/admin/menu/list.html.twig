@@ -1,0 +1,72 @@
+{% extends "admin/layout.html.twig" %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Liste des menus</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('admin_home') }}">Dashboard</a>
+                </li>
+                <li class="active">
+                    <strong>Liste des menus</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+            <div class="title-action">
+                <a href="{{ path('admin_menus_add') }}" class="btn btn-primary btn-sm">Ajouter un menu</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block wrapper_content %}
+    <div class="row wrapper wrapper-content animated fadeInRight">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h4>Liste des menus</h4>
+                </div>
+                <div class="ibox-content">
+                    <div class="project-list">
+                        <table class="table table-hover">
+                            <tbody>
+                            {% for menu in menus %}
+                                <tr>
+                                    <td>
+                                        {% if menu.published %}
+                                            <label class="label label-info">en ligne</label>
+                                        {% else %}
+                                            <label class="label label-default">hors ligne</label>
+                                        {% endif %}
+                                    </td>
+                                    <td class="project-title" nowrap>
+                                        <a>{{- menu.pageName -}}</a>
+                                        <br>{{ url(menu.routeName, {slug: menu.routeSlug}) -}}
+                                    </td>
+                                    <td class="project-actions text-right">
+                                        {% if menu.deletable %}
+                                            {% if menu.published %}
+                                                <a href="{{ path('admin_menu_unpublish', {'id': menu.id}) }}" class="btn btn-warning btn-sm">Dépublier</a>
+                                            {% else %}
+                                                <a href="{{ path('admin_menu_publish', {'id': menu.id}) }}" class="btn btn-primary btn-sm">Publier</a>
+                                            {% endif %}
+                                            <a href="{{ path('admin_menu_edit', {'id': menu.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                            <a href="{{ path('admin_menu_delete', {'id': menu.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td><a href="{{ path('admin_products_add') }}" class="btn btn-primary btn-sm">Ajouter un produit</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
