@@ -67,7 +67,7 @@ RUN mkdir -p \
 COPY app app/
 COPY bin bin/
 COPY src src/
-COPY web web/
+COPY htdocs web/
 
 RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
 

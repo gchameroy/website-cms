@@ -61,13 +61,13 @@
     },
     "config": {
         "sort-packages": true,
-        "component-dir": "web/assets"
+        "component-dir": "htdocs/assets"
     },
     "extra": {
         "symfony-app-dir": "app",
         "symfony-bin-dir": "bin",
         "symfony-var-dir": "var",
-        "symfony-web-dir": "web",
+        "symfony-web-dir": "htdocs",
         "symfony-tests-dir": "tests",
         "symfony-assets-install": "relative",
         "incenteev-parameters": {

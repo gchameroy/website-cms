@@ -11,8 +11,8 @@
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/
-/web/bundles/*
-/web/assets/*
+/htdocs/bundles/*
+/htdocs/assets/*
 /uploads/*
 !/uploads/.gitkeep
 !/uploads/product/.gitkeep
