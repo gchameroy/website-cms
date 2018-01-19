@@ -25,7 +25,6 @@ class OrderProductFixtures extends FixtureHelper
                     $quantity = $this->faker->numberBetween(self::MIN_QTY_USER_PRODUCT, self::MAX_QTY_USER_PRODUCT);
                     $orderProduct = (new OrderProduct())
                         ->setProduct($product)
-                        ->setPrice(0)
                         ->setQuantity($quantity)
                         ->setOrder($this->getReference('order-user-' . $u . '-' . $o));
                     $this->setReference('order-product-' . $u . '-' . $o . '-' . $op, $orderProduct);
@@ -47,7 +46,6 @@ class OrderProductFixtures extends FixtureHelper
                     $quantity = $this->faker->numberBetween(self::MIN_QTY_PRO_PRODUCT, self::MAX_QTY_PRO_PRODUCT);
                     $orderProduct = (new OrderProduct())
                         ->setProduct($product)
-                        ->setPrice(0)
                         ->setQuantity($quantity)
                         ->setOrder($this->getReference('order-pro-' . $u . '-' . $o));
                     $this->setReference('order-product-' . $u . '-' . $o . '-' . $op, $orderProduct);

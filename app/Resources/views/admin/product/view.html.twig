@@ -2,7 +2,7 @@
 
 {% block breadcrumb %}
     <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-lg-10">
+        <div class="col-lg-9">
             <h2>{{ product.label }}</h2>
             <ol class="breadcrumb">
                 <li>
@@ -16,7 +16,7 @@
                 </li>
             </ol>
         </div>
-        <div class="col-lg-2">
+        <div class="col-lg-3">
             <div class="title-action">
                 {% if product.published %}
                     <a href="{{ path('admin_product_unpublish', {'id': product.id }) }}" class="btn btn-warning btn-sm">Dépublier</a>
@@ -24,6 +24,14 @@
                     <a href="{{ path('admin_product_publish', {'id': product.id }) }}" class="btn btn-primary btn-sm">Publier</a>
                 {% endif %}
                 <a href="{{ path('admin_product_edit', {'id': product.id}) }}" class="btn btn-primary btn-sm">Editer</a>
+                {% if not product.isDeletable %}
+                    <a class="btn btn-danger btn-sm" disabled>Supprimer</a>
+                {% else %}
+                    <form class="inline" action="{{ url('admin_product_delete', { product: product.id }) }}" method="post">
+                        <input type="hidden" name="token" value="{{ csrf_token('product-delete') }}"/>
+                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -48,20 +56,6 @@
                                     </h2>
                                     <p class="small text-muted">{{ product.description|nl2br }}</p>
                                 </div>
-
-                                <div class="m-t-md">
-                                    <h4>En savoir plus</h4>
-                                    <p>{{ product.more1|default('Aucune infrmations') }}</p>
-                                </div>
-                                <div class="m-t-md">
-                                    <h4>Ingrédients</h4>
-                                    <p>{{ product.more2|default('Aucune infrmations') }}</p>
-                                </div>
-                                <div class="m-t-md">
-                                    <h4>Conseils dégustation</h4>
-                                    <p>{{ product.more3|default('Aucune infrmations') }}</p>
-                                </div>
-
                                 <div class="m-t-md">
                                     <h4>Catégorie</h4>
                                     <p>{{ product.category.label }}</p>
@@ -86,11 +80,11 @@
                 <div class="tabs-container">
                     <div class="tabs-left">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#tab-product">{{ product.variants[0].variantName }}</a></li>
+                            <li class="active"><a data-toggle="tab" href="#tab-product">{{ product.variantName }}</a></li>
                             {% for variant in product.variants %}
                                 <li><a data-toggle="tab" href="#tab-product-variant-{{ variant.id }}">{{ variant.variantName }}</a></li>
                             {% endfor %}
-                            <li class=""><a class="action_product_variant_add">Ajouter une contenance</a></li>
+                            <li class=""><a class="action_product_variant_add">Ajouter un attribut</a></li>
                         </ul>
                         <div class="tab-content">
                             {% include 'admin/product/variant.html.twig' with {'tabId': 'tab-product', 'selected': true} %}

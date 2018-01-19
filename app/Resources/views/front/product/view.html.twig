@@ -6,83 +6,60 @@
 
 {% block sections %}
     <section class="section-product">
-        <div class="container bg-brown pt-3">
-            <div class="row">
+        <div class="container">
+            <p class="m-t-md">
+                <a href="{{ path('front_products', {'category': product.category.slug, 'page': 1}) }}" class="return-link">
+                    <i class="fa fa-chevron-left m-r-sm"></i>
+                    <span>Retour aux produits</span>
+                </a>
+            </p>
+            <h2 class="text-center">{{ product.label }}</h2>
+            <div class="row m-t-lg">
                 <div class="col-md-6">
                     <div class="row products">
                         <div class="col-md-12 product">
+                            <p class="text-center">
+                                <img src="{{ asset('template/coutellerie/img/img_product_separator.png') }}" alt="">
+                            </p>
+                            <h3 class="text-center">{{ product.label }}</h3>
                             <p class="product-image text-center">
                                 {% if product.image %}
-                                    <img class="img-fluid" src="{{ path('product_image_view', {'image_id': product.image.id}) }}" alt="">
+                                    <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'image_id': product.image.id}) }}" alt="">
                                 {% else %}
-                                    <img class="img-fluid" src="{{ path('product_image_view', {'image_id': 0}) }}" height="320" alt="">
+                                    <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'image_id':0}) }}" height="320" alt="">
                                 {% endif %}
                             </p>
+                            <ul class="product-price">
+                                <li>
+                                    <span>Prix:</span>
+                                    {% set offer = null %}
+                                    {% if app.user %}
+                                        {% set offer = app.user.offer %}
+                                    {% endif %}
+                                    <span>{{ product.price(offer)|number_format(2, '.', ' ') }}€</span>
+                                </li>
+                            </ul>
+                            <br class="clear">
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <h2>{{ product.label }}</h2>
-                    <hr class="dotted mt-2 mb-1">
-                    <p class="text-primary">Réf : {{ product.reference }}</p>
-                    <p class="mt-5">{{ product.description|nl2br }}</p>
-                    {% if product.variants|length > 1 %}
-                        <p class="text-primary">Nos divers contenants :</p>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <p class="text-center">
-                                    {% if product.image %}
-                                        <img class="img-fluid" src="{{ path('product_image_view', {'image_id': product.image.id}) }}" alt="">
-                                    {% else %}
-                                        <img class="img-fluid" src="{{ path('product_image_view', {'image_id': 0}) }}" height="320" alt="">
-                                    {% endif %}
-                                </p>
-                                <h3 class="text-center">{{ product.variantName }}</h3>
-                            </div>
-                            {% for variant in product.variants %}
-                                <div class="col-md-4">
-                                    <p class="text-center">
-                                        {% if variant.image %}
-                                            <img class="img-fluid" src="{{ path('product_image_view', {'image_id': variant.image.id}) }}" alt="">
-                                        {% else %}
-                                            <img class="img-fluid" src="{{ path('product_image_view', {'image_id': 0}) }}" height="320" alt="">
-                                        {% endif %}
-                                    </p>
-                                    <h3 class="text-center">{{ variant.variantName }}</h3>
-                                </div>
-                            {% endfor %}
+                    <aside class="aside">
+                        <div class="aside-container">
+                            <h3>{{ product.label }}</h3>
+                            <p>{{ product.description|nl2br }}</p>
                         </div>
-                    {% endif %}
+                    </aside>
                 </div>
             </div>
-            <div class="row mt-4 pb-5">
-                <div class="col-md-12 px-5 mb-5">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#learn-more" role="tab">En savoir plus</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#ingredients" role="tab">Ingrédients</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tasting-tips" role="tab">Conseils dégistation</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="learn-more" role="tabpanel">
-                            <p>{{ product.more1|nl2br }}</p>
-                        </div>
-                        <div class="tab-pane" id="ingredients" role="tabpanel">
-                            <p>{{ product.more2|nl2br }}</p>
-                        </div>
-                        <div class="tab-pane" id="tasting-tips" role="tabpanel">
-                            <p>{{ product.more3|nl2br }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {{ render(controller('AppBundle:Front/CartProduct:add', {'product': product.id})) }}
         </div>
     </section>
-    {% include 'front/layout/partial/baseline.html.twig' %}
-    {% include 'front/layout/partial/partners.html.twig' %}
+    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('#cart_product_quantity').val(1);
+    </script>
 {% endblock %}

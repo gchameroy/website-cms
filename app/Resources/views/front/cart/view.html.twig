@@ -1,6 +1,10 @@
 {% extends "front/layout.html.twig" %}
 
 {% block sections %}
+    {% set offer = null %}
+    {% if app.user %}
+        {% set offer = app.user.offer %}
+    {% endif %}
     <section class="section-cart m-b-xl">
         <div class="container">
             <h2 class="m-b-md">Panier</h2>
@@ -36,15 +40,15 @@
                                 {% for cartProduct in cart.cartProducts %}
                                     <tr>
                                         <td class="td-image">
-                                            <img class="img-lg" src="{{ path('product_image_view', {'product_id': cartProduct.product.id, 'image_id': cartProduct.product.image.id}) }}" alt="">
+                                            <img class="img-lg" src="{{ path('product_image_view', {'image_id': cartProduct.product.image.id}) }}" alt="">
                                         </td>
                                         <td>
                                             <span>{{ cartProduct.product.label }}</span>
-                                            {% for attribute in cartProduct.attributes %}
-                                                <br><em>{{ attribute.label }}</em>
+                                            {% for skill in cartProduct.product.skills %}
+                                                <br><em>{{ skill.label }} : {{ skill.value }}</em>
                                             {% endfor %}
                                         </td>
-                                        <td class="text-center">{{ cartProduct.product.price|number_format(2, '.', ' ') }}€</td>
+                                        <td class="text-center">{{ cartProduct.product.price(offer)|number_format(2, '.', ' ') }}€</td>
                                         <td class="text-center">
                                             <span class="m-r-sm">
                                                 <a href="{{ path('front_cart_remove_one_quantity', {'cartProduct': cartProduct.id}) }}">
@@ -58,7 +62,7 @@
                                                 </a>
                                             </span>
                                         </td>
-                                        <td class="text-center">{{ cartProduct.price|number_format(2, '.', ' ') }}€</td>
+                                        <td class="text-center">{{ cartProduct.price(offer)|number_format(2, '.', ' ') }}€</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -66,7 +70,7 @@
                                 <tr>
                                     <td colspan="3"></td>
                                     <td><strong>Sous-total</strong></td>
-                                    <td class="text-center">{{ cart.price|number_format(2, '.', ' ') }}€</td>
+                                    <td class="text-center">{{ cart.price(offer)|number_format(2, '.', ' ') }}€</td>
                                 </tr>
                                 <tr>
                                     <td colspan="3"></td>
@@ -76,7 +80,7 @@
                                 <tr>
                                     <td colspan="3" class="b-none"></td>
                                     <td><strong>Total TTC</strong></td>
-                                    <td class="text-center">{{ cart.price|number_format(2, '.', ' ') }}€</td>
+                                    <td class="text-center">{{ cart.price(offer)|number_format(2, '.', ' ') }}€</td>
                                 </tr>
                             </tfoot>
                         </table>

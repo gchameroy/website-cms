@@ -22,8 +22,34 @@ class HomeController extends Controller
      * @Method({"GET","POST"})
      * @return Response
      */
-    public function homeAction() {
-        return $this->render('front/home/home.html.twig');
+    public function homeAction(Request $request, \Swift_Mailer $mailer) {
+        $contact = new Contact();
+
+        $form = $this->createForm(ContactType::class, $contact);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($contact);
+            $em->flush();
+
+            $message = (new \Swift_Message('Demande de contact'))
+                ->setFrom('form-contact@coutellerie-legendre.fr')
+                ->setTo('form-contact@coutellerie-legendre.fr')
+                ->setBody(
+                    $this->renderView('front/emails/contact.html.twig', [
+                        'contact' => $contact
+                    ]), 'text/html'
+                );
+            $mailer->send($message);
+
+            $this->addFlash('success', 'Email send successfully.');
+
+            return $this->redirectToRoute('front_home');
+        }
+
+        return $this->render('front/home/home.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**
@@ -31,9 +57,10 @@ class HomeController extends Controller
      * @return Response
      */
     public function productsAction($max = 3) {
+        $category = $this->getParameter('app_company_id');
         $products = $this->getDoctrine()
             ->getRepository('AppBundle:Product')
-            ->findLastPublished($max);
+            ->findLastPublishedByCategory($category, $max);
 
         return $this->render('front/product/partial/last-products.html.twig', [
             'products' => $products

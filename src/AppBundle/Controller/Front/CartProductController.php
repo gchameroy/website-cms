@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Front;
 
 use AppBundle\Entity\CartProduct;
 use AppBundle\Entity\Product;
+use AppBundle\Form\Type\Cart\CartProductType;
 use AppBundle\Service\CartManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -30,34 +31,28 @@ class CartProductController extends Controller
         $this->checkProduct($product);
 
         $cartProduct = new CartProduct();
-        $cartProduct->setProduct($product);
-        $cartProduct->setCart($cartManager->getCurrentCart());
 
-        $form = $this->createFormBuilder($cartProduct)
-            ->setAction($this->generateUrl('front_cart_product_add', [
+        $form = $this->createForm(CartProductType::class, $cartProduct, [
+            'data' => [
+                'product' => $product,
+                'offer' => $this->getUser() ? $this->getUser()->getOffer() : null
+            ],
+            'action' => $this->generateUrl('front_cart_product_add', [
                 'product' => $product->getId()
-            ]))
-            ->add('quantity', IntegerType::class)
-            ->getForm();
+            ])
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $cartProduct->setCart($cartManager->getCurrentCart());
+            $variant = $this->getDoctrine()
+                ->getRepository(Product::class)
+                ->find($request->request->get('cart_product')['product']);
+            $this->checkProduct($variant);
+            $cartProduct->setProduct($variant);
+
             $em = $this->getDoctrine()->getManager();
-
-            $cartProduct2 = $em->getRepository(CartProduct::class)
-                ->findOneBy([
-                   'cart' => $cartProduct->getCart(),
-                   'product' => $cartProduct->getProduct()
-                ]);
-            if (!$cartProduct2) {
-                $em->persist($cartProduct);
-            } else {
-                $cartProduct2->setQuantity(
-                    $cartProduct2->getQuantity() + $cartProduct->getQuantity()
-                );
-                $em->persist($cartProduct2);
-            }
-
+            $em->persist($cartProduct);
             $em->flush();
 
             $this->addFlash('success', 'Product added successfully to the cart.');
@@ -74,7 +69,8 @@ class CartProductController extends Controller
     /**
      * @param $product
      */
-    private function checkProduct($product) {
+    private function checkProduct($product)
+    {
         if (!$product) {
             throw $this->createNotFoundException('Product Not Found.');
         }

@@ -45,7 +45,7 @@
                                         <a href="{{ path('admin_newsletter', {'id': newsletter.id }) }}">{{ newsletter.title }}</a>
                                         <br>
                                         <p style="width:350px;overflow: hidden; text-overflow: ellipsis;">
-                                            <small>{{ newsletter.content|striptags }}</small>
+                                            <small>{{ newsletter.content|striptags|raw }}</small>
                                         </p>
                                     </td>
                                     <td class="project-actions">

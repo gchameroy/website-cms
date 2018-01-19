@@ -147,7 +147,6 @@ class ClientController extends Controller
             foreach ($cart->getCartProducts() As $cartProduct) {
                 $orderProduct = (new OrderProduct())
                     ->setQuantity($cartProduct->getQuantity())
-                    ->setPrice($cartProduct->getProduct()->getPrice())
                     ->setProduct($cartProduct->getProduct())
                     ->setOrder($order);
                 $em->persist($orderProduct);

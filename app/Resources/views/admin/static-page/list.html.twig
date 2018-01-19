@@ -49,7 +49,7 @@
                                         <a href="{{ path('admin_static_page', {'id': staticPage.id }) }}">{{ staticPage.title }}</a>
                                         <br>
                                         <p style="width:350px;overflow: hidden; text-overflow: ellipsis;">
-                                            <small>{{ staticPage.content|striptags }}</small>
+                                            <small>{{ staticPage.content|striptags|raw }}</small>
                                         </p>
                                     </td>
                                     <td class="project-actions">

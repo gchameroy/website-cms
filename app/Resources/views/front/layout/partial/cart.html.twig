@@ -4,7 +4,11 @@
             <div class="col-lg-12">
                 <p class="text-right m-t-md m-b-md">
                     <a href="{{ path('front_cart') }}">
-                        <span class="m-l-sm">PANIER | {{ cart.length }} <em>Article(s)</em> | {{ cart.price|number_format(2, ',', ' ') }}€</span>
+                        {% set offer = null %}
+                        {% if app.user %}
+                            {% set offer = app.user.offer %}
+                        {% endif %}
+                        <span class="m-l-sm">PANIER | {{ cart.length }} <em>Article(s)</em> | {{ cart.price(offer)|number_format(2, ',', ' ') }}€</span>
                     </a>
                 </p>
             </div>

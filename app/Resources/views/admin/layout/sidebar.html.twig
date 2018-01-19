@@ -2,17 +2,15 @@
     <div class="sidebar-collapse">
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
-                <div class="dropdown profile-element">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <span class="clear">
-                            <span class="block">
-                                <img class="img-responsive" src="{{ asset('template/cassis-alice/img/logo.png') }}" alt="" />
-                            </span>
-                        </span>
+                <div class="dropdown profile-element text-center">
+                    <a href="{{ path('admin_home') }}">
+                        <img src="{{ asset('template/coutellerie/img/img_logo.png') }}" height="100" alt="" />
                     </a>
                 </div>
                 <div class="logo-element">
-                    <img class="img-responsive" src="{{ asset('template/cassis-alice/img/logo.png') }}" alt="" />
+                    <a href="{{ path('admin_home') }}">
+                        <img class="img-responsive" src="{{ asset('template/coutellerie/img/img_logo.png') }}" alt="" />
+                    </a>
                 </div>
             </li>
             <li class="{% if app.request.attributes.get('_route') in ['admin_home'] %}active{% endif %}">
@@ -50,10 +48,10 @@
                     <li class="{% if app.request.attributes.get('_route') in ['admin_bills'] %}active{% endif %}">
                         <a href="#">Liste des factures</a>
                     </li>
+                    #}
                     <li class="{% if app.request.attributes.get('_route') in ['admin_orders', 'admin_order'] %}active{% endif %}">
                         <a href="{{ url('admin_orders') }}">Liste des commandes</a>
                     </li>
-                    #}
                     <li class="{% if app.request.attributes.get('_route') in ['admin_user_offers', 'admin_user_offers_add', 'admin_user_offer_edit', 'admin_user_offer_delete'] %}active{% endif %}">
                         <a href="{{ url('admin_user_offers') }}">Liste des offres</a>
                     </li>

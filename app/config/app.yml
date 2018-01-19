@@ -3,3 +3,4 @@ parameters:
         theme: '%app_theme%'
         company:
             name: '%app_company_name%'
+            id: '%app_company_id%'

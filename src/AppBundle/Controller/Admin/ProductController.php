@@ -407,6 +407,29 @@ class ProductController extends Controller
     }
 
     /**
+     * @Route("/{product}/delete", name="admin_product_delete", requirements={"product": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param int $product
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function deleteAction(int $product, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $product = $em->getRepository(Product::class)
+            ->find($product);
+        $this->checkProduct($product);
+
+        $token = $request->request->get('token');
+        if ($this->isCsrfTokenValid('product-delete', $token)) {
+            $em->remove($product);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('admin_products');
+    }
+
+    /**
      * @Route("/{product}/delete_skill", name="admin_product_skill_delete", requirements={"product": "\d+"})
      * @Method({"GET", "POST"})
      * @param int $product

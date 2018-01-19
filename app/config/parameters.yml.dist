@@ -14,3 +14,4 @@ parameters:
 
     app_theme: default
     app_company_name: 'Zen Panda'
+    app_company_id: 'coutellerie'

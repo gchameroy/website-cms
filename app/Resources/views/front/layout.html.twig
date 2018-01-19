@@ -1,5 +1,5 @@
+<!DOCTYPE html>
 {% spaceless %}
-<!doctype html>
 <html lang="fr">
     <head>
         <meta charset="utf-8">
@@ -7,24 +7,14 @@
         <meta name="author" content="Geoffrey Chameroy">
         {% block meta '' %}
 
-        <title>{% block title 'Les Cassis d\'Alice' %}</title>
+        <title>{% block title 'Coutellerie Legendre' %}</title>
 
-        <link href="{{ asset('favicon.png') }}" rel="icon">
-        <link href="{{ asset('template/' ~ config.theme ~ '/favicon/apple-touch-icon.png') }}" rel="apple-touch-icon" sizes="180x180">
-        <link href="{{ asset('template/' ~ config.theme ~ '/favicon/favicon-32x32.png') }}" rel="icon" type="image/png" sizes="32x32">
-        <link href="{{ asset('template/' ~ config.theme ~ '/favicon/favicon-16x16.png') }}" rel="icon" type="image/png" sizes="16x16">
-        <link href="{{ asset('template/' ~ config.theme ~ '/favicon/manifest.json') }}" rel="manifest">
-        <link href="{{ asset('template/' ~ config.theme ~ '/favicon/safari-pinned-tab.svg') }}" rel="mask-icon" color="#5bbad5">
-        <meta name="theme-color" content="#ffffff">
-
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-        <link href="https://fonts.googleapis.com/css?family=Parisienne|Playfair+Display|Roboto" rel="stylesheet">
+        <link href="{{ asset('favicon.ico') }}" rel="icon">
+        <link href="{{ asset('inspinia/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('inspinia/fonts/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
         <link href="{{ asset('inspinia/css/animate.css') }}" rel="stylesheet">
         <link href="{{ asset('base/css/helper.css') }}" rel="stylesheet">
-        {% if config.theme != 'default' %}
-            <link href="{{ asset('template/' ~ config.theme ~ '/css/style-front.css') }}" rel="stylesheet">
-        {% endif %}
+        <link href="{{ asset('template/coutellerie/css/style-front.css') }}" rel="stylesheet">
         {% block stylesheets '' %}
     </head>
 
@@ -35,9 +25,8 @@
             {{ render(controller('AppBundle:Front/Layout:footer')) }}
         {% endblock %}
 
-        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <script src="{{ asset('inspinia/js/jquery-3.1.1.min.js') }}"></script>
+        <script src="{{ asset('inspinia/js/bootstrap.min.js') }}"></script>
         {% block javascripts '' %}
     </body>
 </html>

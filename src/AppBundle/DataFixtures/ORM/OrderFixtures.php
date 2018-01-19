@@ -16,14 +16,14 @@ class OrderFixtures extends FixtureHelper
 
     private function loadForUser(ObjectManager $manager)
     {
-        for ($i = 1; $i <= self::NB_USER; $i++) {
-            for ($j = 1; $j <= self::NB_ORDER_USER; $j++) {
+        for ($u = 1; $u <= self::NB_USER; $u++) {
+            for ($o = 1; $o <= self::NB_ORDER_USER; $o++) {
                 $order = (new Order())
-                    ->setUser($this->getReference('user-' . $i))
-                    ->setDeliveryAddress($this->getReference('address-user-'. $i))
-                    ->setBillingAddress($this->getReference('address-user-' . $i))
+                    ->setUser($this->getReference('user-' . $u))
+                    ->setDeliveryAddress($this->getReference('address-user-'. $u))
+                    ->setBillingAddress($this->getReference('address-user-' . $u))
                     ->setCreatedAt(new \DateTime());
-                $this->setReference('order-user-' . $i . '-' . $j, $order);
+                $this->setReference('order-user-' . $u . '-' . $o, $order);
                 $manager->persist($order);
             }
         }
@@ -32,14 +32,14 @@ class OrderFixtures extends FixtureHelper
 
     private function loadForPro(ObjectManager $manager)
     {
-        for ($i = 1; $i <= self::NB_PRO; $i++) {
-            for ($j = 1; $j <= self::NB_ORDER_PRO; $j++) {
+        for ($u = 1; $u <= self::NB_PRO; $u++) {
+            for ($o = 1; $o <= self::NB_ORDER_PRO; $o++) {
                 $order = (new Order())
-                    ->setUser($this->getReference('user-pro-' . $i))
-                    ->setDeliveryAddress($this->getReference('address-pro-'. $i))
-                    ->setBillingAddress($this->getReference('address-pro-' . $i))
+                    ->setUser($this->getReference('user-pro-' . $u))
+                    ->setDeliveryAddress($this->getReference('address-pro-'. $u))
+                    ->setBillingAddress($this->getReference('address-pro-' . $u))
                     ->setCreatedAt(new \DateTime());
-                $this->setReference('order-pro-' . $i . '-' . $j, $order);
+                $this->setReference('order-pro-' . $u . '-' . $o, $order);
                 $manager->persist($order);
             }
         }
