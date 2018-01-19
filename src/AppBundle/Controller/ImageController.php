@@ -34,7 +34,7 @@ class ImageController Extends Controller
 
         $filePath = $this->get('kernel')->getRootDir() . '/../uploads/product/';
 
-        $file = $filePath . 'img_no_product.png';
+        $file = $filePath . 'img_no_product.jpg';
         if ($image) {
             $file = $filePath . $image->getPath();
         }

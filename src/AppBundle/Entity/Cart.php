@@ -204,13 +204,14 @@ class Cart
     }
 
     /**
+     * @param UserOffer|null $offer
      * @return float
      */
-    public function getPrice()
+    public function getPrice(?UserOffer $offer)
     {
         $price = 0;
         foreach ($this->cartProducts as $cartProduct) {
-            $price += $cartProduct->getPrice();
+            $price += $cartProduct->getPrice($offer);
         }
 
         return $price;

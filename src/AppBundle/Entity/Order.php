@@ -69,7 +69,7 @@ class Order
     private $billingAddress;
 
     /**
-     * @var ArrayCollection
+     * @var OrderProduct[]
      * @ORM\OneToMany(targetEntity="OrderProduct", mappedBy="order", cascade={"remove", "persist"})
      */
     private $orderProducts;
@@ -199,7 +199,7 @@ class Order
     }
 
     /**
-     * @return ArrayCollection
+     * @return OrderProduct[]
      */
     public function getOrderProducts()
     {
@@ -220,13 +220,14 @@ class Order
     }
 
     /**
+     * @param UserOffer|null $offer
      * @return float
      */
-    public function getPrice()
+    public function getPrice(?UserOffer $offer)
     {
         $price = 0;
         foreach ($this->orderProducts as $orderProduct) {
-            $price += $orderProduct->getPrice();
+            $price += $orderProduct->getPrice($offer);
         }
 
         return $price;

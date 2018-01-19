@@ -30,13 +30,6 @@ class OrderProduct
     private $quantity;
 
     /**
-     * @var float
-     *
-     * @ORM\Column(name="price", type="float")
-     */
-    private $price;
-
-    /**
      * @var Order
      *
      * @ORM\ManyToOne(targetEntity="Order", inversedBy="orderProducts")
@@ -47,7 +40,7 @@ class OrderProduct
     /**
      * @var Product
      *
-     * @ORM\ManyToOne(targetEntity="Product")
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="orderProducts")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
@@ -84,30 +77,6 @@ class OrderProduct
     public function getQuantity()
     {
         return $this->quantity;
-    }
-
-    /**
-     * Set price
-     *
-     * @param float $price
-     *
-     * @return OrderProduct
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * Get price
-     *
-     * @return float
-     */
-    public function getPrice()
-    {
-        return $this->price;
     }
 
     /**
@@ -151,10 +120,20 @@ class OrderProduct
     }
 
     /**
+     * @param UserOffer|null $offer
+     * @return float
+     */
+    public function getPrice(?UserOffer $offer)
+    {
+        return $this->product->getPrice($offer) * $this->getQuantity();
+    }
+
+    /**
      * @return float
      */
     public function getTotal()
     {
-        return $this->quantity * $this->price;
+        // Todo: calculate total
+        return 0;
     }
 }

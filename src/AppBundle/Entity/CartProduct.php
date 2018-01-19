@@ -34,7 +34,7 @@ class CartProduct
 
     /**
      * @var Product
-     * @ORM\ManyToOne(targetEntity="Product")
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="cartProducts")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
@@ -113,10 +113,11 @@ class CartProduct
     }
 
     /**
+     * @param UserOffer|null $offer
      * @return float
      */
-    public function getPrice()
+    public function getPrice(?UserOffer $offer)
     {
-        return $this->product->getDefaultPrice() * $this->quantity;
+        return $this->product->getPrice($offer) * $this->quantity;
     }
 }

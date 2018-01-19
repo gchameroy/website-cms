@@ -128,11 +128,23 @@ class Product
     private $skills;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CartProduct", mappedBy="product", cascade={"remove"})
+     */
+    private $cartProducts;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="OrderProduct", mappedBy="product")
+     */
+    private $orderProducts;
+
+    /**
      * Product constructor.
      */
     public function __construct()
     {
-        $this->variantName = 'Pot de 50g';
+        $this->variantName = 'Aucun label';
         $this->variants = new ArrayCollection();
     }
 
@@ -543,5 +555,26 @@ class Product
     public function getVariantName()
     {
         return $this->variantName;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCartProducts()
+    {
+        return $this->cartProducts;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getOrderProducts()
+    {
+        return $this->orderProducts;
+    }
+
+    public function isDeletable()
+    {
+        return count($this->orderProducts) > 0 ? false : true;
     }
 }
