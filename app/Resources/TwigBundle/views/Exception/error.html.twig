@@ -1,12 +1,16 @@
-{% extends '::layout.html.twig' %}
+{% extends "front/layout.html.twig" %}
 
-{% block title 'Admin Panel - Sign In' %}
+{% block title status_code %}
 
-{% block body_class 'gray-bg' %}
-
-{% block wrapper %}
-    <div class="middle-box text-center animated fadeInDown">
-        <h1>{{ status_code }}</h1>
-        <h3 class="font-bold">{{ status_text }}</h3>
+{% block sections %}
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center m-t-lg m-b-lg">
+                    <h1>Error {{ status_code }}</h1>
+                    <h2>{{ status_text }}</h2>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

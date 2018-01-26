@@ -3,14 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Image;
-use AppBundle\Entity\Newsletter;
-use AppBundle\Entity\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route("/")
