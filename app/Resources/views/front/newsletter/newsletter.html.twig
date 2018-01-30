@@ -6,20 +6,28 @@
 
 {% block sections %}
     <section class="section-newsletter">
-        <div class="container">
+        <div class="container bg-brown pt-4">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>{{ newsletter.title }}</h2>
+                    <h2 class="background">{{ newsletter.title }}</h2>
                     <div class="newsletter-image">
                         {% if newsletter.image %}
-                            <img class="img-responsive" src="{{ path('newsletter_image_view', {'image_id': newsletter.image.id}) }}" alt="">
+                            <img class="img-fluid" src="{{ path('newsletter_image_view', {'image_id': newsletter.image.id}) }}" alt="">
                         {% endif %}
                     </div>
                     <p class="m-t-md text-justify">{{ newsletter.content|raw }}</p>
-                    <p><a class="btn btn-primary m-t-md" href="{{ path('front_home') }}">Retour</a></p>
+                    <p>
+                        <a class="btn btn-primary m-t-md" href="{{ path('front_home') }}">
+                            <span class="text">Retour</span>
+                            <br>
+                            <span class="icon">
+                                <img src="{{ asset('template/cassis-alice/img/wave.png') }}">
+                            </span>
+                        </a>
+                    </p>
                 </div>
             </div>
         </div>
     </section>
-    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
+    {% include 'front/layout/partial/partners.html.twig' %}
 {% endblock %}

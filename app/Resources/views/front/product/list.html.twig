@@ -2,51 +2,39 @@
 
 {% block sections %}
     <section class="products-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2 class="text-center">{{ category.label }}</h2>
-                    <div class="row products">
+        <div class="container bg-brown pt-3">
+            <div class="row pb-5">
+                <div class="col-lg-12 pb-5">
+                    <h2 class="background text-center">{{ category.label }}</h2>
+                    <p class="text-center mt-3 mb-4">
+                        <img src="{{ asset('template/cassis-alice/img/divider-1.png') }}" alt="" />
+                    </p>
+                    <div class="row products mt-6">
                         {% for product in products %}
                             <div class="col-md-4 product">
-                                <p class="text-center">
-                                    <img src="{{ asset('template/coutellerie/img/img_product_separator.png') }}" alt="">
+                                <p class="product-title text-center">
+                                    <a href="{{ path('front_product', {category: product.category.slug, product: product.slug, page: page}) }}" class="btn btn-primary">{{ product.label }}</a>
                                 </p>
-                                <h3 class="text-center">{{ product.label }}</h3>
                                 <p class="product-image text-center">
                                     {% if product.image %}
-                                        <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'image_id': product.image.id}) }}" alt="">
+                                        <img class="img-fluid" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': product.image.id}) }}" alt="">
                                     {% else %}
-                                        <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'image_id':0}) }}" height="320" alt="">
+                                        <img class="img-fluid" src="{{ path('product_image_view', {'product_id': 0, 'image_id':0}) }}" height="320" alt="">
                                     {% endif %}
-                                </p>
-                                <ul class="product-price">
-                                    <li>
-                                        <span>Prix:</span>
-                                        {% set offer = null %}
-                                        {% if app.user %}
-                                            {% set offer = app.user.offer %}
-                                        {% endif %}
-                                        <span>{{ product.price(offer)|number_format(2, '.', ' ') }}€</span>
-                                    </li>
-                                </ul>
-                                <br class="clear">
-                                <p class="text-center m-t-lg m-b-lg">
-                                    <a href="{{ path('front_product', {'category': product.category.slug, 'product': product.slug}) }}" class="btn btn-primary">+ de détails</a>
                                 </p>
                             </div>
                         {% endfor %}
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <ul class="pagination">
-                                <li><a href="{{ path('front_products', {category: category.slug, page: page - 1}) }}"><i class="fa fa-angle-double-left"></i></a></li>
+                    <div class="row mt-5 mb-5">
+                        <div class="col-lg-12 text-center mb-5">
+                            <ul class="pagination mb-5">
+                                <li class="active"><a href="{{ path('front_products', {category: category.slug, page: page - 1}) }}"><i class="fa fa-angle-double-left"></i></a></li>
                                 {% for i in 1..nbPage %}
                                     <li class="{% if page == i %}active{% endif %}">
                                         <a href="{{ path('front_products', {category: category.slug, page: i}) }}">{{ i }}</a>
                                     </li>
                                 {% endfor %}
-                                <li><a href="{{ path('front_products', {category: category.slug, page: page + 1}) }}"><i class="fa fa-angle-double-right"></i></a></li>
+                                <li class="active"><a href="{{ path('front_products', {category: category.slug, page: page + 1}) }}"><i class="fa fa-angle-double-right"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -54,4 +42,6 @@
             </div>
         </div>
     </section>
+    {% include 'front/layout/partial/baseline.html.twig' %}
+    {% include 'front/layout/partial/partners.html.twig' %}
 {% endblock %}

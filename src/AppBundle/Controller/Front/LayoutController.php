@@ -71,8 +71,18 @@ class LayoutController extends Controller
             ->getRepository(Menu::class)
             ->findPublished();
 
+        $categories = $this->getDoctrine()
+            ->getRepository(Category::class)
+            ->findPublished();
+
+        $newsletters = $this->getDoctrine()
+            ->getRepository(Newsletter::class)
+            ->findAll(6, 1, 'desc');
+
         return $this->render('front/layout/footer.html.twig', [
-            'menus' => $menus
+            'menus' => $menus,
+            'categories' => $categories,
+            'newsletters' => $newsletters
         ]);
     }
 }

@@ -78,18 +78,14 @@
                             <tr>
                                 <td>{{ orderProduct.product.label }}</td>
                                 <td>
-                                    {% for skill in orderProduct.product.skills %}
-                                        {% if not loop.first %}
-                                            <br>
-                                        {% endif %}
-                                        <span>- {{ skill.label }} : {{ skill.value }}</span>
+                                    {% for attribute in orderProduct.product.attributes %}
+                                        <span>- {{ attribute.label }}</span>
                                     {% else %}
                                        <span>/</span>
                                     {% endfor %}
                                 </td>
                                 <td class="text-center">{{ orderProduct.quantity }}</td>
-
-                                <td class="text-right">{{ orderProduct.price(app.user.offer)|number_format(2, ',', ' ') }}€</td>
+                                <td class="text-right">{{ orderProduct.price|number_format(2, ',', ' ') }}€</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -97,7 +93,7 @@
                             <tr>
                                 <td colspan="2"></td>
                                 <td>Sous total</td>
-                                <td class="text-right">{{ order.price(app.user.offer)|number_format(2, ',', ' ') }}€</td>
+                                <td class="text-right">{{ order.price|number_format(2, ',', ' ') }}€</td>
                             </tr>
                             <tr>
                                 <td colspan="2"></td>
@@ -107,7 +103,7 @@
                             <tr>
                                 <td colspan="2"></td>
                                 <td>Total TTC</td>
-                                <td class="text-right">{{ order.price(app.user.offer)|number_format(2, ',', ' ') }}€</td>
+                                <td class="text-right">{{ order.price|number_format(2, ',', ' ') }}€</td>
                             </tr>
                         </tfoot>
                     </table>
