@@ -21,7 +21,6 @@ class MenuFixtures extends FixtureHelper
 
         $this->loadDefaults();
         $this->loadForCategories();
-        $this->loadContact();
 
         $this->manager->flush();
     }
@@ -29,18 +28,26 @@ class MenuFixtures extends FixtureHelper
     private function loadDefaults()
     {
         $menu = (new Menu())
-            ->setPageName('Présentation')
+            ->setPageName('Accueil')
             ->setRouteName('front_home')
             ->setOrder($this->order++)
             ->setPublishedAt(new \DateTime())
             ->setIsDeletable(false);
         $this->setReference('menu-home', $menu);
         $this->manager->persist($menu);
+
+        $menu = (new Menu())
+            ->setPageName('Présentation')
+            ->setRouteName('front_presentation')
+            ->setOrder($this->order++)
+            ->setPublishedAt(new \DateTime());
+        $this->setReference('menu-presentation', $menu);
+        $this->manager->persist($menu);
     }
 
     private function loadForCategories()
     {
-        for ($c = 1; $c <= self::NB_PRODUCT_CATEGORY; ++$c) {
+        for ($c = 1; $c < self::NB_PRODUCT_CATEGORY; ++$c) {
             /** @var Category $category */
             $category = $this->getReference('product-category-' . $c);
             $menu = (new Menu())
@@ -52,18 +59,6 @@ class MenuFixtures extends FixtureHelper
             $this->setReference('menu-category-' . $c, $menu);
             $this->manager->persist($menu);
         }
-    }
-
-    private function loadContact()
-    {
-        $menu = (new Menu())
-            ->setPageName('Contact')
-            ->setRouteName('front_contact')
-            ->setOrder($this->order++)
-            ->setPublishedAt(new \DateTime())
-            ->setIsDeletable(false);
-        $this->setReference('menu-contact', $menu);
-        $this->manager->persist($menu);
     }
 
     public function getDependencies()

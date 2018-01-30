@@ -14,9 +14,9 @@ class ProductFixtures extends FixtureHelper
         $date = new \DateTime();
         for ($p = 1; $p <= self::NB_PRODUCT; $p++) {
             $product = new Product();
-            $product->setLabel('Produit N° ' . $p)
+            $product->setLabel('Product ' . $p)
                 ->setDescription($this->faker->paragraph(3))
-                ->setVariantName('Lame 10cm')
+                ->setVariantName('Pot de 50g')
                 ->setMore1($this->faker->paragraph(10))
                 ->setMore2($this->faker->paragraph(10))
                 ->setMore3($this->faker->paragraph(10))

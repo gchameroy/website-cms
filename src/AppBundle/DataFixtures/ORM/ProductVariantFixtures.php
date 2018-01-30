@@ -16,7 +16,7 @@ class ProductVariantFixtures extends FixtureHelper
             for ($v = 1; $v <= self::NB_PRODUCT_VARIANT; $v++) {
                 $product = (new Product())
                     ->setParent($this->getReference('product-' . $p))
-                    ->setVariantName(sprintf('Lame %scm',  ($v * 5) + 10))
+                    ->setVariantName(sprintf('Pot de %sg',  $v * 100))
                     ->setReference('P' . $date->format('ym') . '-' . str_pad($p, 3, '0', STR_PAD_LEFT) . '-V' . $v)
                     ->setPublishedAt($date)
                     ->setImage($this->loadImage($manager));
