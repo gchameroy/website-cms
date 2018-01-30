@@ -18,6 +18,7 @@
 !/uploads/product/.gitkeep
 !/uploads/newsletter/.gitkeep
 !/uploads/static-page/.gitkeep
+!/uploads/gallery/.gitkeep
 /web/uploads/*
 !/web/uploads/.gitkeep
 *~

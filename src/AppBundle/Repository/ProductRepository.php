@@ -73,7 +73,7 @@ class ProductRepository extends EntityRepository
 
     /**
      * @param Category $category
-     * @return float|int
+     * @return int
      */
     public function countNbPagePublishedByCategory(category $category)
     {

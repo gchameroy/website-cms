@@ -1,0 +1,38 @@
+{% extends "front/layout.html.twig" %}
+
+{% block sections %}
+    <section class="galleries-section">
+        <div class="container bg-brown pt-3">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="background text-center">Gallerie</h2>
+                    <p class="text-center mt-3 mb-4">
+                        <img src="{{ asset('template/cassis-alice/img/divider-1.png') }}" alt="" />
+                    </p>
+                    <div class="row mt-6">
+                        {% for gallery in galleries %}
+                            <div class="col-md-3">
+                                <img class="img-fluid" src="{{ path('gallery_image_view', {'image_id': gallery.image.id}) }}" alt="">
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="row mt-5 mb-5">
+                        <div class="col-lg-12 text-center mb-5">
+                            <ul class="pagination mb-5">
+                                <li class="active"><a href="{{ path('front_gallery', {page: page - 1}) }}"><i class="fa fa-angle-double-left"></i></a></li>
+                                {% for i in 1..nbPage %}
+                                    <li class="{% if page == i %}active{% endif %}">
+                                        <a href="{{ path('front_gallery', {page: i}) }}">{{ i }}</a>
+                                    </li>
+                                {% endfor %}
+                                <li class="active"><a href="{{ path('front_gallery', {page: page + 1}) }}"><i class="fa fa-angle-double-right"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% include 'front/layout/partial/baseline.html.twig' %}
+    {% include 'front/layout/partial/partners.html.twig' %}
+{% endblock %}

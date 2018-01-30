@@ -83,6 +83,28 @@ class ImageController Extends Controller
     }
 
     /**
+     * @Route(
+     *     "/images/g-{image_id}", name="gallery_image_view",
+     *     requirements={"image_id": "\d+"}
+     * )
+     * @Method({"GET"})
+     * @param integer $image_id
+     * @return BinaryFileResponse
+     */
+    public function viewGalleryImageAction($image_id)
+    {
+        $image = $this->getDoctrine()
+            ->getRepository(Image::class)
+            ->find($image_id);
+        $this->checkImage($image);
+
+        $filePath = $this->get('kernel')->getRootDir() . '/../uploads/gallery/';
+        $file = $filePath . $image->getPath();
+
+        return new BinaryFileResponse($file);
+    }
+
+    /**
      * @param $image
      */
     private function checkImage($image)

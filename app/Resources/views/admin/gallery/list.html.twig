@@ -1,0 +1,88 @@
+{% extends "admin/layout.html.twig" %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Liste des photos</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('admin_home') }}">Dashboard</a>
+                </li>
+                <li class="active">
+                    <strong>Liste des photos</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+            <div class="title-action">
+                <a href="{{ path('admin_galleries_add') }}" class="btn btn-primary btn-sm">Ajouter une photo</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block wrapper_content %}
+    <div class="row wrapper wrapper-content animated fadeInRight">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h4>Liste des photos</h4>
+                </div>
+                <div class="ibox-content">
+                    <div class="project-list">
+                        <table class="table table-hover">
+                            <tbody>
+                            {% for gallery in galleries %}
+                                <tr>
+                                    <td>
+                                        {% if gallery.published %}
+                                            <label class="label label-info">en ligne</label>
+                                        {% else %}
+                                            <label class="label label-default">hors ligne</label>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <img width="200" src="{{ path('gallery_image_view', {'image_id': gallery.image.id}) }}" alt="" />
+                                    </td>
+                                    <td class="project-title" nowrap>
+                                        <a>{{ gallery.title }}</a>
+                                        <br>
+                                        <p style="width:350px;overflow: hidden; text-overflow: ellipsis;">
+                                            <small>{{ gallery.description }}</small>
+                                        </p>
+                                    </td>
+                                    <td class="project-actions">
+                                        {% if gallery.published %}
+                                            <form class="inline" action="{{ url('admin_gallery_unpublish') }}" method="post">
+                                                <input type="hidden" name="token" value="{{ csrf_token('gallery-unpublish') }}" />
+                                                <input type="hidden" name="gallery" value="{{ gallery.id }}" />
+                                                <button class="btn btn-warning btn-sm" type="submit">Dépublier</button>
+                                            </form>
+                                        {% else %}
+                                            <form class="inline" action="{{ url('admin_gallery_publish') }}" method="post">
+                                                <input type="hidden" name="token" value="{{ csrf_token('gallery-publish') }}" />
+                                                <input type="hidden" name="gallery" value="{{ gallery.id }}" />
+                                                <button class="btn btn-primary btn-sm" type="submit">Publier</button>
+                                            </form>
+                                        {% endif %}
+                                        <a href="{{ path('admin_gallery_edit', {'gallery': gallery.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                        <form class="inline" action="{{ url('admin_gallery_delete') }}" method="post">
+                                            <input type="hidden" name="token" value="{{ csrf_token('gallery-delete') }}" />
+                                            <input type="hidden" name="gallery" value="{{ gallery.id }}" />
+                                            <button class="btn btn-danger btn-sm" type="submit">Supprimer</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td><a href="{{ path('admin_galleries_add') }}" class="btn btn-primary btn-sm">Ajouter une photo</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
