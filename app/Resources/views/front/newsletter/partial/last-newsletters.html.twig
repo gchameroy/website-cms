@@ -1,24 +1,16 @@
-<section class="home-newsletters">
-    <div class="container bg-brown pt-3 pb-5">
-        <div class="row">
-            <div class="col-lg-8">
-                <h2 class="background background-left">Actualités</h2>
-                {% for newsletter in newsletters %}
-                    <div class="image-container">
-                        <img class="img-fluid" src="{{ path('newsletter_image_view', {'image_id': newsletter.image.id}) }}" alt="">
-                    </div>
-                    <h4 class="mt-4">
-                        <a href="{{ path('front_newsletter', {slug: newsletter.slug}) }}">{{ newsletter.title }}</a>
-                        <small> - {{ newsletter.publishedAt|date('d/m/Y') }}</small>
-                    </h4>
-                    <p>{{ newsletter.content|truncate(400, true, '...')|striptags }}</p>
-                    {% if not loop.last %}
-                        <p class="text-center my-4">
-                            <img src="{{ asset('template/cassis-alice/img/divider-2.png') }}" alt="" />
-                        </p>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
+<h2 class="background background-left">Actualités</h2>
+{% for newsletter in newsletters %}
+    <div class="image-container">
+        <img class="img-fluid" src="{{ path('newsletter_image_view', {'image_id': newsletter.image.id}) }}" alt="">
     </div>
-</section>
+    <h4 class="mt-4">
+        <a href="{{ path('front_newsletter', {slug: newsletter.slug}) }}">{{ newsletter.title }}</a>
+        <small> - {{ newsletter.publishedAt|date('d/m/Y') }}</small>
+    </h4>
+    <p>{{ newsletter.content|truncate(400, true, '...')|striptags }}</p>
+    {% if not loop.last %}
+        <p class="text-center my-4">
+            <img src="{{ asset('template/cassis-alice/img/divider-2.png') }}" alt="" />
+        </p>
+    {% endif %}
+{% endfor %}

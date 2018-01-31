@@ -1,0 +1,56 @@
+{% extends "front/layout.html.twig" %}
+
+{% block sections %}
+    <section class="point-of-sales-section">
+        <div class="container bg-brown pt-3 pb-5">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="background text-center">Nos points de ventes</h2>
+                    <p>Lorem ipsum dolor sit amet.</p>
+                    <div id="map" style="height: 500px"></div>
+                    <div class="row mt-6">
+                        {% for pointOfSale in pointOfSales %}
+                            <div class="col-md-3">
+                                <p>
+                                    <strong class="text-primary">{{ pointOfSale.address.company }}</strong>
+                                    <br>{{ pointOfSale.address.address -}}
+                                    <br>{{ pointOfSale.address.zipcode ~ ' ' ~ pointOfSale.address.city -}}
+                                    <br>{{ pointOfSale.website -}}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% include 'front/layout/partial/baseline.html.twig' %}
+    {% include 'front/layout/partial/partners.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe3T7l6rVotuy_15U_FIK2OCb_3IAdZLM"></script>
+    <script>
+        var resultsMap = new google.maps.Map(document.getElementById('map'), {
+            zoom: 12,
+            center: {
+                lat: 48.0805551,
+                lng: 5.0794958
+            }
+        });
+
+        var geocoder = new google.maps.Geocoder();
+        {% for pointOfSale in pointOfSales %}
+            var address = '{{ pointOfSale.address.address ~ ' ' ~ pointOfSale.address.zipCode ~ ' ' ~ pointOfSale.address.city }}';
+            geocoder.geocode({'address': address}, function(results, status) {
+                if(status === google.maps.GeocoderStatus.OK) {
+                    new google.maps.Marker({
+                        map: resultsMap,
+                        position: results[0].geometry.location
+                    });
+                }
+            });
+        {% endfor %}
+    </script>
+
+{% endblock %}

@@ -2,7 +2,18 @@
 
 {% block sections %}
     {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
-    {{ render(controller('AppBundle:Front/Home:newsletters', {'max': 2})) }}
+    <section class="home-newsletters">
+        <div class="container bg-brown pt-3 pb-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    {{ render(controller('AppBundle:Front/Home:newsletters', {'max': 2})) }}
+                </div>
+                <div class="col-md-4">
+                    {% include 'front/home/partial/point-of-sale.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </section>
     {% include 'front/layout/partial/baseline.html.twig' %}
     {% include 'front/layout/partial/partners.html.twig' %}
 {% endblock %}

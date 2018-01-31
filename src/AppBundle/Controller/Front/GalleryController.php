@@ -16,7 +16,7 @@ class GalleryController extends Controller
      * @param int $page
      * @return Response
      */
-    public function listAction(int $page) {
+    public function listAction(int $page = 1) {
         if ($page <= 0) {
             return $this->redirectToRoute('front_gallery', [
                 'page' => 1
@@ -41,10 +41,6 @@ class GalleryController extends Controller
             'galleries' => $galleries,
             'page' => $page,
             'nbPage' => $nbPage
-        ]);
-
-        return $this->render('front/gallery/list.html.twig', [
-            'galleries' => $galleries
         ]);
     }
 }

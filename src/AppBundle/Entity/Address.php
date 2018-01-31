@@ -69,6 +69,7 @@ class Address
 
     public function __construct()
     {
+        $this->country = 'France';
     }
 
     /**

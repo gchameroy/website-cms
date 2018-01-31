@@ -18,4 +18,14 @@ class MenuRepository extends PublishableEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findPublished()
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.publishedAt <= :now')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('m.order', 'asc')
+            ->getQuery()
+            ->getResult();
+    }
 }

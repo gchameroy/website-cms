@@ -57,10 +57,9 @@ class HomeController extends Controller
      * @return Response
      */
     public function productsAction($max = 3) {
-        $category = $this->getParameter('app_company_id');
         $products = $this->getDoctrine()
             ->getRepository('AppBundle:Product')
-            ->findLastPublishedByCategory($category, $max);
+            ->findLastPublished($max);
 
         return $this->render('front/product/partial/last-products.html.twig', [
             'products' => $products
