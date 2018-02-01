@@ -28,15 +28,6 @@ class MenuFixtures extends FixtureHelper
     private function loadDefaults()
     {
         $menu = (new Menu())
-            ->setPageName('Accueil')
-            ->setRouteName('front_home')
-            ->setOrder($this->order++)
-            ->setPublishedAt(new \DateTime())
-            ->setIsDeletable(false);
-        $this->setReference('menu-home', $menu);
-        $this->manager->persist($menu);
-
-        $menu = (new Menu())
             ->setPageName('Présentation')
             ->setRouteName('front_presentation')
             ->setOrder($this->order++)

@@ -131,10 +131,6 @@ class MenuController Extends Controller
             ->find($id);
         $this->checkMenu($menu);
 
-        if (!$menu->isDeletable()) {
-            return $this->redirectToRoute('admin_menus');
-        }
-
         $form = $this->createForm(MenuDeleteType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

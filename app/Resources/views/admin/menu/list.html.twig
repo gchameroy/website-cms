@@ -46,15 +46,13 @@
                                         <br>{{ url(menu.routeName, {slug: menu.routeSlug}) -}}
                                     </td>
                                     <td class="project-actions text-right">
-                                        {% if menu.deletable %}
-                                            {% if menu.published %}
-                                                <a href="{{ path('admin_menu_unpublish', {'id': menu.id}) }}" class="btn btn-warning btn-sm">Dépublier</a>
-                                            {% else %}
-                                                <a href="{{ path('admin_menu_publish', {'id': menu.id}) }}" class="btn btn-primary btn-sm">Publier</a>
-                                            {% endif %}
-                                            <a href="{{ path('admin_menu_edit', {'id': menu.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
-                                            <a href="{{ path('admin_menu_delete', {'id': menu.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                                        {% if menu.published %}
+                                            <a href="{{ path('admin_menu_unpublish', {'id': menu.id}) }}" class="btn btn-warning btn-sm">Dépublier</a>
+                                        {% else %}
+                                            <a href="{{ path('admin_menu_publish', {'id': menu.id}) }}" class="btn btn-primary btn-sm">Publier</a>
                                         {% endif %}
+                                        <a href="{{ path('admin_menu_edit', {'id': menu.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                        <a href="{{ path('admin_menu_delete', {'id': menu.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
                                     </td>
                                 </tr>
                             {% else %}

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Entity\Traits\IsDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,8 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Menu
 {
-    use IsDeletableTrait;
-
     /**
      * @var int
      *
@@ -72,7 +69,6 @@ class Menu
     public function __construct()
     {
         $this->insertedAt = new \DateTime();
-        $this->isDeletable = true;
     }
 
     /**
