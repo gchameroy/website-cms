@@ -53,8 +53,6 @@ class StaticPageController extends Controller
             $em->persist($staticPage);
             $em->flush();
 
-            $this->addFlash('success', 'Static page added successfully.');
-
             return $this->redirectToRoute('admin_static_page', [
                 'id' => $staticPage->getId(),
             ]);
@@ -103,8 +101,6 @@ class StaticPageController extends Controller
             $em->persist($staticPage);
             $em->flush();
 
-            $this->addFlash('success', 'Static page published successfully.');
-
             return $this->redirectToRoute('admin_static_pages');
         }
 
@@ -139,8 +135,6 @@ class StaticPageController extends Controller
             $em->persist($staticPage);
             $em->flush();
 
-            $this->addFlash('success', 'Static page unpublished successfully.');
-
             return $this->redirectToRoute('admin_static_pages');
         }
 
@@ -169,8 +163,6 @@ class StaticPageController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($staticPage);
             $em->flush();
-
-            $this->addFlash('success', 'Static page edited successfully.');
 
             return $this->redirectToRoute('admin_static_page', [
                 'id' => $staticPage->getId()
@@ -202,8 +194,6 @@ class StaticPageController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($staticPage);
             $em->flush();
-
-            $this->addFlash('success', 'Static page deleted successfully.');
 
             return $this->redirectToRoute('admin_static_pages');
         }
@@ -251,8 +241,6 @@ class StaticPageController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($image);
             $em->flush();
-
-            $this->addFlash('success_image', 'Image added successfully.');
 
             return $this->redirectToRoute('admin_static_page', [
                 'id' => $id

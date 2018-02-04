@@ -120,6 +120,12 @@ class User implements UserInterface
     private $carts;
 
     /**
+     * @var ArrayCollection|UserFile[]
+     * @ORM\OneToMany(targetEntity="UserFile", mappedBy="user", cascade={"remove", "persist"})
+     */
+    private $files;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -128,6 +134,7 @@ class User implements UserInterface
         $this->isAdmin = false;
         $this->orders = new ArrayCollection();
         $this->carts = new ArrayCollection();
+        $this->files = new ArrayCollection();
         $this->isInformations = false;
     }
 
@@ -248,8 +255,14 @@ class User implements UserInterface
     public function getRoles()
     {
         $roles = ['ROLE_USER'];
+
+        if ($this->getOffer()->getLabel() === 'Sans offre')
+        {
+            $roles = ['ROLE_PRO'];
+        }
+
         if ($this->isAdmin()) {
-            $roles[] = 'ROLE_ADMIN';
+            $roles = ['ROLE_ADMIN'];
         }
 
         return $roles;
@@ -533,5 +546,13 @@ class User implements UserInterface
     public function isInformations()
     {
         return $this->isInformations;
+    }
+
+    /**
+     * @return ArrayCollection|UserFile[]
+     */
+    public function getFiles()
+    {
+        return $this->files;
     }
 }

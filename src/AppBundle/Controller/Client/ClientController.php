@@ -52,8 +52,6 @@ class ClientController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $this->addFlash('success', 'Compte créé avec succès.');
-
             $token = new UsernamePasswordToken($user, null, 'user', $user->getRoles());
             $this->get('security.token_storage')->setToken($token);
             $this->get('session')->set('_security_main', serialize($token));

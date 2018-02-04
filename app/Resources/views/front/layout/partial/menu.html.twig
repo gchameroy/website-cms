@@ -8,6 +8,12 @@
                             <a href="{{ url(menu.routeName, {slug: menu.routeSlug}) }}">{{ menu.pageName }}</a>
                         </li>
                     {% endfor %}
+                    <li class="list-inline-item pull-right">
+                        <a href="{{ path('professional_user_files') }}">
+                            <img width="30" src="{{ asset('template/cassis-alice/img/espace_pro.png') }}" alt="" />
+                            <span class="ml-2">Accès PRO</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>

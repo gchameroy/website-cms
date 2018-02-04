@@ -23,6 +23,16 @@ security:
             logout:
                 path: admin_logout
 
+        professional:
+            pattern: ^/espace-pro
+            provider: user
+            anonymous: ~
+            form_login:
+                login_path: professional_login
+                check_path: professional_login_check
+            logout:
+                path: professional_logout
+
         user:
             pattern: ^/
             provider: user
@@ -34,6 +44,10 @@ security:
             logout:
                 path: client_logout
 
+    role_hierarchy:
+        ROLE_PRO: ROLE_USER
+        ROLE_ADMIN: ROLE_PRO
+
     access_control:
         - { path: ^/client/sign-in, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/client/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -42,3 +56,5 @@ security:
         - { path: ^/client, roles: "ROLE_USER" }
         - { path: ^/admin/sign-in, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: "ROLE_ADMIN" }
+        - { path: ^/espace-pro/sign-in, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/espace-pro, roles: "ROLE_PRO" }

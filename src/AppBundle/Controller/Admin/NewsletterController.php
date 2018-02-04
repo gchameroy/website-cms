@@ -54,8 +54,6 @@ class NewsletterController extends Controller
             $em->persist($newsletter);
             $em->flush();
 
-            $this->addFlash('success', 'Newsletter added successfully.');
-
             return $this->redirectToRoute('admin_newsletter', [
                 'id' => $newsletter->getId(),
             ]);
@@ -106,8 +104,6 @@ class NewsletterController extends Controller
             $em->persist($newsletter);
             $em->flush();
 
-            $this->addFlash('success', 'Newsletter published successfully.');
-
             return $this->redirectToRoute('admin_newsletters');
         }
 
@@ -143,8 +139,6 @@ class NewsletterController extends Controller
             $em->persist($newsletter);
             $em->flush();
 
-            $this->addFlash('success', 'Newsletter unpublished successfully.');
-
             return $this->redirectToRoute('admin_newsletters');
         }
 
@@ -175,8 +169,6 @@ class NewsletterController extends Controller
             $em->persist($newsletter);
             $em->flush();
 
-            $this->addFlash('success', 'Newsletter edited successfully.');
-
             return $this->redirectToRoute('admin_newsletters');
         }
 
@@ -206,8 +198,6 @@ class NewsletterController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($newsletter);
             $em->flush();
-
-            $this->addFlash('success', 'Newsletter deleted successfully.');
 
             return $this->redirectToRoute('admin_newsletters');
         }
@@ -257,8 +247,6 @@ class NewsletterController extends Controller
             $em->persist($newsletter);
             $em->persist($image);
             $em->flush();
-
-            $this->addFlash('success_image', 'Image added successfully.');
 
             return $this->redirectToRoute('admin_newsletter', [
                 'id' => $id

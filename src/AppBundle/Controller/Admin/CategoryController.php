@@ -48,8 +48,6 @@ class CategoryController Extends Controller
             $em->persist($category);
             $em->flush();
 
-            $this->addFlash('success', 'Catégorie ajoutée avec succès.');
-
             return $this->redirectToRoute('admin_categories', [
                 'id' => $category->getId(),
             ]);
@@ -81,8 +79,6 @@ class CategoryController Extends Controller
             $em->persist($category);
             $em->flush();
 
-            $this->addFlash('success', 'Category published successfully.');
-
             return $this->redirectToRoute('admin_categories');
         }
 
@@ -110,8 +106,6 @@ class CategoryController Extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($category);
             $em->flush();
-
-            $this->addFlash('success', 'Catégorie modifiée avec succès.');
 
             return $this->redirectToRoute('admin_categories');
         }
@@ -141,8 +135,6 @@ class CategoryController Extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($category);
             $em->flush();
-
-            $this->addFlash('success', 'Category deleted successfully.');
 
             return $this->redirectToRoute('admin_categories');
         }

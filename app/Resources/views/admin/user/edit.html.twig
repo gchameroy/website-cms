@@ -11,8 +11,11 @@
                 <li>
                     <a href="{{ path('admin_users') }}">Liste des clients</a>
                 </li>
+                <li>
+                    <a href="{{ path('admin_user', {id: user.id}) }}">{{ user.firstName }} {{ user.lastName }}</a>
+                </li>
                 <li class="active">
-                    <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+                    <strong>Edition du client</strong>
                 </li>
             </ol>
         </div>

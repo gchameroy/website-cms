@@ -42,8 +42,6 @@ class HomeController extends Controller
                 );
             $mailer->send($message);
 
-            $this->addFlash('success', 'Email send successfully.');
-
             return $this->redirectToRoute('front_home');
         }
 

@@ -16,8 +16,12 @@ client:
     type: annotation
     prefix: '/client'
 
+professional:
+    resource: '@AppBundle/Controller/Professional/'
+    type: annotation
+    prefix: '/espace-pro'
+
 front:
     resource: '@AppBundle/Controller/Front/'
     type: annotation
     prefix: '/'
-

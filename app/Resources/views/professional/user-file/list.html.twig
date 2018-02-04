@@ -1,0 +1,37 @@
+{% extends "front/layout.html.twig" %}
+
+{% block sections %}
+    <section class="galleries-section">
+        <div class="container bg-brown pt-3 pb-5">
+            <div class="row pt-5 pb-5">
+                <div class="col-lg-12 pb-5">
+                    <h2>Bienvenue dans votre espace pro</h2>
+                    <hr class="dotted">
+                    <p>Retrouvez dans cet espace l'ensemble des documents mis à votre disposition par Les Cassis D'Alice</p>
+                    <div class="row mt-5 pb-5">
+                        <div class="col-md-12 pb-5">
+                            <table class="table">
+                                <tbody>
+                                {% for userFile in userFiles %}
+                                    <tr>
+                                        <td width="40">
+                                            <i class="fa fa-2x {{ userFile.file.icon }}"></i></td>
+                                        <td>
+                                            <a  class="text-primary" target="_blank" href="{{ path('professional_user_file_download', {'userFile': userFile.id }) }}">{{ userFile.file.title }}</a>
+                                        </td>
+                                        <td class="text-right">
+                                            <a class="btn btn-primary" style="padding:5px 10px!important;" target="_blank" href="{{ path('professional_user_file_download', {'userFile': userFile.id }) }}">Télécharger</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% include 'front/layout/partial/baseline.html.twig' %}
+    {% include 'front/layout/partial/partners.html.twig' %}
+{% endblock %}

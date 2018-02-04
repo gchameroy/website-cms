@@ -62,8 +62,6 @@ class UserOfferController extends Controller
 
             $em->flush();
 
-            $this->addFlash('success', 'Offer added successfully.');
-
             return $this->redirectToRoute('admin_user_offers');
         }
 
@@ -91,8 +89,6 @@ class UserOfferController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($offer);
             $em->flush();
-
-            $this->addFlash('success', 'Offer edited successfully.');
 
             return $this->redirectToRoute('admin_user_offers');
         }
@@ -122,8 +118,6 @@ class UserOfferController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($offer);
             $em->flush();
-
-            $this->addFlash('success', 'Offer deleted successfully.');
 
             return $this->redirectToRoute('admin_user_offers');
         }

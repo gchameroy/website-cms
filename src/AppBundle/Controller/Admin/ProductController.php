@@ -76,7 +76,6 @@ class ProductController extends Controller
             }
 
             $em->flush();
-            $this->addFlash('success', 'Product added successfully.');
 
             return $this->redirectToRoute('admin_product', [
                 'id' => $product->getId(),
@@ -113,8 +112,6 @@ class ProductController extends Controller
             $em->persist($product);
             $em->flush();
 
-            $this->addFlash('success', 'Product published successfully.');
-
             return $this->redirectToRoute('admin_products');
         }
 
@@ -149,8 +146,6 @@ class ProductController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();
-
-            $this->addFlash('success', 'Product unpublished successfully.');
 
             return $this->redirectToRoute('admin_products');
         }
@@ -195,8 +190,6 @@ class ProductController extends Controller
             }
 
             $em->flush();
-
-            $this->addFlash('success', 'Product edited successfully.');
 
             return $this->redirectToRoute('admin_product', [
                 'id' => $id,
@@ -285,8 +278,6 @@ class ProductController extends Controller
             $em->persist($variant);
             $em->flush();
 
-            $this->addFlash('success_image', 'Image added successfully.');
-
             return $this->redirectToRoute('admin_product', [
                 'id' => $id
             ]);
@@ -356,8 +347,6 @@ class ProductController extends Controller
 
             $em->flush();
 
-            $this->addFlash('success', 'Skill added successfully.');
-
             return $this->redirectToRoute('admin_product', [
                 'id' => $product->getId()
             ]);
@@ -392,8 +381,6 @@ class ProductController extends Controller
             $em->persist($skill);
 
             $em->flush();
-
-            $this->addFlash('success', 'Skill edited successfully.');
 
             return $this->redirectToRoute('admin_product', [
                 'id' => $skill->getProduct()->getId()
@@ -513,8 +500,6 @@ class ProductController extends Controller
 
             $em->flush();
 
-            $this->addFlash('success', 'Variant added successfully.');
-
             return $this->redirectToRoute('admin_product', [
                 'id' => $product->getId()
             ]);
@@ -576,8 +561,6 @@ class ProductController extends Controller
             }
 
             $em->flush();
-
-            $this->addFlash('success', 'Variant added successfully.');
 
             return $this->redirectToRoute('admin_product', [
                 'id' => $product->getId()

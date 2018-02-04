@@ -55,8 +55,6 @@ class MenuController Extends Controller
             $em->persist($menu);
             $em->flush();
 
-            $this->addFlash('success', 'Menu added successfully.');
-
             return $this->redirectToRoute('admin_menus');
         }
 
@@ -94,8 +92,6 @@ class MenuController Extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($menu);
             $em->flush();
-
-            $this->addFlash('success', 'Menu edited successfully.');
 
             return $this->redirectToRoute('admin_menus', [
                 'id' => $id,
@@ -138,8 +134,6 @@ class MenuController Extends Controller
             $em->remove($menu);
             $em->flush();
 
-            $this->addFlash('success', 'Menu deleted successfully.');
-
             return $this->redirectToRoute('admin_menus', [
                 'id' => $id,
             ]);
@@ -171,8 +165,6 @@ class MenuController Extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($menu);
             $em->flush();
-
-            $this->addFlash('success', 'Menu published successfully.');
 
             return $this->redirectToRoute('admin_menus');
         }
@@ -207,8 +199,6 @@ class MenuController Extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($menu);
             $em->flush();
-
-            $this->addFlash('success', 'Menu unpublished successfully.');
 
             return $this->redirectToRoute('admin_menus');
         }

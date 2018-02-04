@@ -19,6 +19,7 @@
 !/uploads/newsletter/.gitkeep
 !/uploads/static-page/.gitkeep
 !/uploads/gallery/.gitkeep
+!/uploads/user-files/.gitkeep
 /web/uploads/*
 !/web/uploads/.gitkeep
 *~

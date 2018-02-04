@@ -55,8 +55,6 @@ class CartProductController extends Controller
             $em->persist($cartProduct);
             $em->flush();
 
-            $this->addFlash('success', 'Product added successfully to the cart.');
-
             return $this->redirectToRoute('front_cart');
         }
 

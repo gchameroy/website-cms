@@ -2,7 +2,7 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Entity\Traits\DeletableTrait;
+use AppBundle\Entity\Traits\IsDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserOffer
 {
+    use IsDeletableTrait;
+
     const FORM_NAME = 'product_price_';
 
     /**
@@ -79,11 +81,11 @@ class UserOffer
     /**
      * Add price
      *
-     * @param \AppBundle\Entity\ProductPrice $price
+     * @param ProductPrice $price
      *
      * @return UserOffer
      */
-    public function addPrice(\AppBundle\Entity\ProductPrice $price)
+    public function addPrice(ProductPrice $price)
     {
         $this->prices[] = $price;
 
@@ -93,9 +95,9 @@ class UserOffer
     /**
      * Remove price
      *
-     * @param \AppBundle\Entity\ProductPrice $price
+     * @param ProductPrice $price
      */
-    public function removePrice(\AppBundle\Entity\ProductPrice $price)
+    public function removePrice(ProductPrice $price)
     {
         $this->prices->removeElement($price);
     }
@@ -103,7 +105,7 @@ class UserOffer
     /**
      * Get prices
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return ProductPrice[]
      */
     public function getPrices()
     {

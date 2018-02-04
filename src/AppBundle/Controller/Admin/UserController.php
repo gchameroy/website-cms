@@ -3,10 +3,14 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserFile;
 use AppBundle\Form\Type\User\UserEditType;
 use AppBundle\Form\Type\User\UserType;
+use AppBundle\Form\Type\UserFile\UserFileType;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,14 +57,61 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $this->addFlash('success', 'User added successfully.');
-
             return $this->redirectToRoute('admin_user', [
                 'id' => $user->getId()
             ]);
         }
 
         return $this->render('admin/user/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{user}/add_document", name="admin_user_add_file", requirements={"user": "\d+"})
+     * @Method({"GET", "POST"})
+     *
+     * @param int $user
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     *
+     * @return RedirectResponse|Response
+     */
+    public function addFileAction(int $user, Request $request, EntityManagerInterface $entityManager) {
+        $user = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->find($user);
+        $this->checkUser($user);
+
+        $userFile = new UserFile($user);
+        $form = $this->createForm(UserFileType::class, $userFile);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $file */
+            $file = $userFile->getFile()->getPath();
+            $fileName = md5(uniqid(null, true));
+            $extension = $file->guessExtension();
+            $filePath = sprintf(
+                '%s/../uploads/user-files/%s',
+                $this->get('kernel')->getRootDir(),
+                $userFile->getUser()->getId()
+            );
+
+            $file->move($filePath, $fileName);
+            $userFile->getFile()->setPath($fileName);
+            $userFile->getFile()->setExtension($extension);
+
+            $entityManager->persist($userFile);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin_user', [
+                'id' => $user->getId()
+            ]);
+        }
+
+        return $this->render('admin/user-file/add.html.twig', [
+            'user' => $user,
             'form' => $form->createView(),
         ]);
     }
@@ -101,8 +152,6 @@ class UserController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
-
-            $this->addFlash('success', 'User edited successfully.');
 
             return $this->redirectToRoute('admin_user', [
                 'id' => $user->getId()
