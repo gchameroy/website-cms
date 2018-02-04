@@ -6,6 +6,7 @@ use AppBundle\Entity\Category;
 use AppBundle\Form\Type\Category\CategoryDeleteType;
 use AppBundle\Form\Type\Category\CategoryPublishType;
 use AppBundle\Form\Type\Category\CategoryType;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,10 +23,11 @@ class CategoryController Extends Controller
      * @Route("/", name="admin_categories")
      * @return Response
      */
-    public function listAction() {
+    public function listAction()
+    {
         $categories = $this->getDoctrine()
             ->getRepository(Category::class)
-            ->findAll(0, null, 'asc', false);
+            ->findAll();
 
         return $this->render('admin/category/list.html.twig', [
             'categories' => $categories
@@ -36,17 +38,24 @@ class CategoryController Extends Controller
      * @Route("/add", name="admin_categories_add")
      * @Method({"GET", "POST"})
      * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request) {
+    public function addAction(Request $request, EntityManagerInterface $entityManager)
+    {
         $category = new Category();
 
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
-            $em->flush();
+            $lastCategory = $entityManager
+                ->getRepository(Category::class)
+                ->findLast();
+            $position = $lastCategory ? $lastCategory->getPosition() + 1 : 1;
+
+            $category->setPosition($position);
+            $entityManager->persist($category);
+            $entityManager->flush();
 
             return $this->redirectToRoute('admin_categories', [
                 'id' => $category->getId(),
@@ -65,7 +74,8 @@ class CategoryController Extends Controller
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function publishAction(Request $request, $id) {
+    public function publishAction(Request $request, $id)
+    {
         $category = $this->getDoctrine()
             ->getRepository(Category::class)
             ->find($id);
@@ -95,7 +105,8 @@ class CategoryController Extends Controller
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, $id) {
+    public function editAction(Request $request, $id)
+    {
         $category = $this->getDoctrine()->getRepository(Category::class)->find($id);
 
         $this->checkCategory($category);
@@ -117,13 +128,76 @@ class CategoryController Extends Controller
     }
 
     /**
+     * @Route("/move", name="admin_category_move")
+     * @Method({"POST"})
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse|Response
+     */
+    public function upAction(Request $request, EntityManagerInterface $entityManager)
+    {
+        $token = $request->request->get('token');
+        if (!$this->isCsrfTokenValid('category-move', $token)) {
+            return $this->redirectToRoute('admin_categories');
+        }
+
+        $category = $entityManager
+            ->getRepository(Category::class)
+            ->find($request->request->get('category'));
+        $this->checkCategory($category);
+
+        $direction = $request->request->get('direction');
+        if (!in_array($direction, ['up', 'down'])) {
+            return $this->redirectToRoute('admin_categories');
+        }
+
+        if ($direction == 'up') {
+            if ($category->getPosition() == 1) {
+                return $this->redirectToRoute('admin_categories');
+            }
+
+            /** @var Category $category2 */
+            $category2 = $entityManager->getRepository(Category::class)
+                ->findOneByPosition($category->getPosition() - 1);
+        } else {
+            $last = $entityManager->getRepository(Category::class)
+                ->findLast();
+            if ($category === $last) {
+                return $this->redirectToRoute('admin_categories');
+            }
+
+            /** @var Category $category2 */
+            $category2 = $entityManager->getRepository(Category::class)
+                ->findOneByPosition($category->getPosition() + 1);
+        }
+
+        $position = $category->getPosition();
+        $position2 = $category2->getPosition();
+
+        $category->setPosition(null);
+        $category2->setPosition(null);
+        $entityManager->persist($category);
+        $entityManager->persist($category2);
+        $entityManager->flush();
+
+        $category->setPosition($position2);
+        $category2->setPosition($position);
+        $entityManager->persist($category);
+        $entityManager->persist($category2);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_categories');
+    }
+
+    /**
      * @Route("/{id}/delete", name="admin_category_delete", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param $id
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function deleteAction($id, Request $request) {
+    public function deleteAction($id, Request $request)
+    {
         $category = $this->getDoctrine()
             ->getRepository(Category::class)
             ->find($id);
@@ -148,7 +222,8 @@ class CategoryController Extends Controller
     /**
      * @param $category
      */
-    private function checkCategory($category) {
+    private function checkCategory($category)
+    {
         if (!$category) {
             throw $this->createNotFoundException('Category Not Found.');
         }

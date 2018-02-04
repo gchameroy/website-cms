@@ -20,7 +20,8 @@ class ProductCategoryFixtures extends FixtureHelper
         for ($c = 1; $c <= self::NB_PRODUCT_CATEGORY; $c++) {
             $category = new Category();
             $category->setLabel($this->categories[$c - 1])
-                ->setDescription($this->faker->sentence());
+                ->setDescription($this->faker->sentence())
+                ->setPosition($c);
             $category->setPublishedAt(new \DateTime());
             $this->setReference('product-category-' . $c, $category);
             $manager->persist($category);

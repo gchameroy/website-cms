@@ -46,6 +46,13 @@ class Category
     private $description;
 
     /**
+     * @var int|null
+     * 
+     * @ORM\Column(name="position_id", type="integer", unique=true, nullable=true)
+     */
+    private $position;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="published_at", type="datetime", nullable=true)
@@ -126,6 +133,27 @@ class Category
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @param int|null $position
+     * @return Category
+     */
+    public function setPosition(?int $position): Category
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * Get position
+     *
+     * @return int|null
+     */
+    public function getPosition(): ?int
+    {
+        return $this->position;
     }
 
     /**
