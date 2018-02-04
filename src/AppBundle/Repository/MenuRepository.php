@@ -28,4 +28,12 @@ class MenuRepository extends PublishableEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAll()
+    {
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.order', 'asc')
+            ->getQuery()
+            ->getResult();
+    }
 }

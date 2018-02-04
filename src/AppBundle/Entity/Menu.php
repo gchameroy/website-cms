@@ -43,9 +43,9 @@ class Menu
     private $routeSlug;
 
     /**
-     * @var int
+     * @var int|null
      *
-     * @ORM\Column(name="order_id", type="integer", unique=true)
+     * @ORM\Column(name="order_id", type="integer", unique=true, nullable=true)
      */
     private $order;
 
@@ -154,13 +154,10 @@ class Menu
     }
 
     /**
-     * Set order
-     *
-     * @param integer $order
-     *
+     * @param int|null $order
      * @return Menu
      */
-    public function setOrder($order)
+    public function setOrder(?int $order)
     {
         $this->order = $order;
 
@@ -170,9 +167,9 @@ class Menu
     /**
      * Get order
      *
-     * @return int
+     * @return int|null
      */
-    public function getOrder()
+    public function getOrder(): ?int
     {
         return $this->order;
     }
