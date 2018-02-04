@@ -2,22 +2,32 @@
 
 {% block sections %}
     {% include('front/contact/partial/contact.html.twig') %}
-    {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
+    {% include 'front/layout/partial/baseline.html.twig' %}
+    {% include 'front/layout/partial/partners.html.twig' %}
 {% endblock %}
 
 {% block javascripts %}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe3T7l6rVotuy_15U_FIK2OCb_3IAdZLM"></script>
     <script>
-        function initMap() {
-            var uluru = {lat: 47.8607641, lng: 5.3315089};
-            var map = new google.maps.Map(document.getElementById('google-map'), {
-                zoom: 17,
-                center: uluru
-            });
-            var marker = new google.maps.Marker({
-                position: uluru,
-                map: map
-            });
-        }
+        var geocoder = new google.maps.Geocoder();
+        var address = 'Chemin du Paradis, 52190 Isômes';
+
+        geocoder.geocode({'address': address}, function(results, status) {
+            if(status === google.maps.GeocoderStatus.OK) {
+                console.log(results);
+                var resultsMap = new google.maps.Map(document.getElementById('google-map'), {
+                    zoom: 12,
+                    center: {
+                        lat: results[0].geometry.location.lat(),
+                        lng: results[0].geometry.location.lng()
+                    }
+                });
+
+                new google.maps.Marker({
+                    map: resultsMap,
+                    position: results[0].geometry.location
+                });
+            }
+        });
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXg8yCHuDAiHtCYt916-NjLKemAistJck&callback=initMap"></script>
 {% endblock %}

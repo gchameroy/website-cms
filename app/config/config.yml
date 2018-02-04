@@ -81,8 +81,8 @@ ivory_ck_editor:
             bloc_1: [ 'Bold', 'Italic', 'Underline', 'Blockquote', '-', 'RemoveFormat' ]
             bloc_2: [ 'NumberedList', 'BulletedList' ]
             bloc_3: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ]
-            bloc_4: [ 'Image' ]
-            bloc_5: [ 'Format' ]
+            bloc_4: [ 'Table', 'Image' ]
+            bloc_5: [ 'Format', 'Source' ]
 
 fm_elfinder:
     instances:

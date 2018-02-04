@@ -221,6 +221,17 @@ h4 a {
     content: '';
 }
 
+.image-container .next {
+    position: absolute;
+    top: 150px;
+    right: 0;
+    text-align: left;
+}
+
+.image-container .next .text {
+    font-size: 48px;
+}
+
 .image-container h1 {
     position: absolute;
     margin-top: 137px;

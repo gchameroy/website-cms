@@ -1,26 +1,29 @@
 <section class="contact">
-    <div class="container">
+    <div class="container bg-brown pt-5 pb-5">
         <h2>Nous contacter</h2>
+        <hr class="dotted">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <aside class="aside">
                     <div class="aside-container">
                         {{ form_start(form, {'attr': {'class': 'form-horizontal'} })  }}
-                            <div class="form-group">
-                                <label class="control-label hidden">Nom</label>
-                                {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Nom'} }) }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form_widget(form.name, {'attr': {'class': 'form-control pt-3 mb-3', 'placeholder': 'Nom*'} }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form_widget(form.email, {'attr': {'class': 'form-control pt-3 mb-3', 'placeholder': 'Email*'} }) }}
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label hidden">Email</label>
-                                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'} }) }}
+                                {{ form_widget(form.subject, {'attr': {'class': 'form-control pt-3 mb-3', 'placeholder': 'Sujet*'} }) }}
                             </div>
                             <div class="form-group">
-                                <label class="control-label hidden">Sujet</label>
-                                {{ form_widget(form.subject, {'attr': {'class': 'form-control', 'placeholder': 'Sujet'} }) }}
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label hidden">Message</label>
-                                {{ form_widget(form.message, {'attr': {'class': 'form-control no-resize', 'placeholder': 'Message', 'rows': 8} }) }}
+                                {{ form_widget(form.message, {'attr': {'class': 'form-control no-resize pt-3 mb-3', 'placeholder': 'Message*', 'rows': 15} }) }}
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-primary" type="submit">Envoyer</button>
@@ -30,32 +33,32 @@
                     </div>
                 </aside>
             </div>
-            <div class="col-md-6">
-                <table class="contact-information">
-                    <tr>
-                        <td><i class="fa fa-search text-danger"></i></td>
-                        <td>
-                            <p>
-                                <span><strong>Coutellerie Legendres</strong></span>
-                                <br><span>35, rue Diderot</span>
-                                <br><span>52200 Langre</span>
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-phone text-danger"></i></td>
-                        <td>
-                            <p>+33(0) +.25.00.00.00</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-envelope-o text-danger"></i></td>
-                        <td>
-                            <p>Utilisez notre formulaire de contact ci-contre</p>
-                        </td>
-                    </tr>
-                </table>
-                <div id="google-map" class="google-map"></div>
+            <div class="col-md-4">
+                <h1 class="mb-0">Les Cassis d'Alice</h1>
+                <p>Chemin du Paradis<br>52190 ISÔMES</p>
+                <p>Magasin est ouvert<br>du Lundi au Vendredi<br>De 9 h 00 à 12 h 00<br>et de 14 h 00 à 18 h 00</p>
+                <p>Tél: +33(0)3.25.84.39.04</p>
+                <p>www.les-cassis-alice.fr</p>
+                <p>Pour nous contacter, utilisez le formulaire ci-contre</p>
+                <p class="text-primary">
+                    <a class="text-primary" href="#" target="_blank">
+                        <i class="fa fa-2x fa-facebook" aria-hidden="true"></i>
+                    </a>
+                    <a class="text-primary ml-3" href="#" target="_blank">
+                        <i class="fa fa-2x fa-google-plus" aria-hidden="true"></i>
+                    </a>
+                    <a class="text-primary ml-3" href="#" target="_blank">
+                        <i class="fa fa-2x fa-instagram" aria-hidden="true"></i>
+                    </a>
+                    <a class="text-primary ml-3" href="#" target="_blank">
+                        <i class="fa fa-2x fa-twitter" aria-hidden="true"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div style="height: 400px;" id="google-map" class="google-map"></div>
             </div>
         </div>
     </div>

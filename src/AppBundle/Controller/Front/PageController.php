@@ -10,15 +10,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class PageController extends Controller
 {
     /**
-     * @Route("/privacy-policy", name="front_privacy")
-     * @Method({"GET"})
-     * @return Response
-     */
-    public function privacyAction() {
-        return $this->render('front/page/privacy.html.twig');
-    }
-
-    /**
      * @Route("/presentation", name="front_presentation")
      * @Method({"GET"})
      * @return Response

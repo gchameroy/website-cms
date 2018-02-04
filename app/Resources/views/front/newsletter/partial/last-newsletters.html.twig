@@ -1,6 +1,13 @@
 <h2 class="background background-left">Actualités</h2>
 {% for newsletter in newsletters %}
     <div class="image-container">
+        <a href="{{ path('front_newsletter', {slug: newsletter.slug}) }}" class="btn btn-primary next">
+            <span class="text">Lire<br>la suite</span>
+            <br>
+            <span class="icon">
+                <img src="{{ asset('template/cassis-alice/img/wave.png') }}" alt="">
+            </span>
+        </a>
         <img class="img-fluid" src="{{ path('newsletter_image_view', {'image_id': newsletter.image.id}) }}" alt="">
     </div>
     <h4 class="mt-4">

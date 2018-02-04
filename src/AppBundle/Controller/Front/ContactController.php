@@ -31,8 +31,8 @@ class ContactController extends Controller
             $em->flush();
 
             $message = (new \Swift_Message('Demande de contact'))
-                ->setFrom('form-contact@coutellerie-legendre.fr')
-                ->setTo('form-contact@coutellerie-legendre.fr')
+                ->setFrom('form-contact@cassis-alice.fr')
+                ->setTo('form-contact@cassis-alice.fr')
                 ->setBody(
                     $this->renderView('front/emails/contact.html.twig', [
                         'contact' => $contact

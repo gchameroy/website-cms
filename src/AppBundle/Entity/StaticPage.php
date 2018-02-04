@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Traits\IsDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -13,6 +14,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class StaticPage
 {
+    use IsDeletableTrait;
+
     /**
      * @var int
      *
@@ -82,6 +85,7 @@ class StaticPage
     public function __construct()
     {
         $this->insertedAt = new \DateTime();
+        $this->isDeletable = true;
     }
 
     /**
