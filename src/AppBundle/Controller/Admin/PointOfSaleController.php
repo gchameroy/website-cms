@@ -113,7 +113,7 @@ class PointOfSaleController extends Controller
     }
 
     /**
-     * @param $pointOfSale |null
+     * @param PointOfSale|null $pointOfSale
      */
     private function checkPointOfSale(?PointOfSale $pointOfSale)
     {

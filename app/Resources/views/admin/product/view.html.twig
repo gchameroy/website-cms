@@ -51,15 +51,15 @@
 
                                 <div class="m-t-md">
                                     <h4>En savoir plus</h4>
-                                    <p>{{ product.more1|default('Aucune infrmations') }}</p>
+                                    <p>{{ product.more1|default('Aucune informations') }}</p>
                                 </div>
                                 <div class="m-t-md">
                                     <h4>Ingrédients</h4>
-                                    <p>{{ product.more2|default('Aucune infrmations') }}</p>
+                                    <p>{{ product.more2|default('Aucune informations') }}</p>
                                 </div>
                                 <div class="m-t-md">
                                     <h4>Conseils dégustation</h4>
-                                    <p>{{ product.more3|default('Aucune infrmations') }}</p>
+                                    <p>{{ product.more3|default('Aucune informations') }}</p>
                                 </div>
 
                                 <div class="m-t-md">
@@ -86,7 +86,7 @@
                 <div class="tabs-container">
                     <div class="tabs-left">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#tab-product">{{ product.variants[0].variantName }}</a></li>
+                            <li class="active"><a data-toggle="tab" href="#tab-product">{{ product.variantName }}</a></li>
                             {% for variant in product.variants %}
                                 <li><a data-toggle="tab" href="#tab-product-variant-{{ variant.id }}">{{ variant.variantName }}</a></li>
                             {% endfor %}

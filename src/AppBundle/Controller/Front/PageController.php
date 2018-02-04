@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\Front;
 
+use AppBundle\Entity\Partner;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +23,16 @@ class PageController extends Controller
     /**
      * @Route("/partenaires", name="front_partners")
      * @Method({"GET"})
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
-    public function partnersAction() {
-        return $this->render('front/page/partners.html.twig');
+    public function partnersAction(EntityManagerInterface $entityManager) {
+        $partners = $entityManager
+            ->getRepository(Partner::class)
+            ->findAll();
+
+        return $this->render('front/page/partners.html.twig', [
+            'partners' => $partners
+        ]);
     }
 }

@@ -3,19 +3,19 @@
 {% block breadcrumb %}
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>Liste des points de ventes</h2>
+            <h2>Liste des partenaires</h2>
             <ol class="breadcrumb">
                 <li>
                     <a href="{{ path('admin_home') }}">Dashboard</a>
                 </li>
                 <li class="active">
-                    <strong>Liste des points de ventes</strong>
+                    <strong>Liste des partenaires</strong>
                 </li>
             </ol>
         </div>
         <div class="col-lg-2">
             <div class="title-action">
-                <a href="{{ path('admin_point_of_sales_add') }}" class="btn btn-primary btn-sm">Ajouter un point de ventes</a>
+                <a href="{{ path('admin_partners_add') }}" class="btn btn-primary btn-sm">Ajouter un partenaire</a>
             </div>
         </div>
     </div>
@@ -26,35 +26,38 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h4>Liste des points de ventes</h4>
+                    <h4>Liste des partenaires</h4>
                 </div>
                 <div class="ibox-content">
                     <div class="project-list">
                         <table class="table table-hover">
                             <tbody>
-                            {% for pointOfSale in pointOfSales %}
+                            {% for partner in partners %}
                                 <tr>
+                                    <td width="150">
+                                        <img class="img-fluid" src="{{ path('partner_image_view', {'image': partner.image.id}) }}" alt="" />
+                                    </td>
                                     <td class="project-title" nowrap>
                                         <p>
-                                            <strong class="text-primary">{{ pointOfSale.address.company }}</strong>
-                                            <br><small>{{ pointOfSale.address.address -}}
-                                            <br>{{ pointOfSale.address.zipCode ~ ' ' ~ pointOfSale.address.city -}}
-                                            <br>{{ pointOfSale.phone -}}
-                                            <br>{{ pointOfSale.website }}</small>
+                                            <strong class="text-primary">{{ partner.address.company }}</strong>
+                                            <br><small>{{ partner.address.address -}}
+                                            <br>{{ partner.address.zipCode ~ ' ' ~ partner.address.city -}}
+                                            <br>{{ partner.phone -}}
+                                            <br>{{ partner.website }}</small>
                                         </p>
                                     </td>
                                     <td class="project-actions">
-                                        <a href="{{ path('admin_point_of_sale_edit', {'pointOfSale': pointOfSale.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
-                                        <form class="inline" action="{{ url('admin_point_of_sale_delete') }}" method="post">
-                                            <input type="hidden" name="token" value="{{ csrf_token('point-of-sale-delete') }}" />
-                                            <input type="hidden" name="pointOfSale" value="{{ pointOfSale.id }}" />
+                                        <a href="{{ path('admin_partner_edit', {'partner': partner.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                        <form class="inline" action="{{ url('admin_partner_delete') }}" method="post">
+                                            <input type="hidden" name="token" value="{{ csrf_token('partner-delete') }}" />
+                                            <input type="hidden" name="partner" value="{{ partner.id }}" />
                                             <button class="btn btn-danger btn-sm" type="submit">Supprimer</button>
                                         </form>
                                     </td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td><a href="{{ path('admin_point_of_sales_add') }}" class="btn btn-primary btn-sm">Ajouter un point de ventes</a></td>
+                                    <td><a href="{{ path('admin_partners_add') }}" class="btn btn-primary btn-sm">Ajouter un partenaire</a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>

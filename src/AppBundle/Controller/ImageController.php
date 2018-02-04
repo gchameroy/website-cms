@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Image;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -102,6 +103,34 @@ class ImageController Extends Controller
         $file = $filePath . $image->getPath();
 
         return new BinaryFileResponse($file);
+    }
+
+    /**
+     * @Route(
+     *     "/images/pa-{image}", name="partner_image_view",
+     *     requirements={"image": "\d+"}
+     * )
+     * @Method({"GET"})
+     *
+     * @param int $image
+     * @param EntityManagerInterface $entityManager
+     *
+     * @return BinaryFileResponse
+     */
+    public function viewPartnerImageAction(int $image, EntityManagerInterface $entityManager): BinaryFileResponse
+    {
+        $image = $entityManager
+            ->getRepository(Image::class)
+            ->find($image);
+        $this->checkImage($image);
+
+        $filePath = sprintf(
+            '%s/../uploads/partner/%s',
+            $this->get('kernel')->getRootDir(),
+            $image->getPath()
+        );
+
+        return new BinaryFileResponse($filePath);
     }
 
     /**
