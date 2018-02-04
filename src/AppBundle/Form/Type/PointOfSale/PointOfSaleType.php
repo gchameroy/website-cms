@@ -5,6 +5,7 @@ use AppBundle\Entity\PointOfSale;
 use AppBundle\Form\Type\Address\AddressForPointOfSaleType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,7 +15,8 @@ class PointOfSaleType extends AbstractType
     {
         $builder
             ->add('address', AddressForPointOfSaleType::class)
-            ->add('website', TextType::class)
+            ->add('website', UrlType::class, ['required' => false])
+            ->add('phone', TextType::class, ['required' => false])
         ;
     }
 

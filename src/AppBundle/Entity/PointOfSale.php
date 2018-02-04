@@ -22,11 +22,18 @@ class PointOfSale
     private $id;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="website", type="string", length=255)
+     * @ORM\Column(name="website", type="string", length=255, nullable=true)
      */
     private $website;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     */
+    private $phone;
 
     /**
      * @var Address
@@ -54,11 +61,11 @@ class PointOfSale
     /**
      * Set website
      *
-     * @param string $website
+     * @param string|null $website
      *
      * @return PointOfSale
      */
-    public function setWebsite(string $website): PointOfSale
+    public function setWebsite(?string $website): PointOfSale
     {
         $this->website = $website;
 
@@ -68,11 +75,30 @@ class PointOfSale
     /**
      * Get website
      *
-     * @return string
+     * @return string|null
      */
-    public function getWebsite()
+    public function getWebsite(): ?string
     {
         return $this->website;
+    }
+
+    /**
+     * @param string|null $phone
+     * @return PointOfSale
+     */
+    public function setPhone(?string $phone): PointOfSale
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
     }
 
     /**
