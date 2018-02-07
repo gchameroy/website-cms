@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Front;
 
-use AppBundle\Entity\Newsletter;
 use AppBundle\Entity\StaticPage;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

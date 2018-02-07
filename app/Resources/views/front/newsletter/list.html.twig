@@ -1,0 +1,51 @@
+{% extends "front/layout.html.twig" %}
+
+{% block sections %}
+    <div class="container bg-brown pt-3 pb-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <h2 class="background background-left">Actualités</h2>
+                {% for newsletter in newsletters %}
+                    <div class="image-container">
+                        <a href="{{ path('front_newsletter', {slug: newsletter.slug}) }}" class="btn btn-primary next">
+                            <span class="text">Lire<br>la suite</span>
+                            <br>
+                            <span class="icon">
+                                <img src="{{ asset('template/cassis-alice/img/wave.png') }}" alt="" />
+                            </span>
+                        </a>
+                        <img class="img-fluid" src="{{ path('newsletter_image_view', {'image_id': newsletter.image.id}) }}" alt="" />
+                    </div>
+                    <h4 class="mt-4">
+                        <a href="{{ path('front_newsletter', {slug: newsletter.slug}) }}">{{ newsletter.title }}</a>
+                        <small> - {{ newsletter.publishedAt|date('d/m/Y') }}</small>
+                    </h4>
+                    <p>{{ newsletter.content|truncate(400, true, '...')|striptags }}</p>
+                    {% if not loop.last %}
+                        <p class="text-center my-4">
+                            <img src="{{ asset('template/cassis-alice/img/divider-2.png') }}" alt="" />
+                        </p>
+                    {% endif %}
+                {% endfor %}
+                <div class="row mt-5 mb-5">
+                    <div class="col-lg-12 text-center mb-5">
+                        <ul class="pagination mb-5">
+                            <li class="active"><a href="{{ path('front_newsletters', {page: page - 1}) }}"><i class="fa fa-angle-double-left"></i></a></li>
+                            {% for i in 1..nbPage %}
+                                <li class="{% if page == i %}active{% endif %}">
+                                    <a href="{{ path('front_newsletters', {page: i}) }}">{{ i }}</a>
+                                </li>
+                            {% endfor %}
+                            <li class="active"><a href="{{ path('front_newsletters', {page: page + 1}) }}"><i class="fa fa-angle-double-right"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                {% include 'front/home/partial/point-of-sale.html.twig' %}
+            </div>
+        </div>
+    </div>
+    {% include 'front/layout/partial/baseline.html.twig' %}
+    {% include 'front/layout/partial/partners.html.twig' %}
+{% endblock %}
