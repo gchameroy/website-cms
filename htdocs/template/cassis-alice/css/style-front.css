@@ -272,7 +272,12 @@ h4 a {
 .products .product-title, .product .product-title {
     position: absolute;
     width: 100%;
-    margin-top: 380px;
+    margin-top: 250px;
+}
+
+.products .product-image, .product .product-image {
+    height: 350px;
+    overflow-y: hidden;
 }
 
 .pagination {
