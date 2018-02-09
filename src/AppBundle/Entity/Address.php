@@ -41,31 +41,39 @@ class Address
 
     /**
      * @var string
-     *
      * @ORM\Column(name="address", type="string", length=255)
      */
     private $address;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="zip_code", type="string", length=255)
      */
     private $zipCode;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="country", type="string", length=255)
      */
     private $country;
+
+    /**
+     * @var string
+     * @ORM\Column(name="lat", type="string", length=255, nullable=true)
+     */
+    private $lat;
+
+    /**
+     * @var string
+     * @ORM\Column(name="lng", type="string", length=255, nullable=true)
+     */
+    private $lng;
 
     public function __construct()
     {
@@ -73,8 +81,6 @@ class Address
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -84,11 +90,8 @@ class Address
 
 
     /**
-     * Set lastName
-     *
-     * @param string $lastName
-     *
-     * @return Address
+     * @param $lastName
+     * @return $this
      */
     public function setLastName($lastName)
     {
@@ -98,8 +101,6 @@ class Address
     }
 
     /**
-     * Get lastName
-     *
      * @return string
      */
     public function getLastName()
@@ -108,11 +109,8 @@ class Address
     }
 
     /**
-     * Set firstName
-     *
-     * @param string $firstName
-     *
-     * @return Address
+     * @param $firstName
+     * @return $this
      */
     public function setFirstName($firstName)
     {
@@ -122,8 +120,6 @@ class Address
     }
 
     /**
-     * Get firstName
-     *
      * @return string
      */
     public function getFirstName()
@@ -132,11 +128,8 @@ class Address
     }
 
     /**
-     * Set company
-     *
-     * @param string $company
-     *
-     * @return Address
+     * @param $company
+     * @return $this
      */
     public function setCompany($company)
     {
@@ -146,8 +139,6 @@ class Address
     }
 
     /**
-     * Get company
-     *
      * @return string
      */
     public function getCompany()
@@ -156,11 +147,8 @@ class Address
     }
 
     /**
-     * Set address
-     *
-     * @param string $address
-     *
-     * @return Address
+     * @param $address
+     * @return $this
      */
     public function setAddress($address)
     {
@@ -170,8 +158,6 @@ class Address
     }
 
     /**
-     * Get address
-     *
      * @return string
      */
     public function getAddress()
@@ -180,10 +166,7 @@ class Address
     }
 
     /**
-     * Set zipCode
-     *
      * @param string $zipCode
-     *
      * @return Address
      */
     public function setZipCode($zipCode)
@@ -194,8 +177,6 @@ class Address
     }
 
     /**
-     * Get zipCode
-     *
      * @return string
      */
     public function getZipCode()
@@ -204,10 +185,7 @@ class Address
     }
 
     /**
-     * Set city
-     *
      * @param string $city
-     *
      * @return Address
      */
     public function setCity($city)
@@ -218,8 +196,6 @@ class Address
     }
 
     /**
-     * Get city
-     *
      * @return string
      */
     public function getCity()
@@ -228,10 +204,7 @@ class Address
     }
 
     /**
-     * Set country
-     *
      * @param string $country
-     *
      * @return Address
      */
     public function setCountry($country)
@@ -242,8 +215,6 @@ class Address
     }
 
     /**
-     * Get country
-     *
      * @return string
      */
     public function getCountry()
@@ -251,9 +222,75 @@ class Address
         return $this->country;
     }
 
+    /**
+     * @param string $lat
+     * @return Address
+     */
+    public function setLat(string $lat): Address
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLat(): string
+    {
+        return $this->lat;
+    }
+
+    /**
+     * @param string $lng
+     * @return Address
+     */
+    public function setLng(string $lng): Address
+    {
+        $this->lng = $lng;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLng(): string
+    {
+        return $this->lng;
+    }
+
+    /**
+     * @return string
+     */
     public function getFullName()
     {
         return $this->lastName.' '.$this->firstName;
     }
-}
 
+    /**
+     * @return string
+     */
+    public function getFormattedAddress()
+    {
+        return sprintf(
+            '%s, %s %s, %s',
+            $this->address,
+            $this->zipCode,
+            $this->city,
+            $this->country
+        );
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPosition(): ?string
+    {
+        if ($this->lat === null || $this->lng === null) {
+            return null;
+        }
+
+        return sprintf('%s,%s', $this->lat, $this->lng);
+    }
+}

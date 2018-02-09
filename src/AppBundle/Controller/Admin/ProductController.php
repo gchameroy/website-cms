@@ -14,6 +14,7 @@ use AppBundle\Form\Type\Product\ProductPublishType;
 use AppBundle\Form\Type\Product\ProductVariantType;
 use AppBundle\Form\Type\ProductSkill\ProductSkillType;
 use AppBundle\Form\Type\Product\ProductType;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -160,13 +161,14 @@ class ProductController extends Controller
      * @Route("/{id}/edit", name="admin_product_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param $id
+     * @param int $id
+     * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, int $id, EntityManagerInterface $entityManager)
     {
-        $em = $this->getDoctrine()->getManager();
-        $offers = $em->getRepository(UserOffer::class)
+        $offers = $entityManager
+            ->getRepository(UserOffer::class)
             ->findAll();
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
@@ -177,19 +179,19 @@ class ProductController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($product->getPrices() as $price) {
-                $em->remove($price);
+                $entityManager->remove($price);
             }
-            $em->flush();
+            $entityManager->flush();
 
             foreach ($offers as $offer) {
                 $price = (new ProductPrice())
                     ->setProduct($product)
                     ->setOffer($offer)
                     ->setPrice($request->request->all()['product'][$offer->getFormName()]);
-                $em->persist($price);
+                $entityManager->persist($price);
             }
 
-            $em->flush();
+            $entityManager->flush();
 
             return $this->redirectToRoute('admin_product', [
                 'id' => $id,
@@ -517,18 +519,20 @@ class ProductController extends Controller
      * @Method({"GET", "POST"})
      * @param int $id
      * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      */
-    public function editVariantAction(int $id, Request $request)
+    public function editVariantAction(int $id, Request $request, EntityManagerInterface $entityManager)
     {
-        $em = $this->getDoctrine()->getManager();
-        $variant = $em->getRepository(Product::class)
+        $variant = $entityManager
+            ->getRepository(Product::class)
             ->findOneBy([
                 'id' => $request->query->get('variant'),
                 'parent' => $id
             ]);
         if (!$variant) {
-            $variant = $em->getRepository(Product::class)
+            $variant = $entityManager
+                ->getRepository(Product::class)
                 ->findOneBy([
                     'id' => $request->query->get('variant'),
                     'parent' => null
@@ -540,27 +544,29 @@ class ProductController extends Controller
         $this->checkProduct($variant);
         $this->checkProduct($product);
 
-        $offers = $em->getRepository(UserOffer::class)
+        $offers = $entityManager
+            ->getRepository(UserOffer::class)
             ->findAll();
 
         $form = $this->createForm(ProductVariantType::class, $variant);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($variant->getPrices() as $price) {
-                $em->remove($price);
+                $entityManager->remove($price);
             }
-            $em->flush();
-            $em->persist($variant);
+            $entityManager->flush();
+
+            $entityManager->persist($variant);
 
             foreach ($offers as $offer) {
                 $price = (new ProductPrice())
                     ->setProduct($variant)
                     ->setOffer($offer)
                     ->setPrice($request->request->all()['product'][$offer->getFormName()]);
-                $em->persist($price);
+                $entityManager->persist($price);
             }
 
-            $em->flush();
+            $entityManager->flush();
 
             return $this->redirectToRoute('admin_product', [
                 'id' => $product->getId()

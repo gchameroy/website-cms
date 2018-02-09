@@ -32,24 +32,21 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe3T7l6rVotuy_15U_FIK2OCb_3IAdZLM"></script>
     <script>
         var resultsMap = new google.maps.Map(document.getElementById('map'), {
-            zoom: 12,
+            zoom: 6,
             center: {
                 lat: 48.0805551,
                 lng: 5.0794958
             }
         });
 
-        var geocoder = new google.maps.Geocoder();
         {% for pointOfSale in pointOfSales %}
-            var address = '{{ pointOfSale.address.address ~ ' ' ~ pointOfSale.address.zipCode ~ ' ' ~ pointOfSale.address.city }}';
-            geocoder.geocode({'address': address}, function(results, status) {
-                if(status === google.maps.GeocoderStatus.OK) {
-                    new google.maps.Marker({
-                        map: resultsMap,
-                        position: results[0].geometry.location
-                    });
-                }
-            });
+            {% if pointOfSale.address.position is not null %}
+                var position = {lat: {{ pointOfSale.address.lat}}, lng: {{ pointOfSale.address.lng}}};
+                new google.maps.Marker({
+                    map: resultsMap,
+                    position: position
+                });
+            {% endif %}
         {% endfor %}
     </script>
 {% endblock %}

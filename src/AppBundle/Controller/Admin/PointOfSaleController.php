@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\PointOfSale;
 use AppBundle\Form\Type\PointOfSale\PointOfSaleType;
+use AppBundle\Service\GoogleMaps;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -39,15 +40,20 @@ class PointOfSaleController extends Controller
      * @Method({"GET", "POST"})
      * @param Request $request
      * @param EntityManagerInterface $entityManager
+     * @param GoogleMaps $gmaps
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, EntityManagerInterface $entityManager)
+    public function addAction(Request $request, EntityManagerInterface $entityManager, GoogleMaps $gmaps)
     {
         $pointOfSale = new PointOfSale();
 
         $form = $this->createForm(PointOfSaleType::class, $pointOfSale);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $location = $gmaps->geoLocateAddress($pointOfSale->getAddress()->getFormattedAddress());
+            $pointOfSale->getAddress()->setLat($location->getLat());
+            $pointOfSale->getAddress()->setLng($location->getLng());
+
             $entityManager->persist($pointOfSale);
             $entityManager->flush();
 
@@ -65,9 +71,10 @@ class PointOfSaleController extends Controller
      * @param Request $request
      * @param int $pointOfSale
      * @param EntityManagerInterface $entityManager
+     * @param GoogleMaps $gmaps
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, int $pointOfSale, EntityManagerInterface $entityManager)
+    public function editAction(Request $request, int $pointOfSale, EntityManagerInterface $entityManager, GoogleMaps $gmaps)
     {
         $pointOfSale = $entityManager
             ->getRepository(PointOfSale::class)
@@ -77,6 +84,10 @@ class PointOfSaleController extends Controller
         $form = $this->createForm(PointOfSaleType::class, $pointOfSale);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $location = $gmaps->geoLocateAddress($pointOfSale->getAddress()->getFormattedAddress());
+            $pointOfSale->getAddress()->setLat($location->getLat());
+            $pointOfSale->getAddress()->setLng($location->getLng());
+
             $entityManager->persist($pointOfSale);
             $entityManager->flush();
 
