@@ -6,6 +6,7 @@ use AppBundle\Entity\Category;
 use AppBundle\Entity\Contact;
 use AppBundle\Entity\Newsletter;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\StaticPage;
 use AppBundle\Form\Type\Contact\ContactType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -103,7 +104,7 @@ class HomeController extends Controller
         /** @var Newsletter $newsletter */
         foreach ($newsletters as $newsletter) {
             $urls[] = [
-                'loc' => $this->generateUrl('front_newsletter', ['newsletter' => $newsletter->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                'loc' => $this->generateUrl('front_newsletter', ['slug' => $newsletter->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL),
                 'lastmod' => $newsletter->getPublishedAt()->format('d-m-Y'),
                 'changefreq' => 'daily',
                 'priority' => '0.5'
@@ -127,7 +128,6 @@ class HomeController extends Controller
             }
         }
 
-
         $products = $em->getRepository(Product::class)
             ->findPublished();
         /** @var Product $product */
@@ -140,19 +140,33 @@ class HomeController extends Controller
             ];
         }
 
-        $urls[] = [
-            'loc' => $this->generateUrl('front_home', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'lastmod' => '2017-11-13',
-            'changefreq' => 'daily',
-            'priority' => '0.5'
-        ];
+        $staticPages = $em->getRepository(StaticPage::class)
+            ->findPublished();
+        /** @var Product $product */
+        foreach ($staticPages as $staticPage) {
+            $urls[] = [
+                'loc' => $this->generateUrl('front_static_page', ['slug' => $staticPage->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL),
+                'lastmod' => $staticPage->getPublishedAt()->format('d-m-Y'),
+                'changefreq' => 'daily',
+                'priority' => '0.5'
+            ];
+        }
 
-        $urls[] = [
-            'loc' => $this->generateUrl('front_privacy', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'lastmod' => '2017-11-13',
-            'changefreq' => 'daily',
-            'priority' => '0.5'
+        $customs = [
+            'front_home',
+            'front_contact',
+            'front_point_of_sales',
+            'front_partners',
+            'front_presentation'
         ];
+        foreach ($customs as $custom) {
+            $urls[] = [
+                'loc' => $this->generateUrl($custom, [], UrlGeneratorInterface::ABSOLUTE_URL),
+                'lastmod' => '2017-11-13',
+                'changefreq' => 'daily',
+                'priority' => '0.5'
+            ];
+        }
 
         return $this->render('front/layout/site-map.xml.twig', [
             'urls' => $urls
