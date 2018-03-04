@@ -73,6 +73,26 @@ class ProductRepository extends EntityRepository
 
     /**
      * @param Category $category
+     * @param int|null $page
+     * @return array
+     */
+    public function findPublishedByCategoryBis(Category $category, ?int $page = 1)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.publishedAt <= :now')
+                ->setParameter('now', new \DateTime())
+            ->andWhere('p.category = :category')
+                ->setParameter('category', $category)
+            ->andWhere('p.parent is null')
+            ->orderBy('p.publishedAt', 'desc')
+            ->setFirstResult(($page - 1) * self::PER_PAGE)
+            ->setMaxResults(self::PER_PAGE)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param Category $category
      * @return int
      */
     public function countNbPagePublishedByCategory(category $category)

@@ -92,69 +92,61 @@ class ProductController extends Controller
 
     /**
      * /**
-     * @Route("/{id}/publish", name="admin_product_publish", requirements={"id": "\d+"})
+     * @Route("/publish", name="admin_product_publish")
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param $id
      * @return RedirectResponse|Response
      */
-    public function publishAction(Request $request, $id)
+    public function publishAction(Request $request)
     {
-        $product = $this->getDoctrine()
-            ->getRepository(Product::class)
-            ->find($id);
+        $em = $this->getDoctrine()->getManager();
+        /** @var Product $product */
+        $product = $em->getRepository(Product::class)
+            ->find($request->request->get('product'));
         $this->checkProduct($product);
 
-        $form = $this->createForm(ProductPublishType::class, $product);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $token = $request->request->get('token');
+        if ($this->isCsrfTokenValid('product-publish', $token)) {
             $product->setPublishedAt(new \DateTime());
-            $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();
-
-            return $this->redirectToRoute('admin_products');
         }
 
-        return $this->render('admin/product/publish.html.twig', [
-            'form' => $form->createView(),
-            'product' => $product,
-        ]);
+        $redirect = $this->generateUrl('admin_products');
+        if ($request->request->get('redirect')) {
+            $redirect = $request->request->get('redirect');
+        }
+
+        return $this->redirect($redirect);
     }
 
     /**
-     * @Route("/{id}/unpublish", name="admin_product_unpublish", requirements={"id": "\d+"})
+     * @Route("/unpublish", name="admin_product_unpublish")
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param $id
      * @return RedirectResponse|Response
      */
-    public function unpublishAction(Request $request, $id)
+    public function unpublishAction(Request $request)
     {
-        $product = $this->getDoctrine()
-            ->getRepository(Product::class)
-            ->find($id);
+        $em = $this->getDoctrine()->getManager();
+        /** @var Product $product */
+        $product = $em->getRepository(Product::class)
+            ->find($request->request->get('product'));
         $this->checkProduct($product);
 
-        if (null === $product->getPublishedAt()) {
-            return $this->redirectToRoute('admin_products');
-        }
-
-        $form = $this->createForm(ProductPublishType::class, $product);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $token = $request->request->get('token');
+        if ($this->isCsrfTokenValid('product-unpublish', $token)) {
             $product->setPublishedAt(null);
-            $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();
-
-            return $this->redirectToRoute('admin_products');
         }
 
-        return $this->render('admin/product/unpublish.html.twig', [
-            'form' => $form->createView(),
-            'product' => $product,
-        ]);
+        $redirect = $this->generateUrl('admin_products');
+        if ($request->request->get('redirect')) {
+            $redirect = $request->request->get('redirect');
+        }
+
+        return $this->redirect($redirect);
     }
 
     /**

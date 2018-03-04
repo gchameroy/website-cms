@@ -40,16 +40,18 @@
                                 <h3 class="text-center">{{ product.variantName }}</h3>
                             </div>
                             {% for variant in product.variants %}
-                                <div class="col-md-4">
-                                    <p class="text-center">
-                                        {% if variant.image %}
-                                            <img class="img-fluid" src="{{ path('product_image_view', {'image_id': variant.image.id}) }}" alt="">
-                                        {% else %}
-                                            <img class="img-fluid" src="{{ path('product_image_view', {'image_id': 0}) }}" height="320" alt="">
-                                        {% endif %}
-                                    </p>
-                                    <h3 class="text-center">{{ variant.variantName }}</h3>
-                                </div>
+                                {% if variant.isPublished %}
+                                    <div class="col-md-4">
+                                        <p class="text-center">
+                                            {% if variant.image %}
+                                                <img class="img-fluid" src="{{ path('product_image_view', {'image_id': variant.image.id}) }}" alt="">
+                                            {% else %}
+                                                <img class="img-fluid" src="{{ path('product_image_view', {'image_id': 0}) }}" height="320" alt="">
+                                            {% endif %}
+                                        </p>
+                                        <h3 class="text-center">{{ variant.variantName }}</h3>
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     {% endif %}

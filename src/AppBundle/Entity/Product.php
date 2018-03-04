@@ -275,7 +275,7 @@ class Product
      */
     public function getPublishedAt()
     {
-        return $this->parent === null ? $this->publishedAt : $this->parent->getPublishedAt();
+        return $this->publishedAt;
     }
 
     /**
@@ -283,8 +283,7 @@ class Product
      */
     public function isPublished()
     {
-        $publishedAt =  $this->parent === null ? $this->publishedAt : $this->parent->getPublishedAt();
-        return $publishedAt ? true : false;
+        return $this->publishedAt ? true : false;
     }
 
     /**
@@ -413,7 +412,7 @@ class Product
      */
     public function getParent()
     {
-        return $this->parent;
+        return $this->parent ? $this->parent : $this;
     }
 
     /**

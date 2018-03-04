@@ -57,10 +57,18 @@
                                     <td nowrap>{{ product_price|number_format(2, ',', ' ') }} €</td>
                                     <td nowrap>{{ product.category.label }}</td>
                                     <td class="project-actions text-right">
-                                        {% if product.published %}
-                                            <a href="{{ path('admin_product_unpublish', {'id': product.id }) }}" class="btn btn-warning btn-sm">Dépublier</a>
+                                        {% if product.isPublished %}
+                                            <form class="inline" action="{{ url('admin_product_unpublish') }}" method="post">
+                                                <input type="hidden" name="token" value="{{ csrf_token('product-unpublish') }}" />
+                                                <input type="hidden" name="product" value="{{ product.id }}" />
+                                                <button class="btn btn-warning btn-sm" type="submit">Dépublier</button>
+                                            </form>
                                         {% else %}
-                                            <a href="{{ path('admin_product_publish', {'id': product.id }) }}" class="btn btn-primary btn-sm">Publier</a>
+                                            <form class="inline" action="{{ url('admin_product_publish') }}" method="post">
+                                                <input type="hidden" name="token" value="{{ csrf_token('product-publish') }}" />
+                                                <input type="hidden" name="product" value="{{ product.id }}" />
+                                                <button class="btn btn-primary btn-sm" type="submit">Publier</button>
+                                            </form>
                                         {% endif %}
                                         <a href="{{ path('admin_product', {'id': product.id }) }}" class="btn btn-primary btn-sm">Détails</a>
                                     </td>
