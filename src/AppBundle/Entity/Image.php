@@ -30,24 +30,6 @@ class Image
     private $path;
 
     /**
-     * @var Product
-     *
-     * @ORM\OneToMany(targetEntity="Product", mappedBy="image")
-     */
-    private $products;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Newsletter", mappedBy="image")
-     */
-    private $newsletters;
-
-    public function __construct()
-    {
-        $this->newsletters = new ArrayCollection();
-    }
-
-    /**
      * Get id
      *
      * @return int
@@ -79,63 +61,5 @@ class Image
     public function getPath()
     {
         return $this->path;
-    }
-
-    /**
-     * @param ArrayCollection $products
-     *
-     * @return $this
-     */
-    public function setProducts(ArrayCollection $products)
-    {
-        $this->products = $products;
-
-        return $this;
-    }
-
-    /**
-     * @return Product
-     */
-    public function getProducts()
-    {
-        return $this->products;
-    }
-
-    /**
-     * Set newsletters
-     *
-     * @param ArrayCollection $newsletters
-     */
-    public function setNewsletters(ArrayCollection $newsletters)
-    {
-        $this->newsletters = new ArrayCollection();
-
-        foreach ($newsletters As $newsletter) {
-            $this->addNewsletter($newsletter);
-        }
-    }
-
-    /**
-     * Add newsletter
-     *
-     * @param Newsletter $newsletter
-     *
-     * @return $this
-     */
-    public function addNewsletter(Newsletter $newsletter)
-    {
-        if (!$this->newsletters->contains($newsletter)) {
-            $this->newsletters->add($newsletter);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getNewsletters()
-    {
-        return $this->newsletters;
     }
 }

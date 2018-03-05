@@ -11,12 +11,25 @@ use Symfony\Component\Routing\Annotation\Route;
 class GalleryController extends Controller
 {
     /**
-     * @Route("/gallerie/page-{page}", name="front_gallery")
+     * @Route("/galerie", name="front_gallery_home")
+     * @Method({"GET"})
+     * @return Response
+     */
+    public function homeAction()
+    {
+        return $this->redirectToRoute('front_gallery', [
+            'page' => 1
+        ]);
+    }
+
+    /**
+     * @Route("/galerie/page-{page}", name="front_gallery")
      * @Method({"GET"})
      * @param int $page
      * @return Response
      */
-    public function listAction(int $page = 1) {
+    public function listAction(int $page = 1)
+    {
         if ($page <= 0) {
             return $this->redirectToRoute('front_gallery', [
                 'page' => 1

@@ -49,7 +49,7 @@ class Newsletter
 
     /**
      * @var Image
-     * @ORM\ManyToOne(targetEntity="Image", inversedBy="newsletters")
+     * @ORM\ManyToOne(targetEntity="Image")
      * @ORM\JoinColumn(nullable=true)
      */
     private $image;

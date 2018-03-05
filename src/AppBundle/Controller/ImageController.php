@@ -85,7 +85,7 @@ class ImageController Extends Controller
 
     /**
      * @Route(
-     *     "/images/g-{image_id}", name="gallery_image_view",
+     *     "/images/g-{image_id}.png", name="gallery_image_view",
      *     requirements={"image_id": "\d+"}
      * )
      * @Method({"GET"})

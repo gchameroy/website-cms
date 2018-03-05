@@ -110,7 +110,7 @@ class Product
 
     /**
      * @var Image
-     * @ORM\ManyToOne(targetEntity="Image", inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="Image")
      * @ORM\JoinColumn(nullable=true)
      */
     private $image;

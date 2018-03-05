@@ -12,7 +12,9 @@
                     <div class="row mt-6">
                         {% for gallery in galleries %}
                             <div class="col-md-3">
-                                <img class="img-fluid" src="{{ path('gallery_image_view', {'image_id': gallery.image.id}) }}" alt="">
+                                <a href="{{ path('gallery_image_view', {'image_id': gallery.image.id}) }}" data-toggle="lightbox" data-gallery="gallery" data-title="{{ gallery.title }}" data-footer="{{ gallery.description }}">
+                                    <img src="{{ path('gallery_image_view', {'image_id': gallery.image.id}) }}" class="img-fluid">
+                                </a>
                             </div>
                         {% endfor %}
                     </div>
@@ -35,4 +37,13 @@
     </section>
     {% include 'front/layout/partial/baseline.html.twig' %}
     {% include 'front/layout/partial/partners.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });
+    </script>
 {% endblock %}
