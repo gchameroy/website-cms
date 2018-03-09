@@ -14,7 +14,7 @@ security:
             security: false
 
         admin:
-            pattern: ^/admin
+            pattern: ^/
             provider: user
             anonymous: ~
             form_login:
@@ -24,7 +24,7 @@ security:
                 path: admin_logout
 
         professional:
-            pattern: ^/espace-pro
+            pattern: ^/
             provider: user
             anonymous: ~
             form_login:

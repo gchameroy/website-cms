@@ -14,7 +14,7 @@
         <a href="{{ path('front_newsletter', {slug: newsletter.slug}) }}">{{ newsletter.title }}</a>
         <small> - {{ newsletter.publishedAt|date('d/m/Y') }}</small>
     </h4>
-    <p>{{ newsletter.content|truncate(400, true, '...')|striptags }}</p>
+    <p>{{ newsletter.content|truncate(400, true, '...')|striptags|raw }}</p>
     {% if not loop.last %}
         <p class="text-center my-4">
             <img src="{{ asset('template/cassis-alice/img/divider-2.png') }}" alt="" />

@@ -118,9 +118,9 @@ class HomeController extends Controller
             $nbPage = $this->getDoctrine()
                 ->getRepository(Product::class)
                 ->countNbPagePublishedByCategory($category);
-            for ($page = 1; $page < $nbPage; $page++) {
+            for ($page = 1; $page <= $nbPage; $page++) {
                 $urls[] = [
-                    'loc' => $this->generateUrl('front_products', ['category' => $category->getId(), 'page' => $page], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'loc' => $this->generateUrl('front_products', ['category' => $category->getSlug(), 'page' => $page], UrlGeneratorInterface::ABSOLUTE_URL),
                     'lastmod' => $category->getPublishedAt()->format('d-m-Y'),
                     'changefreq' => 'daily',
                     'priority' => '0.5'
@@ -133,7 +133,7 @@ class HomeController extends Controller
         /** @var Product $product */
         foreach ($products as $product) {
             $urls[] = [
-                'loc' => $this->generateUrl('front_product', ['category' => $product->getCategory()->getId(), 'product' => $product->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                'loc' => $this->generateUrl('front_product', ['category' => $product->getCategory()->getSlug(), 'product' => $product->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL),
                 'lastmod' => $product->getPublishedAt()->format('d-m-Y'),
                 'changefreq' => 'daily',
                 'priority' => '0.5'
@@ -142,7 +142,7 @@ class HomeController extends Controller
 
         $staticPages = $em->getRepository(StaticPage::class)
             ->findPublished();
-        /** @var Product $product */
+        /** @var StaticPage $staticPage */
         foreach ($staticPages as $staticPage) {
             $urls[] = [
                 'loc' => $this->generateUrl('front_static_page', ['slug' => $staticPage->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL),

@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @Route("/categories")
@@ -225,7 +226,7 @@ class CategoryController Extends Controller
     private function checkCategory($category)
     {
         if (!$category) {
-            throw $this->createNotFoundException('Category Not Found.');
+            throw new NotFoundHttpException('Partner Not Found.');
         }
     }
 }
