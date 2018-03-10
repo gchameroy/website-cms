@@ -6,13 +6,13 @@
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <span class="clear">
                             <span class="block">
-                                <img class="img-responsive" src="{{ asset('template/cassis-alice/img/logo.png') }}" alt="" />
+                                <img class="img-responsive" src="{{ asset('template/' ~ config.theme ~ '/img/logo.png') }}" alt="" />
                             </span>
                         </span>
                     </a>
                 </div>
                 <div class="logo-element">
-                    <img class="img-responsive" src="{{ asset('template/cassis-alice/img/logo.png') }}" alt="" />
+                    <img class="img-responsive" src="{{ asset('template/' ~ config.theme ~ '/img/logo.png') }}" alt="" />
                 </div>
             </li>
             <li class="{% if app.request.attributes.get('_route') in ['admin_home'] %}active{% endif %}">
@@ -46,14 +46,6 @@
                     <li class="{% if app.request.attributes.get('_route') in ['admin_users'] %}active{% endif %}">
                         <a href="{{ url('admin_users') }}">Liste des clients</a>
                     </li>
-                    {#
-                    <li class="{% if app.request.attributes.get('_route') in ['admin_bills'] %}active{% endif %}">
-                        <a href="#">Liste des factures</a>
-                    </li>
-                    <li class="{% if app.request.attributes.get('_route') in ['admin_orders', 'admin_order'] %}active{% endif %}">
-                        <a href="{{ url('admin_orders') }}">Liste des commandes</a>
-                    </li>
-                    #}
                     <li class="{% if app.request.attributes.get('_route') in ['admin_user_offers', 'admin_user_offers_add', 'admin_user_offer_edit', 'admin_user_offer_delete'] %}active{% endif %}">
                         <a href="{{ url('admin_user_offers') }}">Liste des offres</a>
                     </li>

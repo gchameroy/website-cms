@@ -6,8 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Image
- *
  * @ORM\Table(name="image")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ImageRepository")
  */
@@ -30,8 +28,13 @@ class Image
     private $path;
 
     /**
-     * Get id
+     * @var Product
      *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Product", inversedBy="images")
+     */
+    private $product;
+
+    /**
      * @return int
      */
     public function getId()
@@ -40,8 +43,6 @@ class Image
     }
 
     /**
-     * Set path
-     *
      * @param string $path
      *
      * @return Image
@@ -54,12 +55,30 @@ class Image
     }
 
     /**
-     * Get path
-     *
      * @return string
      */
     public function getPath()
     {
         return $this->path;
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return Image
+     */
+    public function setProduct(Product $product = null)
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    /**
+     * @return Product
+     */
+    public function getProduct()
+    {
+        return $this->product;
     }
 }

@@ -34,4 +34,14 @@ class PageController extends Controller
             'partners' => $partners
         ]);
     }
+
+    /**
+     * @Route("/cgv-cgu", name="front_privacy")
+     * @Method({"GET"})
+     * @return Response
+     */
+    public function privacyAction()
+    {
+        return $this->render('front/page/privacy.html.twig');
+    }
 }

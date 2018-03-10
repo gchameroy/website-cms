@@ -110,10 +110,9 @@ class Product
 
     /**
      * @var Image
-     * @ORM\ManyToOne(targetEntity="Image")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToMany(targetEntity="Image", mappedBy="product")
      */
-    private $image;
+    private $images;
 
     /**
      * @var ProductPrice[]
@@ -146,6 +145,7 @@ class Product
     {
         $this->variantName = 'Aucun label';
         $this->variants = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     /**
@@ -416,30 +416,6 @@ class Product
     }
 
     /**
-     * Set image
-     *
-     * @param Image|null $image
-     *
-     * @return Product
-     */
-    public function setImage(?Image $image)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return Image
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
      * Get prices
      *
      * @return ProductPrice[]
@@ -575,5 +551,111 @@ class Product
     public function isDeletable()
     {
         return count($this->orderProducts) > 0 ? false : true;
+    }
+
+    /**
+     * Add image
+     *
+     * @param \AppBundle\Entity\Image $image
+     *
+     * @return Product
+     */
+    public function addImage(\AppBundle\Entity\Image $image)
+    {
+        $this->images[] = $image;
+
+        return $this;
+    }
+
+    /**
+     * Remove image
+     *
+     * @param \AppBundle\Entity\Image $image
+     */
+    public function removeImage(\AppBundle\Entity\Image $image)
+    {
+        $this->images->removeElement($image);
+    }
+
+    /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * Add price
+     *
+     * @param \AppBundle\Entity\ProductPrice $price
+     *
+     * @return Product
+     */
+    public function addPrice(\AppBundle\Entity\ProductPrice $price)
+    {
+        $this->prices[] = $price;
+
+        return $this;
+    }
+
+    /**
+     * Remove price
+     *
+     * @param \AppBundle\Entity\ProductPrice $price
+     */
+    public function removePrice(\AppBundle\Entity\ProductPrice $price)
+    {
+        $this->prices->removeElement($price);
+    }
+
+    /**
+     * Add cartProduct
+     *
+     * @param \AppBundle\Entity\CartProduct $cartProduct
+     *
+     * @return Product
+     */
+    public function addCartProduct(\AppBundle\Entity\CartProduct $cartProduct)
+    {
+        $this->cartProducts[] = $cartProduct;
+
+        return $this;
+    }
+
+    /**
+     * Remove cartProduct
+     *
+     * @param \AppBundle\Entity\CartProduct $cartProduct
+     */
+    public function removeCartProduct(\AppBundle\Entity\CartProduct $cartProduct)
+    {
+        $this->cartProducts->removeElement($cartProduct);
+    }
+
+    /**
+     * Add orderProduct
+     *
+     * @param \AppBundle\Entity\OrderProduct $orderProduct
+     *
+     * @return Product
+     */
+    public function addOrderProduct(\AppBundle\Entity\OrderProduct $orderProduct)
+    {
+        $this->orderProducts[] = $orderProduct;
+
+        return $this;
+    }
+
+    /**
+     * Remove orderProduct
+     *
+     * @param \AppBundle\Entity\OrderProduct $orderProduct
+     */
+    public function removeOrderProduct(\AppBundle\Entity\OrderProduct $orderProduct)
+    {
+        $this->orderProducts->removeElement($orderProduct);
     }
 }

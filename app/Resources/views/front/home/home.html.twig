@@ -2,18 +2,25 @@
 
 {% block sections %}
     {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
-    <section class="home-newsletters">
-        <div class="container bg-brown pt-3 pb-5">
-            <div class="row">
-                <div class="col-lg-8">
-                    {{ render(controller('AppBundle:Front/Home:newsletters', {'max': 2})) }}
-                </div>
-                <div class="col-md-4">
-                    {% include 'front/home/partial/point-of-sale.html.twig' %}
-                </div>
-            </div>
-        </div>
-    </section>
-    {% include 'front/layout/partial/baseline.html.twig' %}
-    {% include 'front/layout/partial/partners.html.twig' %}
+    {{ render(controller('AppBundle:Front/Home:newsletters', {'max': 2})) }}
+    {% include('front/home/partial/presentation.html.twig') %}
+    {% include('front/home/partial/pleasure.html.twig') %}
+    {% include('front/contact/partial/contact.html.twig') %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function initMap() {
+            var uluru = {lat: 47.8607641, lng: 5.3315089};
+            var map = new google.maps.Map(document.getElementById('google-map'), {
+                zoom: 17,
+                center: uluru
+            });
+            var marker = new google.maps.Marker({
+                position: uluru,
+                map: map
+            });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXg8yCHuDAiHtCYt916-NjLKemAistJck&callback=initMap"></script>
 {% endblock %}

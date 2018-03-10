@@ -36,7 +36,7 @@
                                 {% for cartProduct in cart.cartProducts %}
                                     <tr>
                                         <td class="td-image">
-                                            <img class="img-lg" src="{{ path('product_image_view', {'product_id': cartProduct.product.id, 'image_id': cartProduct.product.image.id}) }}" alt="">
+                                            <img class="img-lg" src="{{ path('product_image_view', {'product_id': cartProduct.product.id, 'image_id': cartProduct.product.images[0].id}) }}" alt="">
                                         </td>
                                         <td>
                                             <span>{{ cartProduct.product.label }}</span>
