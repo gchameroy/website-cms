@@ -27,7 +27,7 @@ class PartnerController extends Controller
      */
     public function listAction(PartnerManager $partnerManager)
     {
-        $partners = $partnerManager->getAll();
+        $partners = $partnerManager->getList();
 
         return $this->render('admin/partner/list.html.twig', [
             'partners' => $partners

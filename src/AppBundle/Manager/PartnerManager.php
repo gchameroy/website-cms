@@ -29,7 +29,7 @@ class PartnerManager
         return $partner;
     }
 
-    public function getAll(): array
+    public function getList(): array
     {
         return $this->partnerRepository->findAll();
     }

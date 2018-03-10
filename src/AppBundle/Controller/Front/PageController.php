@@ -28,7 +28,7 @@ class PageController extends Controller
      */
     public function partnersAction(PartnerManager $partnerManager)
     {
-        $partners = $partnerManager->getAll();
+        $partners = $partnerManager->getList();
 
         return $this->render('front/page/partners.html.twig', [
             'partners' => $partners
