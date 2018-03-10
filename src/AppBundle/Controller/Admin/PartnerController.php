@@ -5,7 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Entity\Partner;
 use AppBundle\Form\Type\Partner\PartnerEditType;
 use AppBundle\Form\Type\Partner\PartnerType;
-use Doctrine\ORM\EntityManagerInterface;
+use AppBundle\Manager\PartnerManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -22,14 +22,12 @@ class PartnerController extends Controller
     /**
      * @Route("/", name="admin_partners")
      * @Method({"GET"})
-     * @param EntityManagerInterface $entityManager
+     * @param PartnerManager $partnerManager
      * @return Response
      */
-    public function listAction(EntityManagerInterface $entityManager)
+    public function listAction(PartnerManager $partnerManager)
     {
-        $partners = $entityManager
-            ->getRepository(Partner::class)
-            ->findAll();
+        $partners = $partnerManager->getAll();
 
         return $this->render('admin/partner/list.html.twig', [
             'partners' => $partners
@@ -40,10 +38,10 @@ class PartnerController extends Controller
      * @Route("/add", name="admin_partners_add")
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param EntityManagerInterface $entityManager
+     * @param PartnerManager $partnerManager
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, EntityManagerInterface $entityManager)
+    public function addAction(Request $request, PartnerManager $partnerManager)
     {
         $partner = new Partner();
 
@@ -61,8 +59,7 @@ class PartnerController extends Controller
             $file->move($filePath, $fileName);
             $partner->getImage()->setPath($fileName);
 
-            $entityManager->persist($partner);
-            $entityManager->flush();
+            $partnerManager->save($partner);
 
             return $this->redirectToRoute('admin_partners');
         }
@@ -77,21 +74,17 @@ class PartnerController extends Controller
      * @Method({"GET", "POST"})
      * @param Request $request
      * @param int $partner
-     * @param EntityManagerInterface $entityManager
+     * @param PartnerManager $partnerManager
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, int $partner, EntityManagerInterface $entityManager)
+    public function editAction(Request $request, int $partner, PartnerManager $partnerManager)
     {
-        $partner = $entityManager
-            ->getRepository(Partner::class)
-            ->find($partner);
-        $this->checkPartner($partner);
+        $partner = $partnerManager->get($partner);
 
         $form = $this->createForm(PartnerEditType::class, $partner);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($partner);
-            $entityManager->flush();
+            $partnerManager->save($partner);
 
             return $this->redirectToRoute('admin_partners');
         }
@@ -106,32 +99,18 @@ class PartnerController extends Controller
      * @Route("/delete", name="admin_partner_delete")
      * @Method({"POST"})
      * @param Request $request
-     * @param EntityManagerInterface $entityManager
+     * @param PartnerManager $partnerManager
      * @return RedirectResponse|Response
      */
-    public function deleteAction(Request $request, EntityManagerInterface $entityManager)
+    public function deleteAction(Request $request, PartnerManager $partnerManager)
     {
-        $partner = $entityManager
-            ->getRepository(Partner::class)
-            ->find($request->request->get('partner'));
-        $this->checkPartner($partner);
+        $partner = $partnerManager->get($request->request->get('partner'));
 
         $token = $request->request->get('token');
         if ($this->isCsrfTokenValid('partner-delete', $token)) {
-            $entityManager->remove($partner);
-            $entityManager->flush();
+            $partnerManager->remove($partner);
         }
 
         return $this->redirectToRoute('admin_partners');
-    }
-
-    /**
-     * @param Partner|null $partner
-     */
-    private function checkPartner(?Partner $partner)
-    {
-        if (!$partner) {
-            throw $this->createNotFoundException('Partner Not Found.');
-        }
     }
 }
