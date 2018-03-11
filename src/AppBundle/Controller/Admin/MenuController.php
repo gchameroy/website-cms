@@ -10,12 +10,11 @@ use AppBundle\Form\Type\Menu\MenuDeleteType;
 use AppBundle\Form\Type\Menu\MenuType;
 use AppBundle\Form\Type\Menu\MenuPublishType;
 use AppBundle\Form\Type\Menu\MenuUnpublishType;
-use AppBundle\Service\MenuManager;
+use AppBundle\Manager\MenuManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,11 +27,9 @@ class MenuController Extends Controller
      * @Route("/", name="admin_menus")
      * @return Response
      */
-    public function listAction()
+    public function listAction(MenuManager $menuManager)
     {
-        $menus = $this->getDoctrine()
-            ->getRepository(Menu::class)
-            ->findAll();
+        $menus = $menuManager->getList();
 
         return $this->render('admin/menu/list.html.twig', [
             'menus' => $menus
@@ -42,9 +39,6 @@ class MenuController Extends Controller
     /**
      * @Route("/add", name="admin_menus_add")
      * @Method({"GET", "POST"})
-     * @param Request $request
-     * @param MenuManager $menuManager
-     * @return RedirectResponse|Response
      */
     public function addAction(Request $request, MenuManager $menuManager)
     {
@@ -55,8 +49,7 @@ class MenuController Extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $menu->setOrder($menuManager->getNextOrder());
-            $em->persist($menu);
-            $em->flush();
+            $menuManager->save($menu);
 
             return $this->redirectToRoute('admin_menus');
         }
@@ -77,31 +70,24 @@ class MenuController Extends Controller
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_menu_edit", requirements={"id": "\d+"})
+     * @Route("/{menu}/edit", name="admin_menu_edit", requirements={"menu": "\d+"})
      * @Method({"GET", "POST"})
-     * @param Request $request
-     * @param $id
-     * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, int $menu, MenuManager $menuManager)
     {
-        $em = $this->getDoctrine()->getManager();
-        $menu = $em->getRepository(Menu::class)
-            ->find($id);
-        $this->checkMenu($menu);
+        $menu = $menuManager->get($menu);
 
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($menu);
-            $em->flush();
+            $menuManager->save($menu);
 
             return $this->redirectToRoute('admin_menus', [
-                'id' => $id,
+                'menu' => $menu,
             ]);
         }
 
+        $em = $this->getDoctrine()->getManager();
         $categories = $em->getRepository(Category::class)
             ->findAll();
         $staticPages = $em->getRepository(StaticPage::class)
@@ -119,28 +105,20 @@ class MenuController Extends Controller
     }
 
     /**
-     * @Route("/{id}/delete", name="admin_menu_delete", requirements={"id": "\d+"})
+     * @Route("/{menu}/delete", name="admin_menu_delete", requirements={"menu": "\d+"})
      * @Method({"GET", "POST"})
-     * @param $id
-     * @param Request $request
-     * @return RedirectResponse|Response
      */
-    public function deleteAction($id, Request $request)
+    public function deleteAction(int $menu, Request $request, MenuManager $menuManager)
     {
-        $menu = $this->getDoctrine()
-            ->getRepository(Menu::class)
-            ->find($id);
-        $this->checkMenu($menu);
+        $menu = $menuManager->get($menu);
 
         $form = $this->createForm(MenuDeleteType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($menu);
-            $em->flush();
+            $menuManager->remove($menu);
 
             return $this->redirectToRoute('admin_menus', [
-                'id' => $id,
+                'menu' => $menu,
             ]);
         }
 
@@ -151,26 +129,18 @@ class MenuController Extends Controller
     }
 
     /**
-     * @Route("/{id}/publish", name="admin_menu_publish", requirements={"id": "\d+"})
+     * @Route("/{menu}/publish", name="admin_menu_publish", requirements={"menu": "\d+"})
      * @Method({"GET", "POST"})
-     * @param Request $request
-     * @param $id
-     * @return RedirectResponse|Response
      */
-    public function publishAction(Request $request, $id)
+    public function publishAction(Request $request, int $menu, MenuManager $menuManager)
     {
-        $menu = $this->getDoctrine()
-            ->getRepository(Menu::class)
-            ->find($id);
-        $this->checkMenu($menu);
+        $menu = $menuManager->get($menu);
         $menu->setPublishedAt(new \DateTime());
 
         $form = $this->createForm(MenuPublishType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($menu);
-            $em->flush();
+            $menuManager->save($menu);
 
             return $this->redirectToRoute('admin_menus');
         }
@@ -182,18 +152,12 @@ class MenuController Extends Controller
     }
 
     /**
-     * @Route("/{id}/unpublish", name="admin_menu_unpublish", requirements={"id": "\d+"})
+     * @Route("/{menu}/unpublish", name="admin_menu_unpublish", requirements={"menu": "\d+"})
      * @Method({"GET", "POST"})
-     * @param Request $request
-     * @param $id
-     * @return RedirectResponse|Response
      */
-    public function unpublishAction(Request $request, $id)
+    public function unpublishAction(Request $request, int $menu, MenuManager $menuManager)
     {
-        $menu = $this->getDoctrine()
-            ->getRepository(Menu::class)
-            ->find($id);
-        $this->checkMenu($menu);
+        $menu = $menuManager->get($menu);
 
         if (null === $menu->getPublishedAt()) {
             return $this->redirectToRoute('admin_menus');
@@ -203,9 +167,7 @@ class MenuController Extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $menu->setPublishedAt(null);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($menu);
-            $em->flush();
+            $menuManager->save($menu);
 
             return $this->redirectToRoute('admin_menus');
         }
@@ -219,18 +181,12 @@ class MenuController Extends Controller
     /**
      * @Route("/move", name="admin_menu_move")
      * @Method({"POST"})
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @return RedirectResponse|Response
      */
-    public function upAction(Request $request, EntityManagerInterface $entityManager)
+    public function upAction(Request $request, EntityManagerInterface $entityManager, MenuManager $menuManager)
     {
         $token = $request->request->get('token');
         if ($this->isCsrfTokenValid('menu-move', $token)) {
-            $menu = $entityManager
-                ->getRepository(Menu::class)
-                ->find($request->request->get('menu'));
-            $this->checkMenu($menu);
+            $menu = $menuManager->get($request->request->get('menu'));
 
             $direction = $request->request->get('direction');
             if (!in_array($direction, ['up', 'down'])) {
@@ -275,15 +231,5 @@ class MenuController Extends Controller
         }
 
         return $this->redirectToRoute('admin_menus');
-    }
-
-    /**
-     * @param $menu
-     */
-    private function checkMenu($menu)
-    {
-        if (!$menu) {
-            throw $this->createNotFoundException('Menu Not Found.');
-        }
     }
 }

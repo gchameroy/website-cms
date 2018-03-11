@@ -2,7 +2,9 @@
 
 namespace AppBundle\Repository;
 
-class CategoryRepository extends PublishableEntityRepository
+use Doctrine\ORM\EntityRepository;
+
+class CategoryRepository extends EntityRepository
 {
     public function findLast()
     {

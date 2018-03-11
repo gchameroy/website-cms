@@ -2,7 +2,7 @@
 
 class AdminLoginCest
 {
-    public function tryLogin (FunctionalTester $I)
+    public function tryLogin(FunctionalTester $I)
     {
         $I->amOnPage('/admin');
         $I->seeCurrentUrlEquals('/admin/sign-in');
@@ -11,7 +11,7 @@ class AdminLoginCest
         $I->see('Dashboard', 'h2');
     }
 
-    public function tryLoginFail (FunctionalTester $I)
+    public function tryLoginFail(FunctionalTester $I)
     {
         $I->amOnPage('/admin');
         $I->seeCurrentUrlEquals('/admin/sign-in');
@@ -20,7 +20,7 @@ class AdminLoginCest
         $I->see('Invalid credentials.', 'p');
     }
 
-    public function tryLoginHelper (FunctionalTester $I)
+    public function tryLoginHelper(FunctionalTester $I)
     {
         $I->amLoggedAsAdmin();
         $I->amOnPage('/admin');
