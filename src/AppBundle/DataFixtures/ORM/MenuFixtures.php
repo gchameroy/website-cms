@@ -21,6 +21,7 @@ class MenuFixtures extends FixtureHelper
 
         $this->loadDefaults();
         $this->loadForCategories();
+        $this->loadOthers();
 
         $this->manager->flush();
     }
@@ -30,9 +31,9 @@ class MenuFixtures extends FixtureHelper
         $menu = (new Menu())
             ->setPageName('Présentation')
             ->setRouteName('front_presentation')
-            ->setOrder($this->order++)
+            ->setOrder($this->order)
             ->setPublishedAt(new \DateTime());
-        $this->setReference('menu-presentation', $menu);
+        $this->setReference('menu-' . $this->order++, $menu);
         $this->manager->persist($menu);
     }
 
@@ -45,11 +46,30 @@ class MenuFixtures extends FixtureHelper
                 ->setPageName($category->getLabel())
                 ->setRouteName('front_category')
                 ->setRouteSlug($category->getSlug())
-                ->setOrder($this->order++)
+                ->setOrder($this->order)
                 ->setPublishedAt(new \DateTime());
-            $this->setReference('menu-category-' . $c, $menu);
+            $this->setReference('menu-' . $this->order++, $menu);
             $this->manager->persist($menu);
         }
+    }
+
+    private function loadOthers()
+    {
+        $menu = (new Menu())
+            ->setPageName('Table/Cuisine')
+            ->setRouteName('front_presentation')
+            ->setOrder($this->order)
+            ->setPublishedAt(new \DateTime());
+        $this->setReference('menu-' . $this->order++, $menu);
+        $this->manager->persist($menu);
+
+        $menu = (new Menu())
+            ->setPageName('Contact')
+            ->setRouteName('front_contact')
+            ->setOrder($this->order)
+            ->setPublishedAt(new \DateTime());
+        $this->setReference('menu-' . $this->order++, $menu);
+        $this->manager->persist($menu);
     }
 
     public function getDependencies()

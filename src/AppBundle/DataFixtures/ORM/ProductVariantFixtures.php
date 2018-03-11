@@ -19,7 +19,7 @@ class ProductVariantFixtures extends FixtureHelper
                     ->setVariantName(sprintf('Pot de %sg',  $v * 100))
                     ->setReference('P' . $date->format('ym') . '-' . str_pad($p, 3, '0', STR_PAD_LEFT) . '-V' . $v)
                     ->setPublishedAt($date)
-                    ->setImage($this->loadImage($manager));
+                    ->addImage($this->loadImage($manager));
 
                 $this->setReference('product-' . $p . '-variant-' . $v, $product);
                 $manager->persist($product);

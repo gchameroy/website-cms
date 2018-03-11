@@ -20,7 +20,7 @@ abstract class FixtureHelper extends Fixture
     const MAX_QTY_PRO_PRODUCT = 45;
     const NB_PRODUCT = 25;
     const NB_PRODUCT_VARIANT = 2;
-    const NB_PRODUCT_CATEGORY = 4;
+    const NB_PRODUCT_CATEGORY = 2;
     const NB_PRODUCT_SKILL = 2;
 
     /**

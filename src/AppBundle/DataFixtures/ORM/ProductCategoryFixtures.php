@@ -9,10 +9,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 class ProductCategoryFixtures extends FixtureHelper
 {
     private $categories = [
-        'Confitures',
-        'Gelées',
-        'Crème de cassis',
-        'Crème de framboises'
+        'Coutellerie',
+        'Vannerie'
     ];
 
     public function load(ObjectManager $manager)

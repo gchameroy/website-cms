@@ -1,3 +1,7 @@
+{% set user_offer = null %}
+{% if app.user is not null %}
+    {% set user_offer = app.user.offer %}
+{% endif %}
 <section class="last-products">
     <div class="container">
         <h2 class="text-center">Nos derniers produits</h2>
@@ -18,7 +22,7 @@
                     <ul class="product-price">
                         <li>
                             <span>Prix:</span>
-                            <span>{{ product.price(app.user.offer)|number_format(2, '.', ' ') }}€</span>
+                            <span>{{ product.price(user_offer)|number_format(2, '.', ' ') }}€</span>
                         </li>
                     </ul>
                     <br class="clear">

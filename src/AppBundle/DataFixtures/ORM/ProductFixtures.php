@@ -22,7 +22,7 @@ class ProductFixtures extends FixtureHelper
                 ->setMore3($this->faker->paragraph(10))
                 ->setReference('P' . $date->format('ym') . '-' . str_pad($p, 3, '0', STR_PAD_LEFT))
                 ->setPublishedAt($date)
-                ->setImage($this->loadImage($manager))
+                ->addImage($this->loadImage($manager))
                 ->setCategory($this->getReference('product-category-' . $this->faker->numberBetween(1, self::NB_PRODUCT_CATEGORY)));
 
             $this->setReference('product-' . $p, $product);
