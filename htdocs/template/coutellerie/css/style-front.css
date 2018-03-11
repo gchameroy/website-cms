@@ -75,6 +75,10 @@ h3 {
     color: #64453b;
 }
 
+.header.bg-white a{
+    color: #fff;
+}
+
 .cart-bar {
     background: #2c1613;
 }

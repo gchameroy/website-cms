@@ -1,18 +1,21 @@
 <div id="{{ tabId }}" data-variant="{{ product.id }}" class="tab-pane {% if selected %}active{% endif %}">
     <div class="panel-body">
         <div class="col-md-3">
-            {% if product.image %}
-                <img alt="image" class="img-responsive" src="{{ path('product_image_view', {'image_id': product.image.id}) }}" />
-                <button class="m-t-lg btn btn-primary action_product_image_add">Modifier l'image</button>
-            {% else %}
-                <img alt="image" class="img-responsive" src="{{ path('product_image_view', {'image_id': 0}) }}" />
-                <button class="btn btn-primary action_product_image_add">Ajouter une image</button>
+            {% for image in product.images %}
+                <img alt="image" class="img-responsive" src="{{ path('product_image_view', {'image_id': image.id}) }}" />
+                <p class="text-center">
+                    <a href="{{ path('admin_product_remove_image', {'variant': product.id, 'image': image.id}) }}" class="btn btn-danger">Supprimer l'image</a>
+                </p>
+            {% endfor %}
+            {% if product.images|length < 3 %}
+                <p class="text-center">
+                    <button class="btn btn-primary action_product_image_add">Ajouter une image</button>
+                </p>
             {% endif %}
         </div>
         <div class="col-md-9">
             <h2>{{ product.variantName }}</h2>
             <h3><small>Réf.</small> {{ product.reference }}</h3>
-
             <div class="m-t-md">
                 <table>
                     {% for price in product.prices %}

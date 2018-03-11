@@ -5,6 +5,10 @@
 {% block title product.titleSEO %}
 
 {% block sections %}
+    {% set user_offer = null %}
+    {% if app.user %}
+        {% set user_offer = app.user.offer %}
+    {% endif %}
     <section class="section-product">
         <div class="container">
             <p class="m-t-md">
@@ -24,15 +28,20 @@
                             <h3 class="text-center">{{ product.label }}</h3>
                             <p class="product-image text-center">
                                 {% if product.images|length > 0 %}
-                                    <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'product_id': product.id, 'image_id': product.images[0].id}) }}" alt="">
+                                    {% for image in product.images %}
+                                        {% set img_path = path('product_image_view', {'image_id': image.id}) %}
+                                        <a  href="{{ img_path }}" data-toggle="lightbox" data-gallery="product-gallery" class="{% if loop.index0 > 0 %}hidden{% endif %}">
+                                            <img class="img-responsive img-circle img-shadow" src="{{ img_path }}" alt="">
+                                        </a>
+                                    {% endfor %}
                                 {% else %}
-                                    <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'product_id': 0, 'image_id':0}) }}" height="320" alt="">
+                                    <img class="img-responsive img-circle img-shadow" src="{{ path('product_image_view', {'image_id':0}) }}" height="320" alt="">
                                 {% endif %}
                             </p>
                             <ul class="product-price">
                                 <li>
                                     <span>Prix:</span>
-                                    <span>{{ product.price|number_format(2, '.', ' ') }}€</span>
+                                    <span>{{ product.price(user_offer)|number_format(2, '.', ' ') }}€</span>
                                 </li>
                             </ul>
                             <br class="clear">
@@ -52,4 +61,13 @@
         </div>
     </section>
     {{ render(controller('AppBundle:Front/Home:products', {'max': 3})) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });
+    </script>
 {% endblock %}

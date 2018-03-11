@@ -15,7 +15,11 @@ class CartProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('quantity', IntegerType::class)
+            ->add('quantity', IntegerType::class, [
+                'attr' => [
+                    'value' => 1
+                ]
+            ])
             ->add('product', EntityType::class, [
                 'class' => Product::class,
                 'choice_label' => function ($product) use ($options) {

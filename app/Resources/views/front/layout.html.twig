@@ -15,18 +15,22 @@
         <link href="{{ asset('inspinia/css/animate.css') }}" rel="stylesheet">
         <link href="{{ asset('base/css/helper.css') }}" rel="stylesheet">
         <link href="{{ asset('template/coutellerie/css/style-front.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" integrity="sha256-HAaDW5o2+LelybUhfuk0Zh2Vdk8Y2W2UeKmbaXhalfA=" crossorigin="anonymous" />
         {% block stylesheets '' %}
     </head>
 
     <body class="{% block body_theme '' %} {% block body_class '' %}">
         {% block content %}
-            {% include 'front/layout/header.html.twig' %}
+            {% block layout_header %}
+                {% include 'front/layout/header.html.twig' %}
+            {% endblock %}
             {% block sections '' %}
             {% include 'front/layout/footer.html.twig' %}
         {% endblock %}
 
         <script src="{{ asset('inspinia/js/jquery-3.1.1.min.js') }}"></script>
         <script src="{{ asset('inspinia/js/bootstrap.min.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js" integrity="sha256-Y1rRlwTzT5K5hhCBfAFWABD4cU13QGuRN6P5apfWzVs=" crossorigin="anonymous"></script>
         {% block javascripts '' %}
     </body>
 </html>

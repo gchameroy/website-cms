@@ -58,20 +58,6 @@
                                     </h2>
                                     <p class="small text-muted">{{ product.description|nl2br }}</p>
                                 </div>
-
-                                <div class="m-t-md">
-                                    <h4>En savoir plus</h4>
-                                    <p>{{ product.more1|default('Aucune informations') }}</p>
-                                </div>
-                                <div class="m-t-md">
-                                    <h4>Ingrédients</h4>
-                                    <p>{{ product.more2|default('Aucune informations') }}</p>
-                                </div>
-                                <div class="m-t-md">
-                                    <h4>Conseils dégustation</h4>
-                                    <p>{{ product.more3|default('Aucune informations') }}</p>
-                                </div>
-
                                 <div class="m-t-md">
                                     <h4>Catégorie</h4>
                                     <p>{{ product.category.label }}</p>
@@ -100,7 +86,7 @@
                             {% for variant in product.variants %}
                                 <li><a data-toggle="tab" href="#tab-product-variant-{{ variant.id }}">{{ variant.variantName }} ({% if variant.published %}en ligne{% else %}hors ligne{% endif %})</a></li>
                             {% endfor %}
-                            <li class=""><a class="action_product_variant_add">Ajouter une contenance</a></li>
+                            <li class=""><a class="action_product_variant_add">Ajouter une variante</a></li>
                         </ul>
                         <div class="tab-content">
                             {% include 'admin/product/variant.html.twig' with {'tabId': 'tab-product', 'selected': true} %}

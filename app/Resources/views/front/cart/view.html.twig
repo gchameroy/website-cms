@@ -1,6 +1,10 @@
 {% extends "front/layout.html.twig" %}
 
 {% block sections %}
+    {% set user_offer = null %}
+    {% if app.user %}
+        {% set user_offer = app.user.offer %}
+    {% endif %}
     <section class="section-cart m-b-xl">
         <div class="container">
             <h2 class="m-b-md">Panier</h2>
@@ -40,11 +44,9 @@
                                         </td>
                                         <td>
                                             <span>{{ cartProduct.product.label }}</span>
-                                            {% for attribute in cartProduct.attributes %}
-                                                <br><em>{{ attribute.label }}</em>
-                                            {% endfor %}
+                                            <br><em>{{ cartProduct.product.variantName }}</em>
                                         </td>
-                                        <td class="text-center">{{ cartProduct.product.price|number_format(2, '.', ' ') }}€</td>
+                                        <td class="text-center">{{ cartProduct.product.price(user_offer)|number_format(2, '.', ' ') }}€</td>
                                         <td class="text-center">
                                             <span class="m-r-sm">
                                                 <a href="{{ path('front_cart_remove_one_quantity', {'cartProduct': cartProduct.id}) }}">
@@ -58,7 +60,7 @@
                                                 </a>
                                             </span>
                                         </td>
-                                        <td class="text-center">{{ cartProduct.price|number_format(2, '.', ' ') }}€</td>
+                                        <td class="text-center">{{ cartProduct.price(user_offer)|number_format(2, '.', ' ') }}€</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -66,7 +68,7 @@
                                 <tr>
                                     <td colspan="3"></td>
                                     <td><strong>Sous-total</strong></td>
-                                    <td class="text-center">{{ cart.price|number_format(2, '.', ' ') }}€</td>
+                                    <td class="text-center">{{ cart.price(user_offer)|number_format(2, '.', ' ') }}€</td>
                                 </tr>
                                 <tr>
                                     <td colspan="3"></td>
@@ -76,7 +78,7 @@
                                 <tr>
                                     <td colspan="3" class="b-none"></td>
                                     <td><strong>Total TTC</strong></td>
-                                    <td class="text-center">{{ cart.price|number_format(2, '.', ' ') }}€</td>
+                                    <td class="text-center">{{ cart.price(user_offer)|number_format(2, '.', ' ') }}€</td>
                                 </tr>
                             </tfoot>
                         </table>

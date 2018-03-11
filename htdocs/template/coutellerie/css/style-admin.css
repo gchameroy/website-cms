@@ -103,3 +103,7 @@ h2 {
 .profile-element {
     font-weight: bold;
 }
+
+.ibox h2 {
+    color: inherit;
+}

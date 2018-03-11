@@ -1,39 +1,44 @@
 {% extends "front/layout.html.twig" %}
-{% block bg_header 'bg-white' %}
+
+{% block layout_header %}
+    {% include 'front/layout/header_white.html.twig' %}
+{% endblock %}
+
 {% block sections %}
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h2>Actualités</h2>
-                {% for newsletter in newsletters %}
-                    <div class="home-newsletter row">
-                        <div class="col-md-6">
-                            <h3>{{ newsletter.title }}</h3>
-                            <p>{{ newsletter.content|striptags|truncate(400, true, '...')|raw }}</p>
-                            <a href="{{ path('front_newsletter', {'slug': newsletter.slug}) }}" class="btn btn-primary m-t-md">Lire la suite</a>
+    <section class="bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Actualités</h2>
+                    {% for newsletter in newsletters %}
+                        <div class="home-newsletter row">
+                            <div class="col-md-6 {% if loop.index % 2 == 1 %}pull-right{% endif %}">
+                                <h3>{{ newsletter.title }}</h3>
+                                <p>{{ newsletter.content|striptags|truncate(400, true, '...')|raw }}</p>
+                                <a href="{{ path('front_newsletter', {'slug': newsletter.slug}) }}" class="btn btn-primary m-t-md">Lire la suite</a>
+                            </div>
+                            <div class="col-md-6 image-view p-l-none {% if loop.index % 2 == 1 %}p-r-none{% endif %}">
+                                {% if newsletter.image %}
+                                    <img class="img-responsive" src="{{ path('newsletter_image_view', {'image_id': newsletter.image.id}) }}" alt="">
+                                {% endif %}
+                            </div>
                         </div>
-                        <div class="col-md-6 image-view p-l-none">
-                            {% if newsletter.image %}
-                                <img class="img-responsive" src="{{ path('newsletter_image_view', {'image_id': newsletter.image.id}) }}" alt="">
-                            {% endif %}
+                    {% endfor %}
+                    <div class="row m-t-lg m-b-lg">
+                        <div class="col-lg-12 text-center">
+                            <ul class="pagination">
+                                <li><a href="{{ path('front_newsletters', {page: page - 1}) }}"><i class="fa fa-angle-double-left"></i></a></li>
+                                {% for i in 1..nbPage %}
+                                    <li class="{% if page == i %}active{% endif %}">
+                                        <a href="{{ path('front_newsletters', {page: i}) }}">{{ i }}</a>
+                                    </li>
+                                {% endfor %}
+                                <li><a href="{{ path('front_newsletters', {page: page + 1}) }}"><i class="fa fa-angle-double-right"></i></a></li>
+                            </ul>
                         </div>
-                    </div>
-                {% endfor %}
-                <div class="row mt-5 mb-5">
-                    <div class="col-lg-12 text-center mb-5">
-                        <ul class="pagination mb-5">
-                            <li class="active"><a href="{{ path('front_newsletters', {page: page - 1}) }}"><i class="fa fa-angle-double-left"></i></a></li>
-                            {% for i in 1..nbPage %}
-                                <li class="{% if page == i %}active{% endif %}">
-                                    <a href="{{ path('front_newsletters', {page: i}) }}">{{ i }}</a>
-                                </li>
-                            {% endfor %}
-                            <li class="active"><a href="{{ path('front_newsletters', {page: page + 1}) }}"><i class="fa fa-angle-double-right"></i></a></li>
-                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    </section>
 {% endblock %}

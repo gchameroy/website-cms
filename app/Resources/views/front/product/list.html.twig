@@ -1,6 +1,10 @@
 {% extends "front/layout.html.twig" %}
 
 {% block sections %}
+    {% set user_offer = null %}
+    {% if app.user %}
+        {% set user_offer = app.user.offer %}
+    {% endif %}
     <section class="products-section">
         <div class="container">
             <div class="row">
@@ -23,7 +27,7 @@
                                 <ul class="product-price">
                                     <li>
                                         <span>Prix:</span>
-                                        <span>{{ product.price|number_format(2, '.', ' ') }}€</span>
+                                        <span>{{ product.price(user_offer)|number_format(2, '.', ' ') }}€</span>
                                     </li>
                                 </ul>
                                 <br class="clear">

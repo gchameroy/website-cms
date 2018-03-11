@@ -245,15 +245,6 @@ class ProductController extends Controller
         $this->checkProduct($variant);
         $this->checkProduct($product);
 
-        $image = $variant->getImage();
-        if ($image) {
-            $em = $this->getDoctrine()->getManager();
-            $variant->setImage(null);
-            $em->persist($variant);
-            $em->remove($image);
-            $em->flush();
-        }
-
         $image = new Image();
 
         $form = $this->createForm(ImageType::class, $image);
@@ -264,12 +255,11 @@ class ProductController extends Controller
             $fileName = md5(uniqid(null, true));
             $filePath = $this->get('kernel')->getRootDir() . '/../uploads/product/';
             $file->move($filePath, $fileName);
-            $image->setPath($fileName);
-            $variant->setImage($image);
-
+            $image
+                ->setProduct($variant)
+                ->setPath($fileName);
             $em = $this->getDoctrine()->getManager();
             $em->persist($image);
-            $em->persist($variant);
             $em->flush();
 
             return $this->redirectToRoute('admin_product', [
@@ -281,6 +271,29 @@ class ProductController extends Controller
             'form' => $form->createView(),
             'variant' => $variant,
             'product' => $product
+        ]);
+    }
+
+    /**
+     * @Route("/{variant}/remove_image/{image}", name="admin_product_remove_image", requirements={"variant": "\d+", "image": "\d+"})
+     * @Method({"GET", "POST"})
+     */
+    public function removeImageAction(int $variant, int $image)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $variant = $em->getRepository(Product::class)
+            ->find($variant);
+        $this->checkProduct($variant);
+
+        $image = $em->getRepository(Image::class)
+            ->find($image);
+        $this->checkImage($image);
+
+        $em->remove($image);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_product', [
+            'id' => $variant->getParent()->getId()
         ]);
     }
 
@@ -455,6 +468,13 @@ class ProductController extends Controller
     {
         if (!$product) {
             throw $this->createNotFoundException('Product Not Found.');
+        }
+    }
+
+    private function checkImage(?Image $image)
+    {
+        if (!$image) {
+            throw $this->createNotFoundException('Image Not Found.');
         }
     }
 

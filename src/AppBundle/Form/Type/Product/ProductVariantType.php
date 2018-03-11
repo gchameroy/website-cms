@@ -14,9 +14,6 @@ class ProductVariantType extends AbstractType
         $builder
             ->remove('label')
             ->remove('description')
-            ->remove('more1')
-            ->remove('more2')
-            ->remove('more3')
             ->remove('titleSEO')
             ->remove('descriptionSEO')
             ->remove('category')

@@ -34,9 +34,6 @@ class ProductType extends AbstractType
             ->add('description', TextareaType::class, [
                 'required' => false
             ])
-            ->add('more1', TextType::class, ['required' => false])
-            ->add('more2', TextType::class, ['required' => false])
-            ->add('more3', TextType::class, ['required' => false])
             ->add('titleSEO', TextType::class, [
                     'required' => false
             ])
