@@ -1,4 +1,4 @@
-<header class="header">
+<header class="header {% block bg_header '' %}">
     {% include('front/layout/partial/social.html.twig') %}
     {{ render(controller('AppBundle:Front/Layout:cart')) }}
     <nav class="nav">

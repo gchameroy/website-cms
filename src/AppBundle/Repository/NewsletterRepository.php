@@ -4,7 +4,7 @@ namespace AppBundle\Repository;
 
 class NewsletterRepository extends PublishableEntityRepository
 {
-    const PER_PAGE = 3;
+    const PER_PAGE = 5;
 
     /**
      * @param int|null $page
