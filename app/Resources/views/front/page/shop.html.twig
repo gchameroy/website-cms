@@ -1,0 +1,50 @@
+{% extends "front/layout.html.twig" %}
+
+{% block sections %}
+    {% include 'front/home/partial/presentation.html.twig' %}
+    <section class="bg-white">
+        <div class="container">
+            <div class="row m-t-md">
+                <div class="col-md-4">
+                    <div class="bg-brown-shop shop-element p-l-md p-t-md">
+                        <p><a href="#">Liste</a></p>
+                        <p><a href="#">Produits</a></p>
+                        <p><a href="#">Promotion</a></p>
+                        <p><a href="#">ou catégories 1</a></p>
+                    </div>
+                </div>
+                <div class="col-md-8 shop-cut-image">
+                    <img src="{{ asset('template/coutellerie/img/rayon_cuisine_03.png') }}" class="img-responsive" alt="">
+                </div>
+            </div>
+            <div class="row m-t-md">
+                <div class="col-md-6">
+                    <div class="bg-brown-shop shop-element  p-l-md p-t-md">
+                        <p><a href="#">Liste</a></p>
+                        <p><a href="#">Produits</a></p>
+                        <p><a href="#">Promotion</a></p>
+                        <p><a href="#">ou catégories 2</a></p>
+                    </div>
+                </div>
+                <div class="col-md-6 shop-cut-image">
+                    <img src="{{ asset('template/coutellerie/img/rayon_cuisine_07.png') }}" class="img-responsive" alt="">
+                </div>
+            </div>
+            <div class="row m-t-md m-b-md">
+                <div class="col-md-8 shop-cut-image">
+                    <img src="{{ asset('template/coutellerie/img/rayon_cuisine_11.png') }}" class="img-responsive" alt="">
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-brown-shop shop-element p-l-md p-t-md">
+                        <p><a href="#">Liste</a></p>
+                        <p><a href="#">Produits</a></p>
+                        <p><a href="#">Promotion</a></p>
+                        <p><a href="#">ou catégories 3</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% include 'front/home/partial/pleasure.html.twig' %}
+    {% include 'front/contact/partial/contact.html.twig' %}
+{% endblock %}

@@ -55,6 +55,18 @@ h3 {
     color: #64453b !important;
 }
 
+.bg-brown-shop {
+    background-color: #65453b;
+}
+
+.bg-brown-shop {
+    font-size: 18px;
+}
+
+.bg-brown-shop p a {
+    color: #ffffff
+}
+
 .bg-white {
     background: #fff;
 }
@@ -428,6 +440,15 @@ ul.product-price span + span {
 
 textarea.no-resize {
     resize: none;
+}
+
+.shop-element {
+    height: 374px;
+    padding: 130px 0 0 50px;
+}
+
+.shop-cut-image {
+    height: 374px; overflow-y: hidden
 }
 
 footer {
