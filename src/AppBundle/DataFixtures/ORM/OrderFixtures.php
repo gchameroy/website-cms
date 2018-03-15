@@ -22,7 +22,8 @@ class OrderFixtures extends FixtureHelper
                     ->setUser($this->getReference('user-' . $i))
                     ->setDeliveryAddress($this->getReference('address-user-'. $i))
                     ->setBillingAddress($this->getReference('address-user-' . $i))
-                    ->setCreatedAt(new \DateTime());
+                    ->setCreatedAt(new \DateTime())
+                    ->setDeliveryZone($this->getReference('delivery-zone-' . mt_rand(1, self::NB_DELIVERY_ZONE)));
                 $this->setReference('order-user-' . $i . '-' . $j, $order);
                 $manager->persist($order);
             }
@@ -38,7 +39,8 @@ class OrderFixtures extends FixtureHelper
                     ->setUser($this->getReference('user-pro-' . $i))
                     ->setDeliveryAddress($this->getReference('address-pro-'. $i))
                     ->setBillingAddress($this->getReference('address-pro-' . $i))
-                    ->setCreatedAt(new \DateTime());
+                    ->setCreatedAt(new \DateTime())
+                    ->setDeliveryZone($this->getReference('delivery-zone-' . mt_rand(1, self::NB_DELIVERY_ZONE)));
                 $this->setReference('order-pro-' . $i . '-' . $j, $order);
                 $manager->persist($order);
             }

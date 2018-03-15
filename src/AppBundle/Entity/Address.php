@@ -75,6 +75,13 @@ class Address
      */
     private $lng;
 
+    /**
+     * @var DeliveryZone
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\DeliveryZone")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $deliveryZone;
+
     public function __construct()
     {
         $this->country = 'France';
@@ -87,7 +94,6 @@ class Address
     {
         return $this->id;
     }
-
 
     /**
      * @param $lastName
@@ -258,6 +264,18 @@ class Address
     public function getLng(): string
     {
         return $this->lng;
+    }
+
+    public function setDeliveryZone(?DeliveryZone $deliveryZone): Address
+    {
+        $this->deliveryZone = $deliveryZone;
+
+        return $this;
+    }
+
+    public function getDeliveryZone(): ?DeliveryZone
+    {
+        return $this->deliveryZone;
     }
 
     /**

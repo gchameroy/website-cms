@@ -11,7 +11,7 @@
             <p class="indent m-b-md">Notre site ne dispose actuellement d’aucun système de paiement en ligne, nous vous contacterons directement pour finaliser ensemble votre commande. Nous restons à votre disposition pour toutes questions.</p>
             <div class="row">
                 <div class="col-md-3">
-                    <h4 class="bg-white p-h-xs p-w-md m-n">1. Résumé</h4>
+                    <h4 class="p-h-xs p-w-md m-n">1. Résumé</h4>
                 </div>
                 <div class="col-md-3">
                     <h4 class="p-h-xs p-w-md m-n">2. Identifiez-vous</h4>
@@ -20,7 +20,7 @@
                     <h4 class="p-h-xs p-w-md m-n">3. Adresse</h4>
                 </div>
                 <div class="col-md-3">
-                    <h4 class="p-h-xs p-w-md m-n">4. Récapitulatif</h4>
+                    <h4 class="bg-white p-h-xs p-w-md m-n">4. Récapitulatif</h4>
                 </div>
             </div>
             <div class="row">
@@ -28,13 +28,13 @@
                     <div class="bg-white p-w-sm">
                         <table class="table">
                             <thead>
-                                <tr>
-                                    <th>Article</th>
-                                    <th>Nom du Produit</th>
-                                    <th class="text-center">Prix</th>
-                                    <th class="text-center">Quantité</th>
-                                    <th class="text-center">Total</th>
-                                </tr>
+                            <tr>
+                                <th>Article</th>
+                                <th>Nom du Produit</th>
+                                <th class="text-center">Prix</th>
+                                <th class="text-center">Quantité</th>
+                                <th class="text-center">Total</th>
+                            </tr>
                             </thead>
                             <tbody>
                                 {% for cartProduct in cart.cartProducts %}
@@ -52,17 +52,17 @@
                                         </td>
                                         <td class="text-center">{{ cartProduct.product.price(user_offer)|number_format(2, '.', ' ') }}€</td>
                                         <td class="text-center">
-                                            <span class="m-r-sm">
-                                                <a href="{{ path('front_cart_remove_one_quantity', {'cartProduct': cartProduct.id}) }}">
-                                                    <span>-</span>
-                                                </a>
-                                            </span>
+                                                <span class="m-r-sm">
+                                                    <a href="{{ path('front_cart_remove_one_quantity', {'cartProduct': cartProduct.id}) }}">
+                                                        <span>-</span>
+                                                    </a>
+                                                </span>
                                             <span>{{ cartProduct.quantity }}</span>
                                             <span class="m-l-sm">
-                                                <a href="{{ path('front_cart_add_one_quantity', {'cartProduct': cartProduct.id}) }}">
-                                                    <span>+</span>
-                                                </a>
-                                            </span>
+                                                    <a href="{{ path('front_cart_add_one_quantity', {'cartProduct': cartProduct.id}) }}">
+                                                        <span>+</span>
+                                                    </a>
+                                                </span>
                                         </td>
                                         <td class="text-center">{{ cartProduct.price(user_offer)|number_format(2, '.', ' ') }}€</td>
                                     </tr>
@@ -74,31 +74,28 @@
                                     <td><strong>Sous-total*</strong></td>
                                     <td class="text-center">{{ cart.price(user_offer)|number_format(2, '.', ' ') }}€</td>
                                 </tr>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td class="border"><strong>Frais de port</strong></td>
+                                    <td class="border text-center">{{ app.user.deliveryZone.price|number_format(2, '.', ' ') }}€</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="b-none"></td>
+                                    <td><strong>Total TTC</strong></td>
+                                    <td class="text-center">{{ (cart.price(user_offer) + app.user.deliveryZone.price)|number_format(2, '.', ' ') }}€</td>
+                                </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
             </div>
-            <p>
-                <label class="checkbox-inline">
-                    <input type="checkbox" name="accept">
-                    <span>En cochant la case, j'accepte nos conditions d'utilisation et de ventes</span>
-                </label>
-            </p>
-            <p>
-                <small>*Frais de port à calculer selon adresse de livraison</small>
-            </p>
             <div class="clear m-t-md">
-                <span class="pull-left">
-                    <a href="{{ path('front_home') }}" class="btn btn-primary">Continuer ses achats</a>
-                </span>
-                <span class="pull-right">
-                    {% if cart.length > 0 %}
-                        <a href="{{ path('client_login') }}" name="order" class="btn btn-primary m-l-md">Commander</a>
-                    {% else %}
-                        <a class="btn btn-primary m-l-md" disabled>Commander</a>
-                    {% endif %}
-                </span>
+                <form method="post">
+                    <span class="pull-right">
+                        <input type="hidden" name="token" value="{{ csrf_token('client-order-recap') }}" />
+                        <button type="submit" class="btn btn-primary m-l-md">Confirmer</button>
+                    </span>
+                </form>
             </div>
         </div>
     </section>

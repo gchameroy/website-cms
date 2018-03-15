@@ -86,7 +86,7 @@
                             {% for variant in product.variants %}
                                 <li><a data-toggle="tab" href="#tab-product-variant-{{ variant.id }}">{{ variant.variantName }} ({% if variant.published %}en ligne{% else %}hors ligne{% endif %})</a></li>
                             {% endfor %}
-                            <li class=""><a class="action_product_variant_add">Ajouter une variante</a></li>
+                            <li class=""><a class="action_product_variant_add">Ajouter un modèle</a></li>
                         </ul>
                         <div class="tab-content">
                             {% include 'admin/product/variant.html.twig' with {'tabId': 'tab-product', 'selected': true} %}

@@ -2,15 +2,20 @@
 namespace AppBundle\Controller\Client;
 
 use AppBundle\Entity\CartProduct;
+use AppBundle\Entity\DeliveryZone;
 use AppBundle\Entity\Order;
 use AppBundle\Entity\OrderProduct;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserOffer;
 use AppBundle\Form\Type\AddressType;
+use AppBundle\Form\Type\DeliveryZone\DeliveryZoneType;
 use AppBundle\Form\Type\UserType;
+use AppBundle\Repository\OrderRepository;
 use AppBundle\Service\CartManager;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -18,6 +23,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class ClientController extends Controller
@@ -94,7 +100,7 @@ class ClientController extends Controller
      */
     public function registerAddressAction(Request $request, CartManager $cartManager)
     {
-        $cart = $cartManager->getCurrentCart();
+        /** @var User $user */
         $user = $this->getUser();
 
         $isBillingAddress = false;
@@ -122,6 +128,16 @@ class ClientController extends Controller
                     'checked' => $isBillingAddress
                 ]
             ])
+            ->add('deliveryZone', EntityType::class, [
+                'class' => DeliveryZone::class,
+                'choice_label' => function (DeliveryZone $deliveryZone) {
+                    return sprintf(
+                        '%s (%s€)',
+                        $deliveryZone->getName(),
+                        number_format($deliveryZone->getPrice(), 2, ',', ' ')
+                    );
+                }
+            ])
             ->add('comment', TextareaType::class, [
                 'required' => false
             ])
@@ -129,45 +145,26 @@ class ClientController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-
             $em = $this->getDoctrine()->getManager();
-
             $em->persist($data['deliveryAddress']);
-            $user->setDeliveryAddress($data['deliveryAddress']);
 
-            $order = (new Order())
-                ->setUser($user)
-                ->setDeliveryAddress($data['deliveryAddress'])
-                ->setComment($data['comment']);
-            $em->persist($order);
-
-            /** @var CartProduct $cartProduct */
-            foreach ($cart->getCartProducts() As $cartProduct) {
-                $orderProduct = (new OrderProduct())
-                    ->setQuantity($cartProduct->getQuantity())
-                    ->setProduct($cartProduct->getProduct())
-                    ->setOrder($order);
-                $em->persist($orderProduct);
-            }
-
-            $cart->setOrderedAt(new \DateTime())
-                ->setToken(null);
-            $em->persist($cart);
+            $user->setDeliveryAddress($data['deliveryAddress'])
+                ->setDeliveryZone($data['deliveryZone']);
 
             if ($data['isBillingAddress']) {
                 $user->setBillingAddress($data['deliveryAddress']);
-                $order->setBillingAddress($data['deliveryAddress']);
-            }
-            else{
+            } else{
                 $em->persist($data['billingAddress']);
                 $user->setBillingAddress($data['billingAddress']);
-                $order->setBillingAddress($data['billingAddress']);
             }
-            $em->persist($user);
 
+            $cart = $cartManager->getCurrentCart();
+            $cart->setComment($data['comment']);
+
+            $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('client_order_confirmation');
+            return $this->redirectToRoute('client_order_recap');
         }
 
         return $this->render('client/address.html.twig', [
@@ -177,12 +174,77 @@ class ClientController extends Controller
     }
 
     /**
-     * @Route("/order-confirmation", name="client_order_confirmation")
+     * @Route("/order-recap", name="client_order_recap")
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param EntityManager $em
+     * @param CartManager $cartManager
+     * @return Response
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function orderRecap(Request $request, EntityManager $em, CartManager $cartManager): Response
+    {
+        $cart = $cartManager->getCurrentCart();
+        $token = $request->request->get('token');
+        if (!$this->isCsrfTokenValid('client-order-recap', $token)) {
+            return $this->render('client/order/recap.html.twig', [
+                'cart' => $cart
+            ]);
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $order = (new Order())
+            ->setUser($user)
+            ->setDeliveryAddress($user->getDeliveryAddress())
+            ->setBillingAddress($user->getBillingAddress())
+            ->setDeliveryZone($user->getDeliveryZone())
+            ->setComment($cart->getComment());
+        $em->persist($order);
+
+        /** @var CartProduct $cartProduct */
+        foreach ($cart->getCartProducts() As $cartProduct) {
+            $orderProduct = (new OrderProduct())
+                ->setQuantity($cartProduct->getQuantity())
+                ->setProduct($cartProduct->getProduct())
+                ->setOrder($order);
+            $em->persist($orderProduct);
+        }
+
+        $cart->setOrderedAt(new \DateTime())
+            ->setToken(null);
+        $em->persist($cart);
+        $em->flush();
+
+        return $this->redirectToRoute('client_order_confirmation', [
+            'orderId' => $order->getId()
+        ]);
+    }
+
+    /**
+     * @Route("/order-confirmation/{orderId}", name="client_order_confirmation", requirements={"orderId": "\d+"})
      * @Method({"GET"})
+     * @param int $orderId
      * @return Response
      */
-    public function orderConfirmation()
+    public function orderConfirmation(int $orderId)
     {
-        return $this->render('client/order/confirmation.html.twig');
+        /** @var OrderRepository $orderRepository */
+        $orderRepository = $this->getDoctrine()->getRepository(Order::class);
+        /** @var Order|null $order */
+        $order = $orderRepository->find($orderId);
+        $this->checkOrder($order);
+
+        return $this->render('client/order/confirmation.html.twig', [
+            'order' => $order
+        ]);
+    }
+
+    private function checkOrder(?Order $order)
+    {
+        if (!$order) {
+            throw new NotFoundHttpException('Order Not Found.');
+        }
     }
 }

@@ -126,6 +126,12 @@ class User implements UserInterface
     private $files;
 
     /**
+     * @var DeliveryZone
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\DeliveryZone")
+     */
+    private $deliveryZone;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -256,8 +262,7 @@ class User implements UserInterface
     {
         $roles = ['ROLE_USER'];
 
-        if ($this->getOffer()->getLabel() === 'Sans offre')
-        {
+        if ($this->getOffer()->getLabel() === 'Sans offre') {
             $roles = ['ROLE_PRO'];
         }
 
@@ -554,5 +559,17 @@ class User implements UserInterface
     public function getFiles()
     {
         return $this->files;
+    }
+
+    public function setDeliveryZone(DeliveryZone $deliveryZone): User
+    {
+        $this->deliveryZone = $deliveryZone;
+
+        return $this;
+    }
+
+    public function getDeliveryZone(): ?DeliveryZone
+    {
+        return $this->deliveryZone;
     }
 }

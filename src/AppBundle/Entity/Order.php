@@ -75,6 +75,12 @@ class Order
     private $orderProducts;
 
     /**
+     * @var DeliveryZone
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\DeliveryZone")
+     */
+    private $deliveryZone;
+
+    /**
      * Order constructor.
      */
     public function __construct()
@@ -323,5 +329,17 @@ class Order
     public function removeOrderProduct(OrderProduct $orderProduct)
     {
         $this->orderProducts->removeElement($orderProduct);
+    }
+
+    public function setDeliveryZone(DeliveryZone $deliveryZone): Order
+    {
+        $this->deliveryZone = $deliveryZone;
+
+        return $this;
+    }
+
+    public function getDeliveryZone(): ?DeliveryZone
+    {
+        return $this->deliveryZone;
     }
 }

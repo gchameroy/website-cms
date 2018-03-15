@@ -49,8 +49,8 @@ class StaticPage
 
     /**
      * @var Image
-     * @ORM\ManyToOne(targetEntity="Image", inversedBy="newsletters")
-     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=true)
+     * @ORM\OneToOne(targetEntity="Image")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $image;
 

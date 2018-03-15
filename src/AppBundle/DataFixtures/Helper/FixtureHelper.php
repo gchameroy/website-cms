@@ -9,8 +9,8 @@ abstract class FixtureHelper extends Fixture
 {
     const NB_USER = 15;
     const NB_PRO = 5;
-    const NB_ORDER_USER = 3;
-    const NB_ORDER_PRO = 7;
+    const NB_ORDER_USER = 1;
+    const NB_ORDER_PRO = 2;
     const NB_NEWSLETTER = 5;
     const NB_USER_ORDER_PRODUCT = 3;
     const NB_PRO_ORDER_PRODUCT = 5;
@@ -22,6 +22,7 @@ abstract class FixtureHelper extends Fixture
     const NB_PRODUCT_VARIANT = 2;
     const NB_PRODUCT_CATEGORY = 2;
     const NB_PRODUCT_SKILL = 2;
+    const NB_DELIVERY_ZONE = 1;
 
     /**
      * @var \Faker\Generator

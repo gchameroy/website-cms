@@ -45,6 +45,12 @@ class Cart
     private $token;
 
     /**
+     * @var string|null
+     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
+     */
+    private $comment;
+
+    /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="CartProduct", mappedBy="cart")
      */
@@ -150,6 +156,18 @@ class Cart
     public function setToken($token)
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
 
         return $this;
     }
