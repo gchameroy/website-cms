@@ -10,10 +10,11 @@ use AppBundle\Entity\ProductSkill;
 use AppBundle\Entity\UserOffer;
 use AppBundle\Form\Type\Category\CategoryType;
 use AppBundle\Form\Type\ImageType;
-use AppBundle\Form\Type\Product\ProductPublishType;
 use AppBundle\Form\Type\Product\ProductVariantType;
 use AppBundle\Form\Type\ProductSkill\ProductSkillType;
 use AppBundle\Form\Type\Product\ProductType;
+use AppBundle\Repository\ProductRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -29,6 +30,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ProductController extends Controller
 {
+    /** @var EntityManager */
+    private $entityManager;
+
+    /** @var ProductRepository */
+    private $productRepository;
+
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+        $this->productRepository = $entityManager->getRepository(Product::class);
+    }
+
     /**
      * @Route("/", name="admin_products")
      * @return Response
@@ -66,6 +79,15 @@ class ProductController extends Controller
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $nextPosition = 1;
+            $nextProduct = $this->productRepository
+                ->getLast();
+            if ($nextProduct) {
+                $nextPosition = $nextProduct->getPosition() + 1;
+            }
+
+            $product->setPosition($nextPosition);
             $em->persist($product);
 
             foreach ($offers as $offer) {
@@ -591,5 +613,67 @@ class ProductController extends Controller
             'product' => $product,
             'offers' => $offers
         ]);
+    }
+
+    /**
+     * @Route("/move", name="admin_product_move")
+     * @Method({"POST"})
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse|Response
+     */
+    public function moveAction(Request $request, EntityManagerInterface $entityManager)
+    {
+        $token = $request->request->get('token');
+        if (!$this->isCsrfTokenValid('admin-product-move', $token)) {
+            return $this->redirectToRoute('admin_products');
+        }
+
+        $product = $entityManager
+            ->getRepository(Product::class)
+            ->find($request->request->get('product'));
+        $this->checkProduct($product);
+
+        $direction = $request->request->get('direction');
+        if (!in_array($direction, ['up', 'down'])) {
+            return $this->redirectToRoute('admin_products');
+        }
+
+        if ($direction == 'down') {
+            if ($product->getPosition() == 1) {
+                return $this->redirectToRoute('admin_products');
+            }
+
+            /** @var Product $product2 */
+            $product2 = $entityManager->getRepository(Product::class)
+                ->findOneByPosition($product->getPosition() - 1);
+        } else {
+            $last = $entityManager->getRepository(Product::class)
+                ->getLast();
+            if ($product === $last) {
+                return $this->redirectToRoute('admin_products');
+            }
+
+            /** @var Product $product2 */
+            $product2 = $entityManager->getRepository(Product::class)
+                ->findOneByPosition($product->getPosition() + 1);
+        }
+
+        $position = $product->getPosition();
+        $position2 = $product2->getPosition();
+
+        $product->setPosition(null);
+        $product2->setPosition(null);
+        $entityManager->persist($product);
+        $entityManager->persist($product2);
+        $entityManager->flush();
+
+        $product->setPosition($position2);
+        $product2->setPosition($position);
+        $entityManager->persist($product);
+        $entityManager->persist($product2);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_products');
     }
 }

@@ -10,6 +10,16 @@ class ProductRepository extends EntityRepository
 {
     const PER_PAGE = 9;
 
+    public function getLast(): ?Product
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.parent is null')
+            ->orderBy('p.position', 'desc')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     /**
      * @return array
      */
@@ -17,6 +27,7 @@ class ProductRepository extends EntityRepository
     {
         return $this->createQueryBuilder('p')
             ->where('p.parent is null')
+            ->orderBy('p.position', 'desc')
             ->getQuery()
             ->getResult();
     }
@@ -30,7 +41,7 @@ class ProductRepository extends EntityRepository
             ->where('p.publishedAt <= :now')
             ->andWhere('p.parent is null')
             ->setParameter('now', new \DateTime())
-            ->orderBy('p.publishedAt', 'desc')
+            ->orderBy('p.position', 'desc')
             ->getQuery()
             ->getResult();
     }
@@ -64,27 +75,7 @@ class ProductRepository extends EntityRepository
             ->andWhere('p.category = :category')
                 ->setParameter('category', $category)
             ->andWhere('p.parent is null')
-            ->orderBy('p.publishedAt', 'desc')
-            ->setFirstResult(($page - 1) * self::PER_PAGE)
-            ->setMaxResults(self::PER_PAGE)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * @param Category $category
-     * @param int|null $page
-     * @return array
-     */
-    public function findPublishedByCategoryBis(Category $category, ?int $page = 1)
-    {
-        return $this->createQueryBuilder('p')
-            ->where('p.publishedAt <= :now')
-                ->setParameter('now', new \DateTime())
-            ->andWhere('p.category = :category')
-                ->setParameter('category', $category)
-            ->andWhere('p.parent is null')
-            ->orderBy('p.publishedAt', 'desc')
+            ->orderBy('p.position', 'desc')
             ->setFirstResult(($page - 1) * self::PER_PAGE)
             ->setMaxResults(self::PER_PAGE)
             ->getQuery()
@@ -125,7 +116,7 @@ class ProductRepository extends EntityRepository
             ->where('p.publishedAt <= :now')
                 ->setParameter('now', new \DateTime())
             ->andWhere('p.parent is null')
-            ->orderBy('p.publishedAt', 'desc')
+            ->orderBy('p.position', 'desc')
             ->setMaxResults($max)
             ->getQuery()
             ->getResult();
@@ -145,7 +136,7 @@ class ProductRepository extends EntityRepository
             ->andWhere('p.parent is null')
             ->andWhere('c.slug = :category')
             ->setParameter('category', $category)
-            ->orderBy('p.publishedAt', 'desc')
+            ->orderBy('p.position', 'desc')
             ->setMaxResults($max)
             ->getQuery()
             ->getResult();

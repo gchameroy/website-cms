@@ -41,6 +41,24 @@
                                             <label class="label label-default">hors ligne</label>
                                         {% endif %}
                                     </td>
+                                    <td>
+                                        <form class="inline" action="{{ url('admin_product_move') }}" method="post">
+                                            <input type="hidden" name="token" value="{{ csrf_token('admin-product-move') }}" />
+                                            <input type="hidden" name="product" value="{{ product.id }}" />
+                                            <input type="hidden" name="direction" value="up" />
+                                            <button type="submit" class="btn" {% if loop.first %}disabled{% endif %}>
+                                                <i class="fa fa-arrow-up"></i>
+                                            </button>
+                                        </form>
+                                        <form class="inline" action="{{ url('admin_product_move') }}" method="post">
+                                            <input type="hidden" name="token" value="{{ csrf_token('admin-product-move') }}" />
+                                            <input type="hidden" name="product" value="{{ product.id }}" />
+                                            <input type="hidden" name="direction" value="down" />
+                                            <button type="submit" class="btn" {% if loop.last %}disabled{% endif %}>
+                                                <i class="fa fa-arrow-down"></i>
+                                            </button>
+                                        </form>
+                                    </td>
                                     <td class="project-title" nowrap>
                                         <a href="{{ path('admin_product', {'id': product.id }) }}">{{ product.label }}</a>
                                         <br>

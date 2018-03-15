@@ -89,6 +89,12 @@ class Product
     private $descriptionSEO;
 
     /**
+     * @var int|null
+     * @ORM\Column(type="integer", unique=true, nullable=true)
+     */
+    private $position;
+
+    /**
      * @var Category
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
      * @ORM\JoinColumn(nullable=true)
@@ -351,6 +357,25 @@ class Product
     public function getDescriptionSEO()
     {
         return $this->parent === null ? $this->descriptionSEO : $this->parent->getDescriptionSEO();
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int|null $position
+     * @return Product
+     */
+    public function setPosition(?int $position): self
+    {
+        $this->position = $position;
+
+        return $this;
     }
 
     /**

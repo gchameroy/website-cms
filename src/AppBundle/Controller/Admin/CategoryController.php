@@ -135,7 +135,7 @@ class CategoryController Extends Controller
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      */
-    public function upAction(Request $request, EntityManagerInterface $entityManager)
+    public function moveAction(Request $request, EntityManagerInterface $entityManager)
     {
         $token = $request->request->get('token');
         if (!$this->isCsrfTokenValid('category-move', $token)) {
