@@ -79,7 +79,7 @@ class UserFixtures extends FixtureHelper
                 ->setFirstName($this->faker->firstName())
                 ->setLastName($this->faker->lastName)
                 ->setCompany($this->faker->company)
-                ->setOffer($this->getReference('user-offer-pro'))
+                ->setOffer($this->getReference('user-offer-none'))
                 ->setBillingAddress($this->getReference('address-pro-' . $i))
                 ->setDeliveryAddress($this->getReference('address-pro-' . $i));
 

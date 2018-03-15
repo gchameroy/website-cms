@@ -20,8 +20,8 @@
                 <table>
                     {% for price in product.prices %}
                         <tr>
-                            <td width="200"><strong>{{ price.offer.label }}</strong></td>
-                            <td>{{ price.price|number_format(2, ',', ' ') }} € <small>HT</small></td>
+                            <td width="200"><strong>Prix</strong></td>
+                            <td>{{ price.price|number_format(2, ',', ' ') }} €</td>
                         </tr>
                     {% endfor %}
                 </table>

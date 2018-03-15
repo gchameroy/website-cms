@@ -14,12 +14,6 @@ class UserOfferFixtures extends FixtureHelper
         $offer->setLabel('Sans offre');
         $this->setReference('user-offer-none', $offer);
         $manager->persist($offer);
-
-        $offer = new UserOffer();
-        $offer->setLabel('Pro');
-        $this->setReference('user-offer-pro', $offer);
-        $manager->persist($offer);
-
         $manager->flush();
     }
 }

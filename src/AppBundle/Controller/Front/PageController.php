@@ -26,7 +26,9 @@ class PageController extends Controller
 
     /**
      * @Route("/magasin", name="front_shop")
-     * @Method({"GET"})
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param Swift_Mailer $mailer
      * @return Response
      */
     public function shopAtion(Request $request, Swift_Mailer $mailer)

@@ -19,13 +19,8 @@ class LayoutController extends Controller
             ->getRepository(Menu::class)
             ->findPublished();
 
-        $categories = $this->getDoctrine()
-            ->getRepository(Category::class)
-            ->findPublished();
-
         return $this->render('front/layout/partial/menu.html.twig', [
-            'menus' => $menus,
-            'categories' => $categories
+            'menus' => $menus
         ]);
     }
 

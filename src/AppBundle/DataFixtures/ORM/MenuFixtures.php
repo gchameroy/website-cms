@@ -57,7 +57,7 @@ class MenuFixtures extends FixtureHelper
     {
         $menu = (new Menu())
             ->setPageName('Table/Cuisine')
-            ->setRouteName('front_presentation')
+            ->setRouteName('front_shop')
             ->setOrder($this->order)
             ->setPublishedAt(new \DateTime());
         $this->setReference('menu-' . $this->order++, $menu);

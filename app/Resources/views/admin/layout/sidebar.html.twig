@@ -21,12 +21,6 @@
                     <span class="nav-label">Dashboard</span>
                 </a>
             </li>
-            <li class="{% if app.request.attributes.get('_route') in ['admin_orders', 'admin_order'] %}active{% endif %}">
-                <a href="{{ url('admin_orders') }}">
-                    <i class="fa fa-th-large"></i>
-                    <span class="nav-label">Commandes</span>
-                </a>
-            </li>
             <li class="{% if app.request.attributes.get('_route') in ['admin_products', 'admin_products_add', 'admin_product', 'admin_product_edit', 'admin_product_publish', 'admin_product_unpublish', 'admin_product_delete', 'admin_categories', 'admin_categories_add', 'admin_category_edit', 'admin_category_delete'] %}active{% endif %}">
                 <a href="{{ url('admin_products') }}">
                     <i class="fa fa-cubes"></i>
@@ -55,8 +49,10 @@
                     <li class="{% if app.request.attributes.get('_route') in ['admin_users'] %}active{% endif %}">
                         <a href="{{ url('admin_users') }}">Liste des clients</a>
                     </li>
-                    <li class="{% if app.request.attributes.get('_route') in ['admin_user_offers', 'admin_user_offers_add', 'admin_user_offer_edit', 'admin_user_offer_delete'] %}active{% endif %}">
-                        <a href="{{ url('admin_user_offers') }}">Liste des offres</a>
+                    <li class="{% if app.request.attributes.get('_route') in ['admin_orders', 'admin_order'] %}active{% endif %}">
+                        <a href="{{ url('admin_orders') }}">
+                            <span class="nav-label">Liste des commandes</span>
+                        </a>
                     </li>
                 </ul>
             </li>
@@ -83,24 +79,6 @@
                 <a href="{{ url('admin_newsletters') }}">
                     <i class="fa fa-newspaper-o"></i>
                     <span class="nav-label">Actualités</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ url('admin_galleries') }}">
-                    <i class="fa fa-image"></i>
-                    <span class="nav-label">Galerie photo</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ url('admin_point_of_sales') }}">
-                    <i class="fa fa-image"></i>
-                    <span class="nav-label">Points de ventes</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ url('admin_partners') }}">
-                    <i class="fa fa-users"></i>
-                    <span class="nav-label">Partenaires</span>
                 </a>
             </li>
         </ul>

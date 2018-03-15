@@ -28,13 +28,6 @@ class ProductPriceFixtures extends FixtureHelper
                 ->setOffer($this->getReference('user-offer-none'))
                 ->setProduct($this->getReference('product-' . $p));
             $this->manager->persist($price);
-
-            $pprice = $pprice - $this->faker->numberBetween(1, 5);
-            $price = (new ProductPrice())
-                ->setPrice($pprice)
-                ->setOffer($this->getReference('user-offer-pro'))
-                ->setProduct($this->getReference('product-' . $p));
-            $this->manager->persist($price);
         }
 
         $this->manager->flush();
@@ -48,13 +41,6 @@ class ProductPriceFixtures extends FixtureHelper
                 $price = (new ProductPrice())
                     ->setPrice($pprice)
                     ->setOffer($this->getReference('user-offer-none'))
-                    ->setProduct($this->getReference('product-' . $p . '-variant-' . $v));
-                $this->manager->persist($price);
-
-                $pprice = $pprice - $this->faker->numberBetween(1, 5);
-                $price = (new ProductPrice())
-                    ->setPrice($pprice)
-                    ->setOffer($this->getReference('user-offer-pro'))
                     ->setProduct($this->getReference('product-' . $p . '-variant-' . $v));
                 $this->manager->persist($price);
             }
