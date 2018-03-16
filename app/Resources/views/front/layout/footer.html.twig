@@ -9,12 +9,12 @@
             <div class="col-sm-4">
                 <p>
                     <em>Menu</em>
-                    <br><a href="#">Présentation</a>
-                    <br><a href="#">Coutellerie</a>
-                    <br><a href="#">Vannerie</a>
-                    <br><a href="#">Table/Cuisine</a>
+                    <br><a href="{{ path('front_presentation') }}">Présentation</a>
+                    <br><a href="{{ path('front_category', {'slug': 'coutellerie'}) }}">Coutellerie</a>
+                    <br><a href="{{ path('front_category', {'slug': 'vannerie'}) }}">Vannerie</a>
+                    <br><a href="{{ path('front_shop') }}">Table/Cuisine</a>
                     <br><a href="{{ path('front_privacy') }}">Conditions Générales d’utilisation et de Ventes</a>
-                    <br><a href="#">Contact</a>
+                    <br><a href="{{ path('front_contact') }}">Contact</a>
                 </p>
             </div>
             <div class="col-sm-4">
