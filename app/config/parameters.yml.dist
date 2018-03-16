@@ -1,9 +1,9 @@
 parameters:
-    database_host: db
-    database_port: 3306
+    database_host: localhost
+    database_port: ~
     database_name: website_cms
-    database_user: website_cms
-    database_password: website_cms
+    database_user: root
+    database_password:
 
     mailer_transport: smtp
     mailer_host: 127.0.0.1
