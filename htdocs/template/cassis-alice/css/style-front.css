@@ -240,6 +240,12 @@ h4 a {
     width: 100%;
     font-size: 48px;
 }
+
+.img-size-gallery {
+    height: 140px;
+    overflow-y: hidden;
+    margin-bottom: 30px;
+}
 /*********************************************/
 .form-control {
     font-size: 0.8em!important;

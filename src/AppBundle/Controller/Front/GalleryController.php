@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Front;
 
 use AppBundle\Entity\Gallery;
+use AppBundle\Manager\GalleryManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +29,7 @@ class GalleryController extends Controller
      * @param int $page
      * @return Response
      */
-    public function listAction(int $page = 1)
+    public function listAction(int $page = 1, GalleryManager $galleryManager)
     {
         if ($page <= 0) {
             return $this->redirectToRoute('front_gallery', [
@@ -36,9 +37,7 @@ class GalleryController extends Controller
             ]);
         }
 
-        $nbPage = $this->getDoctrine()
-            ->getRepository(Gallery::class)
-            ->countNbPagePublished(11);
+        $nbPage = $galleryManager->getNbPages();
 
         if ($page > $nbPage) {
             return $this->redirectToRoute('front_gallery', [
@@ -46,9 +45,7 @@ class GalleryController extends Controller
             ]);
         }
 
-        $galleries = $this->getDoctrine()
-            ->getRepository(Gallery::class)
-            ->findAll(11, $page, 'desc');
+        $galleries = $galleryManager->getPublished($page);
 
         return $this->render('front/gallery/list.html.twig', [
             'galleries' => $galleries,
