@@ -51,8 +51,10 @@ class PointOfSaleController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $location = $gmaps->geoLocateAddress($pointOfSale->getAddress()->getFormattedAddress());
-            $pointOfSale->getAddress()->setLat($location->getLat());
-            $pointOfSale->getAddress()->setLng($location->getLng());
+            if ($location) {
+                $pointOfSale->getAddress()->setLat($location->getLat());
+                $pointOfSale->getAddress()->setLng($location->getLng());
+            }
 
             $entityManager->persist($pointOfSale);
             $entityManager->flush();
@@ -76,6 +78,7 @@ class PointOfSaleController extends Controller
      */
     public function editAction(Request $request, int $pointOfSale, EntityManagerInterface $entityManager, GoogleMaps $gmaps)
     {
+        /** @var PointOfSale $pointOfSale */
         $pointOfSale = $entityManager
             ->getRepository(PointOfSale::class)
             ->find($pointOfSale);
@@ -85,8 +88,10 @@ class PointOfSaleController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $location = $gmaps->geoLocateAddress($pointOfSale->getAddress()->getFormattedAddress());
-            $pointOfSale->getAddress()->setLat($location->getLat());
-            $pointOfSale->getAddress()->setLng($location->getLng());
+            if ($location) {
+                $pointOfSale->getAddress()->setLat($location->getLat());
+                $pointOfSale->getAddress()->setLng($location->getLng());
+            }
 
             $entityManager->persist($pointOfSale);
             $entityManager->flush();

@@ -15,7 +15,7 @@
                                     <strong class="text-primary">{{ pointOfSale.address.company }}</strong>
                                     <br>{{ pointOfSale.address.address -}}
                                     <br>{{ pointOfSale.address.zipcode ~ ' ' ~ pointOfSale.address.city -}}
-                                    <br>{{ pointOfSale.website -}}
+                                    <br>{% if pointOfSale.website %}<a href="{{ pointOfSale.website }}" target="_blank">{{ pointOfSale.website }}</a>{% endif %}
                                 </p>
                             </div>
                         {% endfor %}

@@ -7,16 +7,9 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-/**
- * Class GoogleMaps
- */
 class GoogleMaps
 {
-    /**
-     * @param string $address
-     * @return Location
-     */
-    public function geoLocateAddress(string $address): Location
+    public function geoLocateAddress(string $address): ?Location
     {
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
@@ -24,10 +17,14 @@ class GoogleMaps
 
         $address = urlencode($address);
         $url = sprintf('https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s', $address, 'AIzaSyCe3T7l6rVotuy_15U_FIK2OCb_3IAdZLM');
-        $response = $serializer->decode(file_get_contents($url), 'json');
+        try {
+            $response = $serializer->decode(file_get_contents($url), 'json');
+        } catch (\Exception $e) {
+            $response['status'] = 'KO';
+        }
 
         if ($response['status'] !== 'OK' || count($response['results']) <= 0) {
-            return new Location();
+            return null;
         }
 
         return $serializer->denormalize($response['results'][0]['geometry']['location'], Location::class);
