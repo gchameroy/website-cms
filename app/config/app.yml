@@ -4,4 +4,3 @@ parameters:
         company:
             name: '%app_company_name%'
             email: '%app_company_email%'
-            id: '%app_company_id%'
