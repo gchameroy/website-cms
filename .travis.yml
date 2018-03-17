@@ -3,15 +3,23 @@ language: php
 php:
   - '7.1'
 
+services:
+  - mysql
+
 env:
   - SYMFONY_ENV=dev
 
 parameters:
     secret: travis_secret
 
-install: composer install
+before_script:
+  - composer install --no-progress --no-interaction --prefer-dist --no-suggest
+  - mysql -e 'CREATE DATABASE website_cms;'
 
-script: php bin/console about
+script:
+  - php bin/console doctrine:schema:create
+  - php bin/console doctrine:fixtures:load -n
+  - vendor/bin/codecept run
 
 notifications:
   webhooks:

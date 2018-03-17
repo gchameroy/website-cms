@@ -1,18 +1,17 @@
 parameters:
-    database_host: db
-    database_port: 3306
+    database_host: localhost
+    database_port: ~
     database_name: website_cms
-    database_user: website_cms
-    database_password: website_cms
+    database_user: root
+    database_password:
 
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: ~
     mailer_password: ~
 
-    secret: ChangeItAsSoonAsPossible
+    secret: ChangeMySecretFluffyUnicorn
 
     app_theme: default
-    app_company_name: 'Zen Panda'
-    app_company_email: 'contact@test.fr'
-    app_company_id: 'coutellerie'
+    app_company_name: 'Fluffy Unicorn'
+    app_company_email: 'contact@fluffy-unicorn.com'
