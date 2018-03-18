@@ -31,7 +31,7 @@ class PageController extends Controller
      * @param Swift_Mailer $mailer
      * @return Response
      */
-    public function shopAtion(Request $request, Swift_Mailer $mailer)
+    public function shopAction(Request $request, Swift_Mailer $mailer)
     {
         $contact = new Contact();
 
@@ -73,15 +73,5 @@ class PageController extends Controller
         return $this->render('front/page/partners.html.twig', [
             'partners' => $partners
         ]);
-    }
-
-    /**
-     * @Route("/cgv-cgu", name="front_privacy")
-     * @Method({"GET"})
-     * @return Response
-     */
-    public function privacyAction()
-    {
-        return $this->render('front/page/privacy.html.twig');
     }
 }

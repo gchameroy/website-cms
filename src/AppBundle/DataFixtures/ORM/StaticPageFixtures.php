@@ -15,20 +15,26 @@ class StaticPageFixtures extends FixtureHelper
     public function load(ObjectManager $manager)
     {
         $this->manager = $manager;
-        $this->loadPrivacy();
+        $this->loadDefaults();
         $this->loadOthers();
     }
 
-    private function loadPrivacy()
+    private function loadDefaults()
     {
-        $staticPage = new StaticPage();
-        $staticPage->setTitle('Mentions légales')
-            ->setContent($this->faker->paragraph(100))
-            ->setPublishedAt(new \DateTime())
-            ->setIsDeletable(false);
+        $pages = [
+            'Mentions légales',
+            'Conditions Générales d\'utilisation et de Ventes'
+        ];
 
-        $this->setReference('staticPage-privacy', $staticPage);
-        $this->manager->persist($staticPage);
+        foreach ($pages as $page) {
+            $staticPage = new StaticPage();
+            $staticPage->setTitle($page)
+                ->setContent($this->faker->paragraph(100))
+                ->setPublishedAt(new \DateTime())
+                ->setIsDeletable(false);
+            $this->manager->persist($staticPage);
+        }
+
         $this->manager->flush();
     }
 
@@ -49,8 +55,8 @@ class StaticPageFixtures extends FixtureHelper
 
     private function loadImage()
     {
-        $uploadPath = __DIR__ . '/../../../../uploads/static-page';
-        $fixturesPath = __DIR__ . '/../img/static-page';
+        $uploadPath = $this->getUploadDir('static-page');
+        $fixturesPath = $this->getImgFixturesDir('static-page');
 
         $file = $this->faker->file($fixturesPath, $uploadPath, false);
         $image = new Image();

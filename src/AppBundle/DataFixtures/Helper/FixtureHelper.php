@@ -33,4 +33,18 @@ abstract class FixtureHelper extends Fixture
     {
         $this->faker = Faker::create();
     }
+
+    public function getUploadDir($folder = ''): string
+    {
+        $folder = '' !== $folder ? '/' . $folder : '';
+
+        return __DIR__ . '/../../../../uploads' . $folder;
+    }
+
+    public function getImgFixturesDir($folder = ''): string
+    {
+        $folder = '' !== $folder ? '/' . $folder : '';
+
+        return __DIR__ . '/../img' . $folder;
+    }
 }
