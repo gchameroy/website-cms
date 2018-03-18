@@ -23,12 +23,12 @@ class GalleryController extends Controller
     }
 
     /**
-     * @Route("/galerie/page-{page}", name="front_gallery")
+     * @Route("/galerie/page-{page}", name="front_gallery", defaults={"page"=1})
      * @Method({"GET"})
      * @param int $page
      * @return Response
      */
-    public function listAction(int $page = 1)
+    public function listAction(int $page)
     {
         if ($page <= 0) {
             return $this->redirectToRoute('front_gallery', [

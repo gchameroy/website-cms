@@ -94,18 +94,24 @@ class HomeController extends Controller
 
         $urls[] = [
             'loc' => $this->generateUrl('front_home', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'lastmod' => $lastProduct->getPublishedAt()->format('d-m-Y'),
+            'lastmod' => $lastProduct->getPublishedAt()->format('Y-m-d'),
             'changefreq' => 'daily',
             'priority' => '0.5'
         ];
 
+        $urls[] = [
+            'loc' => $this->generateUrl('front_newsletters_home', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'lastmod' => '2017-11-13',
+            'changefreq' => 'daily',
+            'priority' => '0.5'
+        ];
         $newsletters = $em->getRepository(Newsletter::class)
             ->findPublished();
         /** @var Newsletter $newsletter */
         foreach ($newsletters as $newsletter) {
             $urls[] = [
                 'loc' => $this->generateUrl('front_newsletter', ['slug' => $newsletter->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL),
-                'lastmod' => $newsletter->getPublishedAt()->format('d-m-Y'),
+                'lastmod' => $newsletter->getPublishedAt()->format('Y-m-d'),
                 'changefreq' => 'daily',
                 'priority' => '0.5'
             ];
@@ -121,7 +127,7 @@ class HomeController extends Controller
             for ($page = 1; $page <= $nbPage; $page++) {
                 $urls[] = [
                     'loc' => $this->generateUrl('front_products', ['category' => $category->getSlug(), 'page' => $page], UrlGeneratorInterface::ABSOLUTE_URL),
-                    'lastmod' => $category->getPublishedAt()->format('d-m-Y'),
+                    'lastmod' => $category->getPublishedAt()->format('Y-m-d'),
                     'changefreq' => 'daily',
                     'priority' => '0.5'
                 ];
@@ -134,7 +140,7 @@ class HomeController extends Controller
         foreach ($products as $product) {
             $urls[] = [
                 'loc' => $this->generateUrl('front_product', ['category' => $product->getCategory()->getSlug(), 'product' => $product->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL),
-                'lastmod' => $product->getPublishedAt()->format('d-m-Y'),
+                'lastmod' => $product->getPublishedAt()->format('Y-m-d'),
                 'changefreq' => 'daily',
                 'priority' => '0.5'
             ];
@@ -146,7 +152,7 @@ class HomeController extends Controller
         foreach ($staticPages as $staticPage) {
             $urls[] = [
                 'loc' => $this->generateUrl('front_static_page', ['slug' => $staticPage->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL),
-                'lastmod' => $staticPage->getPublishedAt()->format('d-m-Y'),
+                'lastmod' => $staticPage->getPublishedAt()->format('Y-m-d'),
                 'changefreq' => 'daily',
                 'priority' => '0.5'
             ];
