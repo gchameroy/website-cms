@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Order;
+use AppBundle\Service\EmailProvider;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -72,9 +73,10 @@ class OrderController extends Controller
      * @Route("/status", name="admin_order_status")
      * @Method({"POST"})
      * @param Request $request
+     * @param EmailProvider $emailProvider
      * @return Response
      */
-    public function statusAction(Request $request) {
+    public function statusAction(Request $request, EmailProvider $emailProvider) {
         $status = $request->request->get('status');
         $order_id = $request->request->get('order_id');
         $order = $this->getDoctrine()
@@ -86,6 +88,10 @@ class OrderController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($order);
         $em->flush();
+
+        if ($order->getStatus() === Order::STATUS_SENT) {
+            $emailProvider->sendClientOrderStatus($status, $order->getUser());
+        }
 
         return new Response('', Response::HTTP_OK);
     }

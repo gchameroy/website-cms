@@ -12,6 +12,7 @@ use AppBundle\Form\Type\DeliveryZone\DeliveryZoneType;
 use AppBundle\Form\Type\UserType;
 use AppBundle\Repository\OrderRepository;
 use AppBundle\Service\CartManager;
+use AppBundle\Service\EmailProvider;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -182,7 +183,7 @@ class ClientController extends Controller
      * @return Response
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function orderRecap(Request $request, EntityManager $em, CartManager $cartManager): Response
+    public function orderRecap(Request $request, EntityManager $em, CartManager $cartManager, EmailProvider $emailProvider): Response
     {
         $cart = $cartManager->getCurrentCart();
         $token = $request->request->get('token');
@@ -216,6 +217,9 @@ class ClientController extends Controller
             ->setToken(null);
         $em->persist($cart);
         $em->flush();
+
+        $emailProvider->sendAdminNewOrder();
+        $emailProvider->sendClientOrderConfirmation($user);
 
         return $this->redirectToRoute('client_order_confirmation', [
             'orderId' => $order->getId()

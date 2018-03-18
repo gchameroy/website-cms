@@ -1,0 +1,54 @@
+<!doctype html>
+{% spaceless %}
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <style>
+            {% include "front/emails/style-email.css" %}
+        </style>
+        <title></title>
+    </head>
+    <body class="body-background">
+        <table cellpadding="40px" cellspacing="0" class="bg-white">
+            <tr class="tr-logo">
+                <td colspan="2" class="td-logo">
+                    <img src="{{ absolute_url(asset('img_logo.png')) }}">
+                </td>
+            </tr>
+            <tr class="tr-title">
+                <td colspan="2" class="td-title">
+                    <h2>{% block title %}{% endblock %}</h2>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="td-content">
+                    {% block content %}{% endblock %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="td-padding-b"></td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="p-title">Coutellerie Legendre</p>
+                    <p class="p-address-1">35, rue Diderot</p>
+                    <p class="p-address-2">52200 LANGRES</p>
+                    <p class="p-tel"><span class="span-tel">Tél. :</span> 03 25 87 00 63</p>
+                    <p>
+                        <a href="#" class="a-website">www.coutellerie-legendre.fr</a>
+                    </p>
+                </td>
+                <td  style="">
+                    <img src="{{ absolute_url(asset('img_footer.png')) }}" class="img-padding">
+                </td>
+            </tr>
+            <tr class="tr-border-email">
+                <td colspan="2"></td>
+            </tr>
+        </table>
+    </body>
+    </html>
+{% endspaceless %}
