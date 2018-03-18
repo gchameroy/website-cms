@@ -5,14 +5,12 @@
         {{ form_widget(form.quantity, {'attr' : {'class' : 'form-control'} }) }}
     </div>
 </div>
-{% if product.variants|length > 0 %}
-    <div class="row m-b-sm">
-        <div class="col-md-offset-7 col-md-2 text-right">Modèle : </div>
-        <div class="col-md-3">
-            {{ form_widget(form.product, {'attr' : {'class' : 'form-control'} }) }}
-        </div>
+<div class="row m-b-sm {% if product.variants|length == 0 %}hidden{% endif %}">
+    <div class="col-md-offset-7 col-md-2 text-right">Modèle : </div>
+    <div class="col-md-3">
+        {{ form_widget(form.product, {'attr' : {'class' : 'form-control'} }) }}
     </div>
-{% endif %}
+</div>
 <div class="row">
     <div class="col-md-offset-9 col-md-2">
         <button class="btn btn-primary" type="submit">Commander</button>
