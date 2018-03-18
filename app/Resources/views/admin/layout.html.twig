@@ -7,7 +7,7 @@
 
         <title>{% block title '' %}</title>
 
-        <link href="{{ asset('favicon.png') }}" rel="icon">
+        {% include 'front/layout/partial/favicon.html.twig' %}
         <link href="{{ asset('inspinia/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('inspinia/fonts/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
         <link href="{{ asset('inspinia/css/animate.css') }}" rel="stylesheet">
