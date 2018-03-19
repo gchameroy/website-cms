@@ -90,7 +90,7 @@ class OrderController extends Controller
         $em->flush();
 
         if ($order->getStatus() === Order::STATUS_SENT) {
-            $emailProvider->sendClientOrderStatus($status, $order->getUser());
+            $emailProvider->sendClientOrderStatus($order->getUser());
         }
 
         return new Response('', Response::HTTP_OK);
