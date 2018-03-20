@@ -56,7 +56,7 @@ class UserOfferController extends Controller
                 $price = (new ProductPrice())
                     ->setOffer($offer)
                     ->setProduct($product)
-                    ->setPrice($product->getDefaultPrice());
+                    ->setPrice($product->getPrice(null));
                 $em->persist($price);
             }
 
@@ -78,6 +78,7 @@ class UserOfferController extends Controller
      * @return RedirectResponse|Response
      */
     public function editAction(Request $request, $id) {
+        /** @var UserOffer $offer */
         $offer = $this->getDoctrine()
             ->getRepository(UserOffer::class)
             ->find($id);
@@ -107,6 +108,7 @@ class UserOfferController extends Controller
      * @return RedirectResponse|Response
      */
     public function deleteAction($id, Request $request) {
+        /** @var UserOffer $offer */
         $offer = $this->getDoctrine()
             ->getRepository(UserOffer::class)
             ->find($id);
