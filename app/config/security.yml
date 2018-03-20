@@ -14,7 +14,8 @@ security:
             security: false
 
         admin:
-            pattern: ^/
+            context: website
+            pattern: ^/admin
             provider: user
             anonymous: ~
             form_login:
@@ -24,7 +25,8 @@ security:
                 path: admin_logout
 
         professional:
-            pattern: ^/
+            context: website
+            pattern: ^/espace-pro
             provider: user
             anonymous: ~
             form_login:
@@ -34,6 +36,7 @@ security:
                 path: professional_logout
 
         user:
+            context: website
             pattern: ^/
             provider: user
             anonymous: ~
