@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Front;
 
-use AppBundle\Entity\Newsletter;
+use AppBundle\Manager\NewsletterManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,6 +10,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class NewsletterController extends Controller
 {
+    /** @var NewsletterManager */
+    private $newsletterManager;
+
+    public function __construct(NewsletterManager $newsletterManager)
+    {
+        $this->newsletterManager = $newsletterManager;
+    }
+
     /**
      * @Route("/actualites/page-{page}", name="front_newsletters")
      * @Method({"GET"})
@@ -23,9 +31,7 @@ class NewsletterController extends Controller
             ]);
         }
 
-        $nbPage = $this->getDoctrine()
-            ->getRepository(Newsletter::class)
-            ->countNbPagePublished();
+        $nbPage = $this->newsletterManager->getNbPagePublished();
 
         if ($page > $nbPage) {
             return $this->redirectToRoute('front_newsletters', [
@@ -33,9 +39,7 @@ class NewsletterController extends Controller
             ]);
         }
 
-        $newsletters = $this->getDoctrine()
-            ->getRepository(Newsletter::class)
-            ->findPublishedByPage($page);
+        $newsletters = $this->newsletterManager->getListPublishedByPage($page);
 
         return $this->render('front/newsletter/list.html.twig', [
             'newsletters' => $newsletters,
@@ -51,22 +55,10 @@ class NewsletterController extends Controller
      * @return Response
      */
     public function viewAction(string $slug) {
-        $newsletter = $this->getDoctrine()
-            ->getRepository(Newsletter::class)
-            ->findOnePublished($slug);
-        $this->checkNewsletter($newsletter);
+        $newsletter = $this->newsletterManager->getPublishedBySlug($slug);
 
         return $this->render('front/newsletter/newsletter.html.twig', [
             'newsletter' => $newsletter
         ]);
-    }
-
-    /**
-     * @param $newsletter
-     */
-    private function checkNewsletter($newsletter) {
-        if (!$newsletter) {
-            throw $this->createNotFoundException('Newsletter Not Found.');
-        }
     }
 }

@@ -2,7 +2,10 @@
 
 namespace AppBundle\Repository;
 
-class NewsletterRepository extends PublishableEntityRepository
+use AppBundle\Entity\Newsletter;
+use Doctrine\ORM\EntityRepository;
+
+class NewsletterRepository extends EntityRepository
 {
     const PER_PAGE = 3;
 
@@ -10,7 +13,7 @@ class NewsletterRepository extends PublishableEntityRepository
      * @param int|null $page
      * @return array
      */
-    public function findPublishedByPage(?int $page = 1)
+    public function getListPublishedByPage(?int $page = 1): array
     {
         return $this->createQueryBuilder('n')
             ->where('n.publishedAt <= :now')
@@ -22,10 +25,7 @@ class NewsletterRepository extends PublishableEntityRepository
             ->getResult();
     }
 
-    /**
-     * @return int
-     */
-    public function countNbPagePublished()
+    public function getNbPagePublished(): int
     {
         $nb = $this->createQueryBuilder('n')
             ->select('count(n.id)')
@@ -37,5 +37,16 @@ class NewsletterRepository extends PublishableEntityRepository
         $nbPage = ceil($nb / self::PER_PAGE);
 
         return $nbPage == 0 ? 1 : $nbPage;
+    }
+
+    public function getPublishedBySlug(string $slug): ?Newsletter
+    {
+        return $this->createQueryBuilder('n')
+            ->where('n.publishedAt <= :now')
+                ->setParameter('now', new \DateTime())
+            ->andWhere('n.slug = :slug')
+                ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

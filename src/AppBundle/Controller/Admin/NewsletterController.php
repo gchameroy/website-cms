@@ -8,6 +8,7 @@ use AppBundle\Form\Type\ImageType;
 use AppBundle\Form\Type\Newsletter\NewsletterDeleteType;
 use AppBundle\Form\Type\Newsletter\NewsletterPublishType;
 use AppBundle\Form\Type\Newsletter\NewsletterType;
+use AppBundle\Manager\NewsletterManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -21,16 +22,22 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class NewsletterController extends Controller
 {
+    /** @var NewsletterManager */
+    private $newsletterManager;
+
+    public function __construct(NewsletterManager $newsletterManager)
+    {
+        $this->newsletterManager = $newsletterManager;
+    }
+
     /**
      * @Route("/", name="admin_newsletters")
      * @Method({"GET"})
      * @return Response
      */
-    public function listAction()
+    public function listAction(): Response
     {
-        $newsletters = $this->getDoctrine()
-            ->getRepository(Newsletter::class)
-            ->findAll(0, null, 'desc', false);
+        $newsletters = $this->newsletterManager->getList();
 
         return $this->render('admin/newsletter/list.html.twig', [
             'newsletters' => $newsletters
@@ -43,16 +50,14 @@ class NewsletterController extends Controller
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request)
+    public function addAction(Request $request): Response
     {
-        $newsletter = new Newsletter();
+        $newsletter = $this->newsletterManager->getNew();
 
         $form = $this->createForm(NewsletterType::class, $newsletter);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($newsletter);
-            $em->flush();
+            $newsletter = $this->newsletterManager->save($newsletter);
 
             return $this->redirectToRoute('admin_newsletter', [
                 'id' => $newsletter->getId(),
@@ -70,12 +75,9 @@ class NewsletterController extends Controller
      * @param integer $id
      * @return Response
      */
-    public function viewAction($id)
+    public function viewAction(int $id): Response
     {
-        $newsletter = $this->getDoctrine()
-            ->getRepository(Newsletter::class)
-            ->find($id);
-        $this->checkNewsletter($newsletter);
+        $newsletter = $this->newsletterManager->get($id);
 
         return $this->render('admin/newsletter/view.html.twig', [
             'newsletter' => $newsletter
@@ -85,24 +87,19 @@ class NewsletterController extends Controller
     /**
      * @Route("/{id}/publish", name="admin_newsletter_publish", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
-     * @param Request $request
      * @param $id
+     * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function publishAction(Request $request, $id)
+    public function publishAction(int $id, Request $request): Response
     {
-        $newsletter = $this->getDoctrine()
-            ->getRepository(Newsletter::class)
-            ->find($id);
-        $this->checkNewsletter($newsletter);
+        $newsletter = $this->newsletterManager->get($id);
 
         $form = $this->createForm(NewsletterPublishType::class, $newsletter);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $newsletter->setPublishedAt(new \DateTime());
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($newsletter);
-            $em->flush();
+            $this->newsletterManager->save($newsletter);
 
             return $this->redirectToRoute('admin_newsletters');
         }
@@ -116,16 +113,13 @@ class NewsletterController extends Controller
     /**
      * @Route("/{id}/unpublish", name="admin_newsletter_unpublish", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
-     * @param Request $request
      * @param $id
+     * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function unpublishAction(Request $request, $id)
+    public function unpublishAction(int $id, Request $request): Response
     {
-        $newsletter = $this->getDoctrine()
-            ->getRepository(Newsletter::class)
-            ->find($id);
-        $this->checkNewsletter($newsletter);
+        $newsletter = $this->newsletterManager->get($id);
 
         if (null === $newsletter->getPublishedAt()) {
             return $this->redirectToRoute('admin_newsletters');
@@ -135,9 +129,7 @@ class NewsletterController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $newsletter->setPublishedAt(null);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($newsletter);
-            $em->flush();
+            $this->newsletterManager->save($newsletter);
 
             return $this->redirectToRoute('admin_newsletters');
         }
@@ -151,25 +143,22 @@ class NewsletterController extends Controller
     /**
      * @Route("/{id}/edit", name="admin_newsletter_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
-     * @param Request $request
      * @param $id
+     * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, $id)
+    public function editAction(int $id, Request $request): Response
     {
-        $newsletter = $this->getDoctrine()
-            ->getRepository(Newsletter::class)
-            ->find($id);
-        $this->checkNewsletter($newsletter);
+        $newsletter = $this->newsletterManager->get($id);
 
         $form = $this->createForm(NewsletterType::class, $newsletter);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($newsletter);
-            $em->flush();
+            $this->newsletterManager->save($newsletter);
 
-            return $this->redirectToRoute('admin_newsletters');
+            return $this->redirectToRoute('admin_newsletter', [
+                'id' => $newsletter->getId(),
+            ]);
         }
 
         return $this->render('admin/newsletter/edit.html.twig', [
@@ -185,19 +174,14 @@ class NewsletterController extends Controller
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function deleteAction($id, Request $request)
+    public function deleteAction(int $id, Request $request): Response
     {
-        $newsletter = $this->getDoctrine()
-            ->getRepository(Newsletter::class)
-            ->find($id);
-        $this->checkNewsletter($newsletter);
+        $newsletter = $this->newsletterManager->get($id);
 
         $form = $this->createForm(NewsletterDeleteType::class, $newsletter);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($newsletter);
-            $em->flush();
+            $this->newsletterManager->remove($newsletter);
 
             return $this->redirectToRoute('admin_newsletters');
         }
@@ -211,30 +195,20 @@ class NewsletterController extends Controller
     /**
      * @Route("/{id}/add_image", name="admin_newsletter_add_image", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
-     * @param Request $request
      * @param integer $id
+     * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function addImageAction(Request $request, $id)
+    public function addImageAction(int $id, Request $request): Response
     {
-        $newsletter = $this->getDoctrine()
-            ->getRepository(Newsletter::class)
-            ->find($id);
-        $this->checkNewsletter($newsletter);
+        $newsletter = $this->newsletterManager->get($id);
 
         $image = new Image();
 
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $oldImage = $newsletter->getImage();
-            if ($oldImage) {
-                $newsletter->setImage(null);
-                $em->persist($newsletter);
-                $em->remove($oldImage);
-                $em->flush();
-            }
+            $newsletter = $this->newsletterManager->removeOldImage($newsletter);
 
             /** @var UploadedFile $file */
             $file = $image->getPath();
@@ -242,14 +216,12 @@ class NewsletterController extends Controller
             $filePath = $this->get('kernel')->getRootDir() . '/../uploads/newsletter/';
             $file->move($filePath, $fileName);
             $image->setPath($fileName);
-            $newsletter->setImage($image);
 
-            $em->persist($newsletter);
-            $em->persist($image);
-            $em->flush();
+            $newsletter->setImage($image);
+            $newsletter = $this->newsletterManager->save($newsletter);
 
             return $this->redirectToRoute('admin_newsletter', [
-                'id' => $id
+                'id' => $newsletter->getId()
             ]);
         }
 
@@ -257,15 +229,5 @@ class NewsletterController extends Controller
             'form' => $form->createView(),
             'newsletter' => $newsletter,
         ]);
-    }
-
-    /**
-     * @param $newsletter
-     */
-    private function checkNewsletter($newsletter)
-    {
-        if (!$newsletter) {
-            throw $this->createNotFoundException('Newsletter Not Found.');
-        }
     }
 }
