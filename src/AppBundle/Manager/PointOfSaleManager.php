@@ -2,7 +2,6 @@
 
 namespace AppBundle\Manager;
 
-
 use AppBundle\Entity\PointOfSale;
 use AppBundle\Repository\PointOfSaleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,18 +13,18 @@ class PointOfSaleManager
     private $entityManager;
 
     /** @var PointOfSaleRepository */
-    private $pointOfSalesRepository;
+    private $pointOfSaleRepository;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->pointOfSalesRepository = $this->entityManager->getRepository(PointOfSale::class);
+        $this->pointOfSaleRepository = $this->entityManager->getRepository(PointOfSale::class);
     }
 
     public function get(int $id): PointOfSale
     {
         /** @var $pointOfSale PointOfSale */
-        $pointOfSale = $this->pointOfSalesRepository->find($id);
+        $pointOfSale = $this->pointOfSaleRepository->find($id);
         $this->checkPointOfSale($pointOfSale);
 
         return $pointOfSale;
@@ -33,7 +32,7 @@ class PointOfSaleManager
 
     public function getList(): array
     {
-        return $this->pointOfSalesRepository->findAll();
+        return $this->pointOfSaleRepository->findAll();
     }
 
     public function getNew(): PointOfSale

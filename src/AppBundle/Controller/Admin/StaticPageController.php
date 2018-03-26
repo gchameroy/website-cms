@@ -3,12 +3,12 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Image;
-use AppBundle\Entity\StaticPage;
 use AppBundle\Form\Type\ImageType;
 use AppBundle\Form\Type\StaticPage\StaticPageDeleteType;
 use AppBundle\Form\Type\StaticPage\StaticPagePublishType;
 use AppBundle\Form\Type\StaticPage\StaticPageType;
 use AppBundle\Form\Type\StaticPage\StaticPageUnpublishType;
+use AppBundle\Manager\StaticPageManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -22,15 +22,22 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class StaticPageController extends Controller
 {
+    /** @var StaticPageManager */
+    private $staticPageManager;
+
+    public function __construct(StaticPageManager $staticPageManager)
+    {
+        $this->staticPageManager = $staticPageManager;
+    }
+
     /**
      * @Route("/", name="admin_static_pages")
      * @Method({"GET"})
      * @return Response
      */
-    public function listAction() {
-        $staticPages = $this->getDoctrine()
-            ->getRepository(StaticPage::class)
-            ->findAll(0, null, 'desc', false);
+    public function listAction(): Response
+    {
+        $staticPages = $this->staticPageManager->getList();
 
         return $this->render('admin/static-page/list.html.twig', [
             'staticPages' => $staticPages
@@ -43,15 +50,13 @@ class StaticPageController extends Controller
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request) {
-        $staticPage = new StaticPage();
-
+    public function addAction(Request $request): Response
+    {
+        $staticPage = $this->staticPageManager->getNew();
         $form = $this->createForm(StaticPageType::class, $staticPage);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($staticPage);
-            $em->flush();
+            $staticPage = $this->staticPageManager->save($staticPage);
 
             return $this->redirectToRoute('admin_static_page', [
                 'id' => $staticPage->getId(),
@@ -69,11 +74,9 @@ class StaticPageController extends Controller
      * @param integer $id
      * @return Response
      */
-    public function viewAction($id) {
-        $staticPage = $this->getDoctrine()
-            ->getRepository(StaticPage::class)
-            ->find($id);
-        $this->checkStaticPage($staticPage);
+    public function viewAction(int $id): Response
+    {
+        $staticPage = $this->staticPageManager->get($id);
 
         return $this->render('admin/static-page/view.html.twig', [
             'staticPage' => $staticPage
@@ -87,19 +90,14 @@ class StaticPageController extends Controller
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function publishAction(Request $request, $id) {
-        $staticPage = $this->getDoctrine()
-            ->getRepository(StaticPage::class)
-            ->find($id);
-        $this->checkStaticPage($staticPage);
+    public function publishAction(Request $request, int $id): Response
+    {
+        $staticPage = $this->staticPageManager->get($id);
         $staticPage->setPublishedAt(new \DateTime());
-
         $form = $this->createForm(StaticPagePublishType::class, $staticPage);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($staticPage);
-            $em->flush();
+            $this->staticPageManager->save($staticPage);
 
             return $this->redirectToRoute('admin_static_pages');
         }
@@ -117,23 +115,17 @@ class StaticPageController extends Controller
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function unpublishAction(Request $request, $id) {
-        $staticPage = $this->getDoctrine()
-            ->getRepository(StaticPage::class)
-            ->find($id);
-        $this->checkStaticPage($staticPage);
-
+    public function unpublishAction(Request $request, int $id): Response
+    {
+        $staticPage = $this->staticPageManager->get($id);
         if (null === $staticPage->getPublishedAt()) {
             return $this->redirectToRoute('admin_static_pages');
         }
-
         $form = $this->createForm(StaticPageUnpublishType::class, $staticPage);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $staticPage->setPublishedAt(null);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($staticPage);
-            $em->flush();
+            $this->staticPageManager->save($staticPage);
 
             return $this->redirectToRoute('admin_static_pages');
         }
@@ -151,18 +143,13 @@ class StaticPageController extends Controller
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, $id) {
-        $staticPage = $this->getDoctrine()
-            ->getRepository(StaticPage::class)
-            ->find($id);
-        $this->checkStaticPage($staticPage);
-
+    public function editAction(Request $request, int $id): Response
+    {
+        $staticPage = $this->staticPageManager->get($id);
         $form = $this->createForm(StaticPageType::class, $staticPage);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($staticPage);
-            $em->flush();
+            $staticPage = $this->staticPageManager->save($staticPage);
 
             return $this->redirectToRoute('admin_static_page', [
                 'id' => $staticPage->getId()
@@ -182,18 +169,13 @@ class StaticPageController extends Controller
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function deleteAction($id, Request $request) {
-        $staticPage = $this->getDoctrine()
-            ->getRepository(StaticPage::class)
-            ->find($id);
-        $this->checkStaticPage($staticPage);
-
+    public function deleteAction($id, Request $request): Response
+    {
+        $staticPage = $this->staticPageManager->get($id);
         $form = $this->createForm(StaticPageDeleteType::class, $staticPage);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($staticPage);
-            $em->flush();
+            $this->staticPageManager->remove($staticPage);
 
             return $this->redirectToRoute('admin_static_pages');
         }
@@ -211,39 +193,24 @@ class StaticPageController extends Controller
      * @param integer $id
      * @return RedirectResponse|Response
      */
-    public function addImageAction(Request $request, $id) {
-        $staticPage = $this->getDoctrine()
-            ->getRepository(StaticPage::class)
-            ->find($id);
-        $this->checkStaticPage($staticPage);
-
-        $image = $staticPage->getImage();
-        if ($image) {
-            $em = $this->getDoctrine()->getManager();
-            $staticPage->removeImage();
-            $em->remove($image);
-            $em->flush();
-        }
-
+    public function addImageAction(Request $request, int $id): Response
+    {
+        $staticPage = $this->staticPageManager->get($id);
         $image = new Image();
-
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $file */
             $file = $image->getPath();
             $fileName = md5(uniqid(null, true));
-            $filePath = $this->get('kernel')->getRootDir().'/../uploads/static-page/';
+            $filePath = $this->get('kernel')->getRootDir() . '/../uploads/static-page/';
             $file->move($filePath, $fileName);
             $image->setPath($fileName);
             $staticPage->setImage($image);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($image);
-            $em->flush();
+            $staticPage = $this->staticPageManager->save($staticPage);
 
             return $this->redirectToRoute('admin_static_page', [
-                'id' => $id
+                'id' => $staticPage->getId()
             ]);
         }
 
@@ -251,14 +218,5 @@ class StaticPageController extends Controller
             'form' => $form->createView(),
             'staticPage' => $staticPage,
         ]);
-    }
-
-    /**
-     * @param $staticPage
-     */
-    private function checkStaticPage($staticPage) {
-        if (!$staticPage) {
-            throw $this->createNotFoundException('Static page Not Found.');
-        }
     }
 }
