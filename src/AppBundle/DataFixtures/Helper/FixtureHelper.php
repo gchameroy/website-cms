@@ -23,6 +23,7 @@ abstract class FixtureHelper extends Fixture
     const NB_PRODUCT_CATEGORY = 4;
     const NB_PRODUCT_SKILL = 2;
     const NB_GALLERY = 3;
+    const NB_POINT_OF_SALE = 3;
 
     /**
      * @var \Faker\Generator

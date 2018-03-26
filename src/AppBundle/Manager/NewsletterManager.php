@@ -48,7 +48,7 @@ class NewsletterManager
 
     public function getListPublishedByPage(?int $page = 1): array
     {
-        return $this->newsletterRepository->getAllPublishedByPage($page);
+        return $this->newsletterRepository->getListPublishedByPage($page);
     }
 
     public function getNbPagePublished(): int

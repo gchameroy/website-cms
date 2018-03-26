@@ -13,6 +13,7 @@ class AddressFixtures extends FixtureHelper
         $this->loafForAdmin($manager);
         $this->loafForUser($manager);
         $this->loadForPro($manager);
+        $this->loafForPointOfSale($manager);
     }
 
     private function loafForAdmin(ObjectManager $manager)
@@ -24,7 +25,6 @@ class AddressFixtures extends FixtureHelper
             ->setZipCode($this->faker->numberBetween(52000, 52999));
         $this->setReference('address-admin', $address);
         $manager->persist($address);
-
         $manager->flush();
     }
 
@@ -39,7 +39,6 @@ class AddressFixtures extends FixtureHelper
             $this->setReference('address-user-' . $i, $address);
             $manager->persist($address);
         }
-
         $manager->flush();
     }
 
@@ -54,7 +53,23 @@ class AddressFixtures extends FixtureHelper
             $this->setReference('address-pro-' . $i, $address);
             $manager->persist($address);
         }
+        $manager->flush();
+    }
 
+    private function loafForPointOfSale(ObjectManager $manager)
+    {
+        for ($i = 1; $i <= self::NB_POINT_OF_SALE; $i++) {
+            $address = (new Address())
+                ->setCompany($this->faker->company)
+                ->setAddress($this->faker->address)
+                ->setCity($this->faker->city)
+                ->setCountry($this->faker->country)
+                ->setZipCode($this->faker->numberBetween(52000, 52999))
+                ->setLat($this->faker->latitude)
+                ->setLng($this->faker->longitude);
+            $this->setReference('address-point-of-sale-' . $i, $address);
+            $manager->persist($address);
+        }
         $manager->flush();
     }
 }

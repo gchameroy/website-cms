@@ -9,6 +9,7 @@ class AdminGalleryCest
         $I->amLoggedAsAdmin();
         $I->amOnPage('/admin/gallery');
         $I->seeCurrentUrlEquals('/admin/gallery');
+        $I->seeResponseCodeIs(HttpCode::OK);
         $I->see('Liste des photos', 'h2');
         $I->seeNumberOfElements('.ibox-content tr', 3);
     }

@@ -2,10 +2,9 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\PointOfSale;
 use AppBundle\Form\Type\PointOfSale\PointOfSaleType;
+use AppBundle\Manager\PointOfSaleManager;
 use AppBundle\Service\GoogleMaps;
-use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,17 +17,22 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PointOfSaleController extends Controller
 {
+    /** @var PointOfSaleManager */
+    private $pointOfSaleManager;
+
+    public function __construct(PointOfSaleManager $pointOfSaleManager)
+    {
+        $this->pointOfSaleManager = $pointOfSaleManager;
+    }
+
     /**
      * @Route("/", name="admin_point_of_sales")
      * @Method({"GET"})
-     * @param EntityManagerInterface $entityManager
      * @return Response
      */
-    public function listAction(EntityManagerInterface $entityManager)
+    public function listAction(): Response
     {
-        $pointOfSales = $entityManager
-            ->getRepository(PointOfSale::class)
-            ->findAll();
+        $pointOfSales = $this->pointOfSaleManager->getList();
 
         return $this->render('admin/point-of-sale/list.html.twig', [
             'pointOfSales' => $pointOfSales
@@ -39,13 +43,12 @@ class PointOfSaleController extends Controller
      * @Route("/add", name="admin_point_of_sales_add")
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param EntityManagerInterface $entityManager
      * @param GoogleMaps $gmaps
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, EntityManagerInterface $entityManager, GoogleMaps $gmaps)
+    public function addAction(Request $request, GoogleMaps $gmaps): Response
     {
-        $pointOfSale = new PointOfSale();
+        $pointOfSale = $this->pointOfSaleManager->getNew();
 
         $form = $this->createForm(PointOfSaleType::class, $pointOfSale);
         $form->handleRequest($request);
@@ -56,8 +59,7 @@ class PointOfSaleController extends Controller
                 $pointOfSale->getAddress()->setLng($location->getLng());
             }
 
-            $entityManager->persist($pointOfSale);
-            $entityManager->flush();
+            $this->pointOfSaleManager->save($pointOfSale);
 
             return $this->redirectToRoute('admin_point_of_sales');
         }
@@ -72,17 +74,12 @@ class PointOfSaleController extends Controller
      * @Method({"GET", "POST"})
      * @param Request $request
      * @param int $pointOfSale
-     * @param EntityManagerInterface $entityManager
      * @param GoogleMaps $gmaps
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, int $pointOfSale, EntityManagerInterface $entityManager, GoogleMaps $gmaps)
+    public function editAction(Request $request, int $pointOfSale, GoogleMaps $gmaps): Response
     {
-        /** @var PointOfSale $pointOfSale */
-        $pointOfSale = $entityManager
-            ->getRepository(PointOfSale::class)
-            ->find($pointOfSale);
-        $this->checkPointOfSale($pointOfSale);
+        $pointOfSale = $this->pointOfSaleManager->get($pointOfSale);
 
         $form = $this->createForm(PointOfSaleType::class, $pointOfSale);
         $form->handleRequest($request);
@@ -93,8 +90,7 @@ class PointOfSaleController extends Controller
                 $pointOfSale->getAddress()->setLng($location->getLng());
             }
 
-            $entityManager->persist($pointOfSale);
-            $entityManager->flush();
+            $this->pointOfSaleManager->save($pointOfSale);
 
             return $this->redirectToRoute('admin_point_of_sales');
         }
@@ -109,32 +105,16 @@ class PointOfSaleController extends Controller
      * @Route("/delete", name="admin_point_of_sale_delete")
      * @Method({"POST"})
      * @param Request $request
-     * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      */
-    public function deleteAction(Request $request, EntityManagerInterface $entityManager)
+    public function deleteAction(Request $request): Response
     {
-        $pointOfSale = $entityManager
-            ->getRepository(PointOfSale::class)
-            ->find($request->request->get('pointOfSale'));
-        $this->checkPointOfSale($pointOfSale);
-
         $token = $request->request->get('token');
         if ($this->isCsrfTokenValid('point-of-sale-delete', $token)) {
-            $entityManager->remove($pointOfSale);
-            $entityManager->flush();
+            $pointOfSale = $this->pointOfSaleManager->get($request->request->get('pointOfSale'));
+            $this->pointOfSaleManager->remove($pointOfSale);
         }
 
         return $this->redirectToRoute('admin_point_of_sales');
-    }
-
-    /**
-     * @param PointOfSale|null $pointOfSale
-     */
-    private function checkPointOfSale(?PointOfSale $pointOfSale)
-    {
-        if (!$pointOfSale) {
-            throw $this->createNotFoundException('Point Of Sale Not Found.');
-        }
     }
 }
