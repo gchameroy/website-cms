@@ -67,7 +67,9 @@
                                         </p>
                                     </td>
                                     <td class="project-actions">
-                                        {% if not category.published %}
+                                        {% if category.published %}
+                                            <a href="{{ path('admin_category_unpublish', {'id': category.id }) }}" class="btn btn-warning btn-sm">Dépublier</a>
+                                        {% else %}
                                             <a href="{{ path('admin_category_publish', {'id': category.id }) }}" class="btn btn-primary btn-sm">Publier</a>
                                         {% endif %}
                                         <a href="{{ path('admin_category_edit', {'id': category.id }) }}" class="btn btn-primary btn-sm">Modifier</a>
