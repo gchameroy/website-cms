@@ -48,8 +48,12 @@ class PointOfSaleManager
         return $pointOfSale;
     }
 
-    public function remove(PointOfSale $pointOfSale): void
+    public function remove(?PointOfSale $pointOfSale): void
     {
+        if (!$pointOfSale) {
+            return;
+        }
+
         $this->entityManager->remove($pointOfSale);
         $this->entityManager->flush();
     }

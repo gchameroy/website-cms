@@ -61,11 +61,15 @@ class StaticPageManager
 
     public function remove(StaticPage $staticPage): void
     {
+        if (!$staticPage) {
+            return;
+        }
+
         $this->entityManager->remove($staticPage);
         $this->entityManager->flush();
     }
 
-    private function checkStaticPage(?StaticPage $staticPage)
+    private function checkStaticPage(?StaticPage $staticPage): void
     {
         if (!$staticPage) {
             throw new NotFoundHttpException('Static Page Not Found.');

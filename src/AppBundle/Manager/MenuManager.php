@@ -56,13 +56,17 @@ class MenuManager
         return $menu;
     }
 
-    public function remove(Menu $menu)
+    public function remove(? Menu $menu): void
     {
+        if (!$menu) {
+            return;
+        }
+
         $this->entityManager->remove($menu);
         $this->entityManager->flush();
     }
 
-    public function checkMenu(?Menu $menu)
+    public function checkMenu(?Menu $menu): void
     {
         if(!$menu) {
             throw new NotFoundHttpException('Menu Not Found.');

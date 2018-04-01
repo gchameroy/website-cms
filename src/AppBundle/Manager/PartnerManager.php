@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Manager;
 
 use AppBundle\Entity\Partner;
@@ -22,7 +23,7 @@ class PartnerManager
 
     public function get(int $id): Partner
     {
-        /** @var $partner Partner*/
+        /** @var $partner Partner */
         $partner = $this->partnerRepository->find($id);
         $this->checkPartner($partner);
 
@@ -47,13 +48,17 @@ class PartnerManager
         return $partner;
     }
 
-    public function remove (Partner $partner)
+    public function remove(Partner $partner): void
     {
+        if (!$partner) {
+            return;
+        }
+
         $this->entityManager->remove($partner);
         $this->entityManager->flush();
     }
 
-    private function checkPartner(?Partner $partner)
+    private function checkPartner(?Partner $partner): void
     {
         if (!$partner) {
             throw new NotFoundHttpException('Partner Not Found.');

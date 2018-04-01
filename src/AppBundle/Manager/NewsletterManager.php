@@ -69,13 +69,17 @@ class NewsletterManager
         return $newsletter;
     }
 
-    public function remove(Newsletter $newsletter)
+    public function remove(?Newsletter $newsletter): void
     {
+        if (!$newsletter) {
+            return;
+        }
+
         $this->entityManager->remove($newsletter);
         $this->entityManager->flush();
     }
 
-    public function removeOldImage(Newsletter $newsletter)
+    public function removeOldImage(Newsletter $newsletter): Newsletter
     {
         $oldImage = $newsletter->getImage();
         if ($oldImage) {
@@ -88,7 +92,7 @@ class NewsletterManager
         return $newsletter;
     }
 
-    private function checkNewsletter(?Newsletter $newsletter)
+    private function checkNewsletter(?Newsletter $newsletter): void
     {
         if (!$newsletter) {
             throw new NotFoundHttpException('Newsletter Not Found.');

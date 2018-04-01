@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jennou
- * Date: 20/03/2018
- * Time: 14:17
- */
 
 namespace AppBundle\Manager;
-
 
 use AppBundle\Entity\Category;
 use AppBundle\Repository\CategoryRepository;
@@ -68,16 +61,17 @@ class CategoryManager
         return $category;
     }
 
-    public function remove(Category $category)
+    public function remove(?Category $category): void
     {
+        if (!$category) {
+            return;
+        }
+
         $this->entityManager->remove($category);
         $this->entityManager->flush();
     }
 
-    /**
-     * @param $category
-     */
-    private function checkCategory($category)
+    private function checkCategory(?Category $category): void
     {
         if (!$category) {
             throw new NotFoundHttpException('Category Not Found.');

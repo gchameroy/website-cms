@@ -53,9 +53,9 @@ class GalleryManager
         return $gallery;
     }
 
-    public function remove(?Gallery $gallery)
+    public function remove(?Gallery $gallery): void
     {
-        if(!$gallery) {
+        if (!$gallery) {
             return;
         }
 
@@ -63,10 +63,7 @@ class GalleryManager
         $this->entityManager->flush();
     }
 
-    /**
-     * @param $gallery|null
-     */
-    private function checkGallery(?Gallery $gallery)
+    private function checkGallery(?Gallery $gallery): void
     {
         if (!$gallery) {
             throw new NotFoundHttpException('Gallery Not Found.');
