@@ -6,6 +6,7 @@ use AppBundle\Entity\Category;
 use AppBundle\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\DisabledException;
 
 class CategoryManager
 {
@@ -21,11 +22,18 @@ class CategoryManager
         $this->categoryRepository = $this->entityManager->getRepository(Category::class);
     }
 
-    public function get(int $id): Category
+    public function getNew(): Category
     {
-        /** @var $category Category */
+        return new Category();
+    }
+
+    public function get(int $id, bool $withCheck = true): Category
+    {
+        /** @var Category $category */
         $category = $this->categoryRepository->find($id);
-        $this->checkCategory($category);
+        if ($withCheck === true) {
+            $this->checkCategory($category);
+        }
 
         return $category;
     }
@@ -37,7 +45,13 @@ class CategoryManager
 
     public function getOneByPosition(int $position): Category
     {
-        return $this->categoryRepository->findOneByPosition($position);
+        /** @var Category $category */
+        $category = $this->categoryRepository->findOneBy([
+            'position' => $position
+        ]);
+        $this->checkCategory($category);
+
+        return $category;
     }
 
     public function getLast(): ?Category
@@ -66,9 +80,8 @@ class CategoryManager
         if (!$category) {
             return;
         }
-
-        $this->entityManager->remove($category);
-        $this->entityManager->flush();
+        // Todo: implement this function
+        throw new DisabledException();
     }
 
     private function checkCategory(?Category $category): void

@@ -10,6 +10,7 @@ use AppBundle\Manager\CategoryManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,14 +20,21 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CategoryController Extends Controller
 {
+    /** @var CategoryManager */
+    private $categoryManager;
+
+    public function __construct(CategoryManager $categoryManager)
+    {
+        $this->categoryManager = $categoryManager;
+    }
+
     /**
      * @Route("/", name="admin_categories")
-     * @param CategoryManager $categoryManager
      * @return Response
      */
-    public function listAction(CategoryManager $categoryManager)
+    public function listAction(): Response
     {
-        $categories = $categoryManager->getList();
+        $categories = $this->categoryManager->getList();
 
         return $this->render('admin/category/list.html.twig', [
             'categories' => $categories
@@ -37,24 +45,20 @@ class CategoryController Extends Controller
      * @Route("/add", name="admin_categories_add")
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param CategoryManager $categoryManager
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, CategoryManager $categoryManager)
+    public function addAction(Request $request): Response
     {
-        $category = new Category();
-
+        $category = $this->categoryManager->getNew();
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $position = $categoryManager->getNextPosition();
+            $position = $this->categoryManager->getNextPosition();
             $category->setPosition($position);
 
-            $categoryManager->save($category);
+            $this->categoryManager->save($category);
 
-            return $this->redirectToRoute('admin_categories', [
-                'id' => $category->getId(),
-            ]);
+            return $this->redirectToRoute('admin_categories');
         }
 
         return $this->render('admin/category/add.html.twig', [
@@ -63,22 +67,47 @@ class CategoryController Extends Controller
     }
 
     /**
+     * @Route("/add-modal", name="admin_categories_add_modal", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return JsonResponse|Response
+     */
+    public function addModalAction(Request $request): Response
+    {
+        $category = $this->categoryManager->getNew();
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->categoryManager->save($category);
+
+            return new JsonResponse([
+                'success' => true,
+                'id' => $category->getId(),
+                'label' => $category->getLabel()
+            ]);
+        }
+
+        return $this->render("admin/product/modal/add_category.html.twig", [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * @Route("/{id}/publish", name="admin_category_publish", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param CategoryManager $categoryManager
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function publishAction(Request $request, CategoryManager $categoryManager, int $id)
+    public function publishAction(Request $request, int $id): Response
     {
-        $category = $categoryManager->get($id);
+        $category = $this->categoryManager->get($id);
 
         $form = $this->createForm(CategoryPublishType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $category->setPublishedAt(new \DateTime());
-            $categoryManager->save($category);
+            $this->categoryManager->save($category);
 
             return $this->redirectToRoute('admin_categories');
         }
@@ -93,19 +122,18 @@ class CategoryController Extends Controller
      * @Route("/{id}/unpublish", name="admin_category_unpublish", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param CategoryManager $categoryManager
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function unpublishAction(Request $request, CategoryManager $categoryManager, int $id)
+    public function unpublishAction(Request $request, int $id): Response
     {
-        $category = $categoryManager->get($id);
+        $category = $this->categoryManager->get($id);
 
         $form = $this->createForm(CategoryPublishType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $category->setPublishedAt(null);
-            $categoryManager->save($category);
+            $this->categoryManager->save($category);
 
             return $this->redirectToRoute('admin_categories');
         }
@@ -120,18 +148,17 @@ class CategoryController Extends Controller
      * @Route("/{id}/edit", name="admin_category_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param CategoryManager $categoryManager
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, CategoryManager $categoryManager, int $id)
+    public function editAction(Request $request, int $id): Response
     {
-        $category = $categoryManager->get($id);
+        $category = $this->categoryManager->get($id);
 
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $categoryManager->save($category);
+            $this->categoryManager->save($category);
 
             return $this->redirectToRoute('admin_categories');
         }
@@ -146,17 +173,16 @@ class CategoryController Extends Controller
      * @Route("/move", name="admin_category_move")
      * @Method({"POST"})
      * @param Request $request
-     * @param CategoryManager $categoryManager
      * @return RedirectResponse|Response
      */
-    public function upAction(Request $request, CategoryManager $categoryManager)
+    public function upAction(Request $request): Response
     {
         $token = $request->request->get('token');
         if (!$this->isCsrfTokenValid('category-move', $token)) {
             return $this->redirectToRoute('admin_categories');
         }
 
-        $category = $categoryManager->get($request->request->get('category'));
+        $category = $this->categoryManager->get($request->request->get('category'));
 
         $direction = $request->request->get('direction');
         if (!in_array($direction, ['up', 'down'])) {
@@ -169,15 +195,15 @@ class CategoryController Extends Controller
             }
 
             /** @var Category $category2 */
-            $category2 = $categoryManager->getOneByPosition($category->getPosition() - 1);
+            $category2 = $this->categoryManager->getOneByPosition($category->getPosition() - 1);
         } else {
-            $last = $categoryManager->getLast();
+            $last = $this->categoryManager->getLast();
             if ($category === $last) {
                 return $this->redirectToRoute('admin_categories');
             }
 
             /** @var Category $category2 */
-            $category2 = $categoryManager->getOneByPosition($category->getPosition() + 1);
+            $category2 = $this->categoryManager->getOneByPosition($category->getPosition() + 1);
         }
 
         $position = $category->getPosition();
@@ -185,40 +211,33 @@ class CategoryController Extends Controller
 
         $category->setPosition(null);
         $category2->setPosition(null);
-        $categoryManager->save($category);
-        $categoryManager->save($category2);
+        $this->categoryManager->save($category);
+        $this->categoryManager->save($category2);
 
         $category->setPosition($position2);
         $category2->setPosition($position);
-        $categoryManager->save($category);
-        $categoryManager->save($category2);
+        $this->categoryManager->save($category);
+        $this->categoryManager->save($category2);
 
         return $this->redirectToRoute('admin_categories');
     }
 
     /**
-     * @Route("/{id}/delete", name="admin_category_delete", requirements={"id": "\d+"})
+     * @Route("/delete", name="admin_category_delete")
      * @Method({"GET", "POST"})
-     * @param $id
      * @param Request $request
-     * @param CategoryManager $categoryManager
      * @return RedirectResponse|Response
      */
-    public function deleteAction(int $id, Request $request, CategoryManager $categoryManager)
+    public function deleteAction(Request $request): Response
     {
-        $category = $categoryManager->get($id);
-
-        $form = $this->createForm(CategoryDeleteType::class, $category);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $categoryManager->remove($category);
-
+        $token = $request->request->get('token');
+        if (!$this->isCsrfTokenValid('category-move', $token)) {
             return $this->redirectToRoute('admin_categories');
         }
 
-        return $this->render('admin/category/delete.html.twig', [
-            'form' => $form->createView(),
-            'category' => $category,
-        ]);
+        $category = $this->categoryManager->get($request->request->get('category'), false);
+        $this->categoryManager->remove($category);
+
+        return $this->redirectToRoute('admin_categories');
     }
 }

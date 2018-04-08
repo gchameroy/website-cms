@@ -13,6 +13,49 @@ class AdminCategoryCest
         $I->seeNumberOfElements('.ibox-content tr', 4);
     }
 
+    public function tryAdd(FunctionalTester $I)
+    {
+        $I->amLoggedAsAdmin();
+        $I->amOnPage('/admin/categories');
+        $I->seeNumberOfElements('.ibox-content tr', 4);
+
+        $I->amOnPage('/admin/categories/add');
+        $I->seeCurrentUrlEquals('/admin/categories/add');
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->submitForm('form', [
+            'category[label]' => 'Test add category',
+            'category[description]' => 'I love unicorns'
+        ]);
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeCurrentUrlEquals('/admin/categories');
+        $I->see('Test add category', 'td');
+        $I->seeNumberOfElements('.ibox-content tr', 5);
+    }
+
+    public function tryAddAjax(FunctionalTester $I)
+    {
+        $I->amLoggedAsAdmin();
+        $I->amOnPage('/admin/categories');
+        $I->seeNumberOfElements('.ibox-content tr', 4);
+
+        $I->amOnPage('/admin/categories/add-modal');
+        $I->seeCurrentUrlEquals('/admin/categories/add-modal');
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->submitForm('form', [
+            'category[label]' => 'Test add modal category',
+            'category[description]' => 'I love unicorns'
+        ]);
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeCurrentUrlEquals('/admin/categories/add-modal');
+        $I->see('"success":true');
+        $I->see('"label":"Test add modal category"');
+
+        $I->amOnPage('/admin/categories');
+        $I->seeCurrentUrlEquals('/admin/categories');
+        $I->see('Test add modal category', 'td');
+        $I->seeNumberOfElements('.ibox-content tr', 5);
+    }
+
     public function tryEdit(FunctionalTester $I)
     {
         $I->amLoggedAsAdmin();
