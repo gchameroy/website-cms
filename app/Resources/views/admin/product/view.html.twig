@@ -135,26 +135,6 @@
             });
         });
 
-        $('.action_product_price_add').click(function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            $.get('{{ path('admin_product_skill_add', { id: product.id }) }}').done(function (response) {
-                $(response).modal();
-            });
-        });
-
-        $('.action_product_price_edit').click(function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var skill = $(this).data('skill');
-
-            $.get('{{ path('admin_product_skill_edit', { id: product.id }) }}', {
-                'skill': skill
-            }).done(function (response) {
-                $(response).modal();
-            });
-        });
-
         $('.action_product_variant_add').click(function (e) {
             e.preventDefault();
             e.stopPropagation();

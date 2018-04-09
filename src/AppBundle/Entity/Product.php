@@ -122,12 +122,6 @@ class Product
     private $prices;
 
     /**
-     * @var ProductSkill[]
-     * @ORM\OneToMany(targetEntity="ProductSkill", mappedBy="product", cascade={"remove", "persist"})
-     */
-    private $skills;
-
-    /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\CartProduct", mappedBy="product", cascade={"remove"})
      */
@@ -462,40 +456,6 @@ class Product
         }
 
         return 0;
-    }
-
-    /**
-     * Add skill
-     *
-     * @param ProductSkill $skill
-     *
-     * @return Product
-     */
-    public function addSkill(ProductSkill $skill)
-    {
-        $this->skills[] = $skill;
-
-        return $this;
-    }
-
-    /**
-     * Remove skill
-     *
-     * @param ProductSkill $skill
-     */
-    public function removeSkill(ProductSkill $skill)
-    {
-        $this->skills->removeElement($skill);
-    }
-
-    /**
-     * Get skills
-     *
-     * @return ProductSkill[]
-     */
-    public function getSkills()
-    {
-        return $this->skills;
     }
 
     /**
