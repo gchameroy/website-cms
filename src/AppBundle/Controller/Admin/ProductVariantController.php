@@ -2,18 +2,16 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\Image;
-use AppBundle\Entity\Product;
 use AppBundle\Entity\ProductPrice;
 use AppBundle\Entity\UserOffer;
 use AppBundle\Form\Type\ImageType;
 use AppBundle\Form\Type\Product\ProductVariantType;
+use AppBundle\Manager\ImageManager;
 use AppBundle\Manager\ProductManager;
-use Doctrine\ORM\EntityManagerInterface;
+use AppBundle\Manager\ProductVariantManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,70 +25,57 @@ class ProductVariantController extends Controller
     /** @var ProductManager */
     private $productManager;
 
-    public function __construct(ProductManager $productManager)
+    /** @var ProductVariantManager */
+    private $productVariantManager;
+
+    /** @var ImageManager */
+    private $imageManager;
+
+    public function __construct(ProductManager $productManager, ProductVariantManager $productVariantManager, ImageManager $imageManager)
     {
         $this->productManager = $productManager;
+        $this->productVariantManager = $productVariantManager;
+        $this->imageManager = $imageManager;
     }
 
     /**
-     * @Route("/{id}/add_image", name="admin_product_add_image", requirements={"id": "\d+"})
+     * @Route("/{id}/add-image", name="admin_product_add_image", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
-     * @param Request $request
      * @param integer $id
+     * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function addImageAction(Request $request, int $id): Response
+    public function addImageAction(int $id, Request $request): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        /** @var Product $variant */
-        $variant = $em->getRepository(Product::class)
-            ->findOneBy([
-                'id' => $request->query->get('variant'),
-                'parent' => $id
-            ]);
-        if (!$variant) {
-            $variant = $em->getRepository(Product::class)
-                ->findOneBy([
-                    'id' => $request->query->get('variant'),
-                    'parent' => null
-                ]);
-            $product = $variant;
-        } else {
-            $product = $variant->getParent();
-        }
+        $product = $this->productManager->get($id);
+        $variant = $this->productVariantManager->get($request->query->get('variant'));
 
-        $this->checkProduct($variant);
-        $this->checkProduct($product);
-
-        $image = $variant->getImage();
-        if ($image) {
-            $em = $this->getDoctrine()->getManager();
-            $variant->setImage(null);
-            $em->persist($variant);
-            $em->remove($image);
-            $em->flush();
-        }
-
-        $image = new Image();
-
+        $image = $this->imageManager->getNew();
         $form = $this->createForm(ImageType::class, $image);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $image = $variant->getImage();
+            if ($image) {
+                $variant->setImage(null);
+                $this->productVariantManager->save($variant);
+                $this->imageManager->remove($image);
+            }
+
             /** @var UploadedFile $file */
             $file = $image->getPath();
             $fileName = md5(uniqid(null, true));
             $filePath = $this->get('kernel')->getRootDir() . '/../uploads/product/';
             $file->move($filePath, $fileName);
-            $image->setPath($fileName);
-            $variant->setImage($image);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($image);
-            $em->persist($variant);
-            $em->flush();
+            $image->setPath($fileName);
+            $this->imageManager->save($image);
+
+            $variant->setImage($image);
+            $this->productVariantManager->save($variant);
 
             return $this->redirectToRoute('admin_product', [
-                'id' => $id
+                'id' => $product->getId()
             ]);
         }
 
@@ -101,9 +86,8 @@ class ProductVariantController extends Controller
         ]);
     }
 
-
     /**
-     * @Route("/{id}/add_variant", name="admin_product_variant_add", requirements={"id": "\d+"})
+     * @Route("/{id}/add-variant", name="admin_product_variant_add", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param int $id
      * @param Request $request
@@ -111,21 +95,19 @@ class ProductVariantController extends Controller
      */
     public function addVariantAction(int $id, Request $request): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        $variant = (new Product())
-            ->setVariantName('');
-
         $product = $this->productManager->get($id);
+        $variant = $this->productVariantManager->getNew($product);
 
+        $em = $this->getDoctrine()->getManager();
         $offers = $em->getRepository(UserOffer::class)
             ->findAll();
 
         $form = $this->createForm(ProductVariantType::class, $variant);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $variant->setParent($product);
-            $em->persist($variant);
+            $this->productVariantManager->save($variant);
 
+            /** @var UserOffer $offer */
             foreach ($offers as $offer) {
                 $price = (new ProductPrice())
                     ->setProduct($variant)
@@ -133,7 +115,6 @@ class ProductVariantController extends Controller
                     ->setPrice($request->request->all()['product'][$offer->getFormName()]);
                 $em->persist($price);
             }
-
             $em->flush();
 
             return $this->redirectToRoute('admin_product', [
@@ -149,49 +130,27 @@ class ProductVariantController extends Controller
     }
 
     /**
-     * @Route("/{id}/edit_variant", name="admin_product_variant_edit", requirements={"id": "\d+"})
+     * @Route("/{id}/edit-variant", name="admin_product_variant_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @param int $id
      * @param Request $request
-     * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      */
-    public function editVariantAction(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function editVariantAction(int $id, Request $request): Response
     {
-        /** @var Product $variant */
-        $variant = $entityManager
-            ->getRepository(Product::class)
-            ->findOneBy([
-                'id' => $request->query->get('variant'),
-                'parent' => $id
-            ]);
-        if (!$variant) {
-            $variant = $entityManager
-                ->getRepository(Product::class)
-                ->findOneBy([
-                    'id' => $request->query->get('variant'),
-                    'parent' => null
-                ]);
-            $product = $variant;
-        } else {
-            $product = $variant->getParent();
-        }
-        $this->checkProduct($variant);
-        $this->checkProduct($product);
+        $product = $this->productManager->get($id);
+        $variant = $this->productVariantManager->get($request->query->get('variant'));
 
-        $offers = $entityManager
+        $em = $this->getDoctrine()->getManager();
+        $offers = $em
             ->getRepository(UserOffer::class)
             ->findAll();
 
         $form = $this->createForm(ProductVariantType::class, $variant);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($variant->getPrices() as $price) {
-                $entityManager->remove($price);
-            }
-            $entityManager->flush();
-
-            $entityManager->persist($variant);
+            $this->productVariantManager->save($variant);
+            $this->productVariantManager->removePrices($variant);
 
             /** @var UserOffer $offer */
             foreach ($offers as $offer) {
@@ -199,10 +158,9 @@ class ProductVariantController extends Controller
                     ->setProduct($variant)
                     ->setOffer($offer)
                     ->setPrice($request->request->all()['product'][$offer->getFormName()]);
-                $entityManager->persist($price);
+                $em->persist($price);
             }
-
-            $entityManager->flush();
+            $em->flush();
 
             return $this->redirectToRoute('admin_product', [
                 'id' => $product->getId()
@@ -215,12 +173,5 @@ class ProductVariantController extends Controller
             'product' => $product,
             'offers' => $offers
         ]);
-    }
-
-    private function checkProduct(?Product $product): void
-    {
-        if (!$product) {
-            throw new NotFoundHttpException('Product Variant Not Found.');
-        }
     }
 }
