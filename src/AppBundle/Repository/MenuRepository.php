@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class MenuRepository extends EntityRepository
 {
-    public function findLast()
+    public function getLast()
     {
         return $this->createQueryBuilder('m')
             ->orderBy('m.order', 'desc')

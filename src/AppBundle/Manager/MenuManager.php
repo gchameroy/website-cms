@@ -25,7 +25,7 @@ class MenuManager
     {
         /** @var MenuRepository $menuRepository */
         $menuRepository = $this->entityManager->getRepository(Menu::class);
-        $menu = $menuRepository->findLast();
+        $menu = $menuRepository->getLast();
 
         if (!$menu) {
             return 1;
@@ -41,6 +41,38 @@ class MenuManager
         $this->checkMenu($menu);
 
         return $menu;
+    }
+
+    public function getNew(): Menu
+    {
+        return new Menu();
+    }
+
+    public function getLast(): Menu
+    {
+        return $this->menuRepository->getLast();
+    }
+
+    public function getPrevious(Menu $menu): Menu
+    {
+        /** @var Menu $previousMenu */
+        $previousMenu = $this->menuRepository->findOneBy([
+            ['order' => $menu->getOrder() - 1]
+        ]);
+        $this->checkMenu($previousMenu);
+
+        return $previousMenu;
+    }
+
+    public function getNext(Menu $menu): Menu
+    {
+        /** @var Menu $nextMenu */
+        $nextMenu = $this->menuRepository->findOneBy([
+            ['order' => $menu->getOrder() + 1]
+        ]);
+        $this->checkMenu($nextMenu);
+
+        return $nextMenu;
     }
 
     public function getList(): array

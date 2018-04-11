@@ -2,19 +2,18 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\Category;
-use AppBundle\Entity\Menu;
-use AppBundle\Entity\Product;
-use AppBundle\Entity\StaticPage;
 use AppBundle\Form\Type\Menu\MenuDeleteType;
 use AppBundle\Form\Type\Menu\MenuType;
 use AppBundle\Form\Type\Menu\MenuPublishType;
 use AppBundle\Form\Type\Menu\MenuUnpublishType;
+use AppBundle\Manager\CategoryManager;
 use AppBundle\Manager\MenuManager;
-use Doctrine\ORM\EntityManagerInterface;
+use AppBundle\Manager\ProductManager;
+use AppBundle\Manager\StaticPageManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,13 +22,38 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class MenuController Extends Controller
 {
+    /** @var MenuManager */
+    private $menuManager;
+
+    /** @var CategoryManager */
+    private $categoryManager;
+
+    /** @var StaticPageManager */
+    private $staticPageManager;
+
+    /** @var ProductManager */
+    private $productManager;
+
+    public function __construct(
+        MenuManager $menuManager,
+        CategoryManager $categoryManager,
+        StaticPageManager $staticPageManager,
+        ProductManager $productManager
+    )
+    {
+        $this->menuManager = $menuManager;
+        $this->categoryManager = $categoryManager;
+        $this->staticPageManager = $staticPageManager;
+        $this->productManager = $productManager;
+    }
+
     /**
      * @Route("/", name="admin_menus")
      * @return Response
      */
-    public function listAction(MenuManager $menuManager)
+    public function listAction(): Response
     {
-        $menus = $menuManager->getList();
+        $menus = $this->menuManager->getList();
 
         return $this->render('admin/menu/list.html.twig', [
             'menus' => $menus
@@ -39,27 +63,25 @@ class MenuController Extends Controller
     /**
      * @Route("/add", name="admin_menus_add")
      * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, MenuManager $menuManager)
+    public function addAction(Request $request): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        $menu = new Menu();
+        $menu = $this->menuManager->getNew();
 
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $menu->setOrder($menuManager->getNextOrder());
-            $menuManager->save($menu);
+            $menu->setOrder($this->menuManager->getNextOrder());
+            $this->menuManager->save($menu);
 
             return $this->redirectToRoute('admin_menus');
         }
 
-        $categories = $em->getRepository(Category::class)
-            ->findAll();
-        $staticPages = $em->getRepository(StaticPage::class)
-            ->findAll();
-        $products = $em->getRepository(Product::class)
-            ->findAll();
+        $categories = $this->categoryManager->getList();
+        $staticPages = $this->staticPageManager->getList();
+        $products = $this->productManager->getList();
 
         return $this->render('admin/menu/add.html.twig', [
             'form' => $form->createView(),
@@ -72,28 +94,25 @@ class MenuController Extends Controller
     /**
      * @Route("/{menu}/edit", name="admin_menu_edit", requirements={"menu": "\d+"})
      * @Method({"GET", "POST"})
+     * @param int $menu
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, int $menu, MenuManager $menuManager)
+    public function editAction(int $menu, Request $request): Response
     {
-        $menu = $menuManager->get($menu);
+        $menu = $this->menuManager->get($menu);
 
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $menuManager->save($menu);
+            $this->menuManager->save($menu);
 
-            return $this->redirectToRoute('admin_menus', [
-                'menu' => $menu,
-            ]);
+            return $this->redirectToRoute('admin_menus');
         }
 
-        $em = $this->getDoctrine()->getManager();
-        $categories = $em->getRepository(Category::class)
-            ->findAll();
-        $staticPages = $em->getRepository(StaticPage::class)
-            ->findAll();
-        $products = $em->getRepository(Product::class)
-            ->findAll();
+        $categories = $this->categoryManager->getList();
+        $staticPages = $this->staticPageManager->getList();
+        $products = $this->productManager->getList();
 
         return $this->render('admin/menu/edit.html.twig', [
             'form' => $form->createView(),
@@ -107,40 +126,44 @@ class MenuController Extends Controller
     /**
      * @Route("/{menu}/delete", name="admin_menu_delete", requirements={"menu": "\d+"})
      * @Method({"GET", "POST"})
+     * @param int $menu
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
-    public function deleteAction(int $menu, Request $request, MenuManager $menuManager)
+    public function deleteAction(int $menu, Request $request): Response
     {
-        $menu = $menuManager->get($menu);
+        $menu = $this->menuManager->get($menu);
 
         $form = $this->createForm(MenuDeleteType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $menuManager->remove($menu);
+            $this->menuManager->remove($menu);
 
-            return $this->redirectToRoute('admin_menus', [
-                'menu' => $menu,
-            ]);
+            return $this->redirectToRoute('admin_menus');
         }
 
         return $this->render('admin/menu/delete.html.twig', [
             'form' => $form->createView(),
-            'menu' => $menu
+            'menu' => $menu,
         ]);
     }
 
     /**
      * @Route("/{menu}/publish", name="admin_menu_publish", requirements={"menu": "\d+"})
      * @Method({"GET", "POST"})
+     * @param int $menu
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
-    public function publishAction(Request $request, int $menu, MenuManager $menuManager)
+    public function publishAction(int $menu, Request $request): Response
     {
-        $menu = $menuManager->get($menu);
+        $menu = $this->menuManager->get($menu);
         $menu->setPublishedAt(new \DateTime());
 
         $form = $this->createForm(MenuPublishType::class, $menu);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $menuManager->save($menu);
+            $this->menuManager->save($menu);
 
             return $this->redirectToRoute('admin_menus');
         }
@@ -154,10 +177,13 @@ class MenuController Extends Controller
     /**
      * @Route("/{menu}/unpublish", name="admin_menu_unpublish", requirements={"menu": "\d+"})
      * @Method({"GET", "POST"})
+     * @param int $menu
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
-    public function unpublishAction(Request $request, int $menu, MenuManager $menuManager)
+    public function unpublishAction(int $menu, Request $request): Response
     {
-        $menu = $menuManager->get($menu);
+        $menu = $this->menuManager->get($menu);
 
         if (null === $menu->getPublishedAt()) {
             return $this->redirectToRoute('admin_menus');
@@ -167,7 +193,7 @@ class MenuController Extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $menu->setPublishedAt(null);
-            $menuManager->save($menu);
+            $this->menuManager->save($menu);
 
             return $this->redirectToRoute('admin_menus');
         }
@@ -181,12 +207,14 @@ class MenuController Extends Controller
     /**
      * @Route("/move", name="admin_menu_move")
      * @Method({"POST"})
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function upAction(Request $request, EntityManagerInterface $entityManager, MenuManager $menuManager)
+    public function moveAction(Request $request): RedirectResponse
     {
         $token = $request->request->get('token');
         if ($this->isCsrfTokenValid('menu-move', $token)) {
-            $menu = $menuManager->get($request->request->get('menu'));
+            $menu = $this->menuManager->get($request->request->get('menu'));
 
             $direction = $request->request->get('direction');
             if (!in_array($direction, ['up', 'down'])) {
@@ -198,19 +226,14 @@ class MenuController Extends Controller
                     return $this->redirectToRoute('admin_menus');
                 }
 
-                /** @var Menu $menu2 */
-                $menu2 = $entityManager->getRepository(Menu::class)
-                    ->findOneByOrder($menu->getOrder() - 1);
+                $menu2 = $this->menuManager->getPrevious($menu);
             } else {
-                $last = $entityManager->getRepository(Menu::class)
-                    ->findLast();
+                $last = $this->menuManager->getLast();
                 if ($menu === $last) {
                     return $this->redirectToRoute('admin_menus');
                 }
 
-                /** @var Menu $menu2 */
-                $menu2 = $entityManager->getRepository(Menu::class)
-                    ->findOneByOrder($menu->getOrder() + 1);
+                $menu2 = $this->menuManager->getNext($menu);
             }
 
             $order = $menu->getOrder();
@@ -218,16 +241,13 @@ class MenuController Extends Controller
 
             $menu->setOrder(null);
             $menu2->setOrder(null);
-            $entityManager->persist($menu);
-            $entityManager->persist($menu2);
-            $entityManager->flush();
-
+            $this->menuManager->save($menu);
+            $this->menuManager->save($menu2);
 
             $menu->setOrder($order2);
             $menu2->setOrder($order);
-            $entityManager->persist($menu);
-            $entityManager->persist($menu2);
-            $entityManager->flush();
+            $this->menuManager->save($menu);
+            $this->menuManager->save($menu2);
         }
 
         return $this->redirectToRoute('admin_menus');
