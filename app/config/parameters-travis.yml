@@ -12,6 +12,6 @@ parameters:
 
     secret: ChangeMySecretFluffyUnicorn
 
-    app_theme: cassis-alice
+    app_theme: default
     app_company_name: 'Fluffy Unicorn'
     app_company_email: 'contact@fluffy-unicorn.com'

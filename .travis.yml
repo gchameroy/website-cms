@@ -6,13 +6,15 @@ php:
 services:
   - mysql
 
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
 env:
   - SYMFONY_ENV=dev
 
-parameters:
-    secret: travis_secret
-
 before_script:
+  - cp app/config/parameters-travis.yml app/config/parameters.yml
   - composer install --no-progress --no-interaction --prefer-dist --no-suggest
   - mysql -e 'CREATE DATABASE website_cms;'
 

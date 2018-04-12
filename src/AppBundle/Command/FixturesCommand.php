@@ -16,24 +16,28 @@ class FixturesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $command = $this->getApplication()->find('doctrine:database:drop');
-        $arguments = ['--force' => true];
-        $arrayInput = new ArrayInput($arguments);
-        $command->run($arrayInput, $output);
+        try {
+            $command = $this->getApplication()->find('doctrine:database:drop');
+            $arguments = ['--force' => true];
+            $arrayInput = new ArrayInput($arguments);
+            $command->run($arrayInput, $output);
 
-        $command = $this->getApplication()->find('doctrine:database:create');
-        $arguments = [];
-        $arrayInput = new ArrayInput($arguments);
-        $command->run($arrayInput, $output);
+            $command = $this->getApplication()->find('doctrine:database:create');
+            $arguments = [];
+            $arrayInput = new ArrayInput($arguments);
+            $command->run($arrayInput, $output);
 
-        $command = $this->getApplication()->find('doctrine:schema:create');
-        $arguments = [];
-        $arrayInput = new ArrayInput($arguments);
-        $command->run($arrayInput, $output);
+            $command = $this->getApplication()->find('doctrine:schema:create');
+            $arguments = [];
+            $arrayInput = new ArrayInput($arguments);
+            $command->run($arrayInput, $output);
 
-        $command = $this->getApplication()->find('doctrine:fixtures:load');
-        $arguments = ['--no-interaction' => true];
-        $arrayInput = new ArrayInput($arguments);
-        $command->run($arrayInput, $output);
+            $command = $this->getApplication()->find('doctrine:fixtures:load');
+            $arguments = ['--append' => true];
+            $arrayInput = new ArrayInput($arguments);
+            $command->run($arrayInput, $output);
+        } catch (\Exception $e) {
+            $output->writeln($e->getMessage());
+        }
     }
 }
