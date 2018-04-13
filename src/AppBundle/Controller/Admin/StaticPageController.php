@@ -86,11 +86,11 @@ class StaticPageController extends Controller
     /**
      * @Route("/{id}/publish", name="admin_static_page_publish", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
+     * @param int $id
      * @param Request $request
-     * @param $id
      * @return RedirectResponse|Response
      */
-    public function publishAction(Request $request, int $id): Response
+    public function publishAction(int $id, Request $request): Response
     {
         $staticPage = $this->staticPageManager->get($id);
         $staticPage->setPublishedAt(new \DateTime());
@@ -111,11 +111,11 @@ class StaticPageController extends Controller
     /**
      * @Route("/{id}/unpublish", name="admin_static_page_unpublish", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
+     * @param int $id
      * @param Request $request
-     * @param $id
      * @return RedirectResponse|Response
      */
-    public function unpublishAction(Request $request, int $id): Response
+    public function unpublishAction(int $id, Request $request): Response
     {
         $staticPage = $this->staticPageManager->get($id);
         if (null === $staticPage->getPublishedAt()) {
@@ -139,11 +139,11 @@ class StaticPageController extends Controller
     /**
      * @Route("/{id}/edit", name="admin_static_page_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
+     * @param int $id
      * @param Request $request
-     * @param $id
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, int $id): Response
+    public function editAction(int $id, Request $request): Response
     {
         $staticPage = $this->staticPageManager->get($id);
         $form = $this->createForm(StaticPageType::class, $staticPage);
@@ -165,11 +165,11 @@ class StaticPageController extends Controller
     /**
      * @Route("/{id}/delete", name="admin_static_page_delete", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
-     * @param $id
+     * @param int $id
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function deleteAction($id, Request $request): Response
+    public function deleteAction(int $id, Request $request): Response
     {
         $staticPage = $this->staticPageManager->get($id);
         $form = $this->createForm(StaticPageDeleteType::class, $staticPage);
@@ -189,11 +189,11 @@ class StaticPageController extends Controller
     /**
      * @Route("/{id}/add_image", name="admin_static_page_add_image", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
+     * @param int $id
      * @param Request $request
-     * @param integer $id
      * @return RedirectResponse|Response
      */
-    public function addImageAction(Request $request, int $id): Response
+    public function addImageAction(int $id, Request $request): Response
     {
         $staticPage = $this->staticPageManager->get($id);
         $image = new Image();

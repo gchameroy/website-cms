@@ -3,10 +3,14 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\UserFile;
+use AppBundle\Form\Type\UserFile\UserFileType;
+use AppBundle\Manager\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -16,6 +20,59 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  */
 class UserFileController Extends Controller
 {
+    /** @var UserManager */
+    private $userManager;
+
+    public function __construct(UserManager $userManager)
+    {
+        $this->userManager = $userManager;
+    }
+
+    /**
+     * @Route("/{user}/add_document", name="admin_user_add_file", requirements={"user": "\d+"})
+     * @Method({"GET", "POST"})
+     * @param int $user
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function addFileAction(int $user, Request $request): Response
+    {
+        $user = $this->userManager->get($user);
+
+        $userFile = new UserFile($user);
+        $form = $this->createForm(UserFileType::class, $userFile);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $file */
+            $file = $userFile->getFile()->getPath();
+            $fileName = md5(uniqid(null, true));
+            $extension = $file->guessExtension();
+            $filePath = sprintf(
+                '%s/../uploads/user-files/%s',
+                $this->get('kernel')->getRootDir(),
+                $userFile->getUser()->getId()
+            );
+
+            $file->move($filePath, $fileName);
+            $userFile->getFile()->setPath($fileName);
+            $userFile->getFile()->setExtension($extension);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($userFile);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_user', [
+                'id' => $user->getId()
+            ]);
+        }
+
+        return $this->render('admin/user-file/add.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+
     /**
      * @Route("/{userFile}/download", name="admin_user_file_download", requirements={"userFile": "\d+"})
      * @Method({"GET"})
@@ -26,6 +83,7 @@ class UserFileController Extends Controller
      */
     public function downloadAction(int $userFile): Response
     {
+        /** @var UserFile $userFile */
         $userFile = $this->getDoctrine()
             ->getRepository(UserFile::class)
             ->find($userFile);
@@ -60,6 +118,7 @@ class UserFileController Extends Controller
      */
     public function deleteAction(Request $request, EntityManagerInterface $entityManager): Response
     {
+        /** @var UserFile $userFile */
         $userFile = $this->getDoctrine()
             ->getRepository(UserFile::class)
             ->find($request->request->get('userFile'));

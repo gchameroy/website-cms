@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Image;
-use AppBundle\Entity\Newsletter;
 use AppBundle\Form\Type\ImageType;
 use AppBundle\Form\Type\Newsletter\NewsletterDeleteType;
 use AppBundle\Form\Type\Newsletter\NewsletterPublishType;

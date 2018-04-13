@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\Partner;
 use AppBundle\Form\Type\Partner\PartnerEditType;
 use AppBundle\Form\Type\Partner\PartnerType;
 use AppBundle\Manager\PartnerManager;
@@ -19,15 +18,22 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PartnerController extends Controller
 {
+    /** @var PartnerManager */
+    private $partnerManager;
+
+    public function __construct(PartnerManager $partnerManager)
+    {
+        $this->partnerManager = $partnerManager;
+    }
+
     /**
      * @Route("/", name="admin_partners")
      * @Method({"GET"})
-     * @param PartnerManager $partnerManager
      * @return Response
      */
-    public function listAction(PartnerManager $partnerManager)
+    public function listAction()
     {
-        $partners = $partnerManager->getList();
+        $partners = $this->partnerManager->getList();
 
         return $this->render('admin/partner/list.html.twig', [
             'partners' => $partners
@@ -38,12 +44,11 @@ class PartnerController extends Controller
      * @Route("/add", name="admin_partners_add")
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param PartnerManager $partnerManager
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request, PartnerManager $partnerManager)
+    public function addAction(Request $request): Response
     {
-        $partner = new Partner();
+        $partner = $this->partnerManager->getNew();
 
         $form = $this->createForm(PartnerType::class, $partner);
         $form->handleRequest($request);
@@ -59,7 +64,7 @@ class PartnerController extends Controller
             $file->move($filePath, $fileName);
             $partner->getImage()->setPath($fileName);
 
-            $partnerManager->save($partner);
+            $this->partnerManager->save($partner);
 
             return $this->redirectToRoute('admin_partners');
         }
@@ -72,26 +77,25 @@ class PartnerController extends Controller
     /**
      * @Route("/{partner}/edit", name="admin_partner_edit", requirements={"partner": "\d+"})
      * @Method({"GET", "POST"})
-     * @param Request $request
      * @param int $partner
-     * @param PartnerManager $partnerManager
+     * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, int $partner, PartnerManager $partnerManager)
+    public function editAction(int $partner, Request $request): Response
     {
-        $partner = $partnerManager->get($partner);
+        $partner = $this->partnerManager->get($partner);
 
         $form = $this->createForm(PartnerEditType::class, $partner);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $partnerManager->save($partner);
+            $this->partnerManager->save($partner);
 
             return $this->redirectToRoute('admin_partners');
         }
 
         return $this->render('admin/partner/edit.html.twig', [
             'form' => $form->createView(),
-            'partner' => $partner
+            'partner' => $partner,
         ]);
     }
 
@@ -99,16 +103,15 @@ class PartnerController extends Controller
      * @Route("/delete", name="admin_partner_delete")
      * @Method({"POST"})
      * @param Request $request
-     * @param PartnerManager $partnerManager
      * @return RedirectResponse|Response
      */
-    public function deleteAction(Request $request, PartnerManager $partnerManager)
+    public function deleteAction(Request $request): Response
     {
-        $partner = $partnerManager->get($request->request->get('partner'));
+        $partner = $this->partnerManager->get($request->request->get('partner'));
 
         $token = $request->request->get('token');
         if ($this->isCsrfTokenValid('partner-delete', $token)) {
-            $partnerManager->remove($partner);
+            $this->partnerManager->remove($partner);
         }
 
         return $this->redirectToRoute('admin_partners');

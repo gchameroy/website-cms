@@ -2,15 +2,11 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\User;
-use AppBundle\Entity\UserFile;
 use AppBundle\Form\Type\User\UserEditType;
 use AppBundle\Form\Type\User\UserType;
-use AppBundle\Form\Type\UserFile\UserFileType;
-use Doctrine\ORM\EntityManagerInterface;
+use AppBundle\Manager\UserManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,18 +17,25 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends Controller
 {
+    /** @var UserManager */
+    private $userManager;
+
+    public function __construct(UserManager $userManager)
+    {
+        $this->userManager = $userManager;
+    }
+
     /**
      * @Route("/", name="admin_users")
      * @Method({"GET"})
      * @return Response
      */
-    public function listAction() {
-        $users = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->findAll();
+    public function listAction(): Response
+    {
+        $users = $this->userManager->getList();
 
         return $this->render('admin/user/list.html.twig', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
@@ -42,8 +45,9 @@ class UserController extends Controller
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function addAction(Request $request) {
-        $user = new User();
+    public function addAction(Request $request): Response
+    {
+        $user = $this->userManager->getNew();
 
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -52,13 +56,10 @@ class UserController extends Controller
                 ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password)
                 ->eraseCredentials();
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $this->userManager->save($user);
 
             return $this->redirectToRoute('admin_user', [
-                'id' => $user->getId()
+                'id' => $user->getId(),
             ]);
         }
 
@@ -68,65 +69,14 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/{user}/add_document", name="admin_user_add_file", requirements={"user": "\d+"})
-     * @Method({"GET", "POST"})
-     *
-     * @param int $user
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     *
-     * @return RedirectResponse|Response
-     */
-    public function addFileAction(int $user, Request $request, EntityManagerInterface $entityManager) {
-        $user = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->find($user);
-        $this->checkUser($user);
-
-        $userFile = new UserFile($user);
-        $form = $this->createForm(UserFileType::class, $userFile);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile $file */
-            $file = $userFile->getFile()->getPath();
-            $fileName = md5(uniqid(null, true));
-            $extension = $file->guessExtension();
-            $filePath = sprintf(
-                '%s/../uploads/user-files/%s',
-                $this->get('kernel')->getRootDir(),
-                $userFile->getUser()->getId()
-            );
-
-            $file->move($filePath, $fileName);
-            $userFile->getFile()->setPath($fileName);
-            $userFile->getFile()->setExtension($extension);
-
-            $entityManager->persist($userFile);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('admin_user', [
-                'id' => $user->getId()
-            ]);
-        }
-
-        return $this->render('admin/user-file/add.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="admin_user", requirements={"id": "\d+"})
      * @Method({"GET"})
-     * @param integer $id
+     * @param int $id
      * @return Response
      */
-    public function viewAction($id) {
-        $user = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->find($id);
-        $this->checkUser($user);
+    public function viewAction(int $id): Response
+    {
+        $user = $this->userManager->get($id);
 
         return $this->render('admin/user/view.html.twig', [
             'user' => $user
@@ -136,22 +86,18 @@ class UserController extends Controller
     /**
      * @Route("/{id}/edit", name="admin_user_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
+     * @param int $id
      * @param Request $request
-     * @param $id
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request, $id) {
-        $user = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->find($id);
-        $this->checkUser($user);
+    public function editAction(int $id, Request $request): Response
+    {
+        $user = $this->userManager->get($id);
 
         $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $this->userManager->save($user);
 
             return $this->redirectToRoute('admin_user', [
                 'id' => $user->getId()
@@ -160,16 +106,7 @@ class UserController extends Controller
 
         return $this->render('admin/user/edit.html.twig', [
             'form' => $form->createView(),
-            'user' => $user
+            'user' => $user,
         ]);
-    }
-
-    /**
-     * @param $user
-     */
-    private function checkUser($user) {
-        if (!$user) {
-            throw $this->createNotFoundException('User Not Found.');
-        }
     }
 }
