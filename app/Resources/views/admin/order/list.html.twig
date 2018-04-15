@@ -46,7 +46,7 @@
                                     <td>#{{ order.id }}</td>
                                     <td>{{ order.user.email }}</td>
                                     <td>{{ order.createdAt|date('Y-m-d H:i') }}</td>
-                                    <td>{{ order.price|number_format(2, ',', ' ') }}€</td>
+                                    <td>{{ order.price(order.user.offer)|number_format(2, ',', ' ') }}€</td>
                                     <td class="text-right">
                                         <a href="{{ path('admin_order', {'id': order.id }) }}" class="btn btn-primary btn-sm">Détails</a>
                                     </td>

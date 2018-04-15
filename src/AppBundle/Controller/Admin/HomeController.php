@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Service\OrderManager;
+use AppBundle\Manager\OrderManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ class HomeController extends Controller
      * @return Response
      */
     public function homeAction(OrderManager $orderManager) {
-        $orders = $orderManager->findAll();
+        $orders = $orderManager->getList();
         $total = $orderManager->getTotal();
 
         return $this->render('admin/home.html.twig', [

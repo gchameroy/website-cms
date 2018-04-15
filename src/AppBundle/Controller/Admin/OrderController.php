@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\Order;
+use AppBundle\Manager\OrderManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -14,14 +14,20 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class OrderController extends Controller
 {
+    /** @var OrderManager */
+    private $orderManager;
+
+    public function __construct(OrderManager $orderManager)
+    {
+        $this->orderManager = $orderManager;
+    }
+
     /**
      * @Route("/", name="admin_orders")
      * @return Response
      */
     public function listAction() {
-        $orders = $this->getDoctrine()
-            ->getRepository(Order::class)
-            ->findAll();
+        $orders = $this->orderManager->getList();
 
         return $this->render('admin/order/list.html.twig', [
             'orders' => $orders
@@ -34,11 +40,8 @@ class OrderController extends Controller
      * @param integer $id
      * @return Response
      */
-    public function viewAction($id) {
-        $order = $this->getDoctrine()
-            ->getRepository(Order::class)
-            ->find($id);
-        $this->checkOrder($order);
+    public function viewAction(int $id) {
+        $order = $this->orderManager->get($id);
 
         return $this->render('admin/order/view.html.twig', [
             'order' => $order
@@ -55,15 +58,10 @@ class OrderController extends Controller
         $order_id = $request->request->get('order_id');
         $paid = $request->request->get('paid');
 
-        $order = $this->getDoctrine()
-            ->getRepository(Order::class)
-            ->find($order_id);
-        $this->checkOrder($order);
+        $order = $this->orderManager->get($order_id);
 
         $order->setIsPaid($paid);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($order);
-        $em->flush();
+        $this->orderManager->save($order);
 
         return new Response('', Response::HTTP_OK);
     }
@@ -77,25 +75,11 @@ class OrderController extends Controller
     public function statusAction(Request $request) {
         $status = $request->request->get('status');
         $order_id = $request->request->get('order_id');
-        $order = $this->getDoctrine()
-            ->getRepository(Order::class)
-            ->find($order_id);
-        $this->checkOrder($order);
+        $order = $this->orderManager->get($order_id);
 
         $order->setStatus($status);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($order);
-        $em->flush();
+        $this->orderManager->save($order);
 
         return new Response('', Response::HTTP_OK);
-    }
-
-    /**
-     * @param $order
-     */
-    private function checkOrder($order) {
-        if (!$order) {
-            throw $this->createNotFoundException('Order Not Found.');
-        }
     }
 }
