@@ -1,16 +1,16 @@
 parameters:
-    database_host: localhost
-    database_port: ~
-    database_name: website_cms
-    database_user: root
-    database_password:
+    database_host: '%env(DATABASE_HOST)%'
+    database_port: '%env(DATABASE_PORT)%'
+    database_name: '%env(DATABASE_NAME)%'
+    database_user: '%env(DATABASE_USER)%'
+    database_password: '%env(DATABASE_PASSWORD)%'
 
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: ~
     mailer_password: ~
 
-    secret: ChangeMySecretFluffyUnicorn
+    secret: ThisTokenIsAFunnyUnicornToken
 
     app_theme: cassis-alice
     app_company_name: 'Fluffy Unicorn'

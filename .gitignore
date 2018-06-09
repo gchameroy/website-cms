@@ -11,8 +11,8 @@
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/
-/htdocs/bundles/*
-/htdocs/assets/*
+/web/bundles/*
+/web/assets/*
 /uploads/*
 !/uploads/.gitkeep
 !/uploads/product/.gitkeep
@@ -23,3 +23,5 @@
 /web/uploads/*
 !/web/uploads/.gitkeep
 *~
+
+/docker-compose.override.yml

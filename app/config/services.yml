@@ -1,4 +1,9 @@
 parameters:
+    env(DATABASE_HOST): db
+    env(DATABASE_PORT): null
+    env(DATABASE_NAME): website_cms
+    env(DATABASE_USER): website
+    env(DATABASE_PASSWORD): website
 
 services:
     _defaults:

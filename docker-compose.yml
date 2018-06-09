@@ -1,65 +1,26 @@
-version: '3'
+version: "3"
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: webdevops/php-apache:7.2
+    ports:
+      - "10000:80"
     depends_on:
       - db
     environment:
-      # Change to prod in production
-      - SYMFONY_ENV=dev
+      WEB_DOCUMENT_ROOT: /srv/web
+      WEB_DOCUMENT_INDEX: app.php
+      PHP_DATE_TIMEZONE: "UTC"
+    working_dir: /srv
     volumes:
-      # Comment out the next line in production
-      - ./:/srv/api-platform:rw
-      # This is for assets:install
-      - ./web:/srv/api-platform/web:rw
-      - ./vendor:/srv/api-platform/vendor:rw
-      - ./var:/srv/api-platform/var:rw
-      # If you develop on Linux, comment out the following volumes to just use bind-mounted project directory from host
-#      - /srv/api-platform/var/
-#      - /srv/api-platform/var/cache/
-#      - /srv/api-platform/var/logs/
-#      - /srv/api-platform/var/sessions/
-#      - /srv/api-platform/vendor/
+      - .:/srv
+
   db:
-    build:
-      context: ./docker/db
-      dockerfile: ./Dockerfile
+    image: mysql:5.7
     environment:
-      - MYSQL_DATABASE=website_cms
-      # You should definitely change the password in production
-      - MYSQL_PASSWORD=website_cms
-      - MYSQL_RANDOM_ROOT_PASSWORD=true
-      - MYSQL_USER=website_cms
-    volumes:
-      - db-data:/var/lib/mysql:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/mysql:rw
-  nginx:
-    build:
-      context: ./docker/nginx
-      dockerfile: ./Dockerfile
-    volumes:
-      # Comment out the next line in production
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./web:/srv/api-platform/web:ro
+      MYSQL_DATABASE: website_cms
+      MYSQL_USER: website
+      MYSQL_PASSWORD: website
+      MYSQL_ROOT_PASSWORD: root
     ports:
-      - "8080:80"
-
-  varnish:
-    build:
-      context: ./docker/varnish
-      dockerfile: ./Dockerfile
-    depends_on:
-      - app
-      - nginx
-    volumes:
-      - ./docker/varnish/conf:/etc/varnish:ro
-    ports:
-      - "80:80"
-
-volumes:
-  app-web: {}
-  db-data: {}
+      - "10001:3306"

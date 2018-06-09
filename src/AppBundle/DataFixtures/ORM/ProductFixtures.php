@@ -11,7 +11,7 @@ class ProductFixtures extends FixtureHelper
 {
     public function load(ObjectManager $manager)
     {
-        $date = new \DateTime();
+        $date = new \DateTime('2018-06-01');
         for ($p = 1; $p <= self::NB_PRODUCT; $p++) {
             $product = new Product();
             $product->setLabel('Product ' . $p)

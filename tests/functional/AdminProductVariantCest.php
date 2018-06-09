@@ -20,7 +20,7 @@ class AdminProductVariantCest
         $I->seeCurrentUrlEquals('/admin/products/1');
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->canSee('Pot de 50g', 'h2');
-        $I->canSee('P1804-001', 'h3');
+        $I->canSee('P1806-001', 'h3');
     }
 
     public function tryAdd(FunctionalTester $I)
